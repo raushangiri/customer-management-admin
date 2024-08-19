@@ -10,9 +10,9 @@ src/App.css
     padding: 20px;
     color: white;
     height: 100vh;
-    display: flex; /* Add this */
-    flex-direction: column; /* Add this */
-    align-items: center; /* Add this to center content horizontally */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
   }
   
   .sidebar h2 {
@@ -22,21 +22,21 @@ src/App.css
   .sidebar ul {
     list-style: none;
     padding: 0;
-    margin-top: 20px; /* Adjust margin to push the list down a bit */
-    width: 100%; /* Ensure the list takes up the full width */
+    margin-top: 20px; 
+    width: 100%; 
   }
   
   .sidebar ul li {
     margin: 15px 0;
-    width: 100%; /* Ensure each list item takes up the full width */
+    width: 100%; 
   }
   
   .sidebar ul li a {
     color: white;
     text-decoration: none;
-    display: block; /* Ensure the entire list item is clickable */
-    padding: 10px 0; /* Add padding for better spacing */
-    width: 100%; /* Ensure the link takes up the full width */
+    display: block; 
+    padding: 10px 0; 
+    width: 100%; 
   }
   
   .sidebar ul li a:hover {
@@ -50,7 +50,7 @@ src/App.css
   }
   
   .content-with-sidebar {
-    margin-left: 200px; /* Adjust based on your sidebar width */
+    margin-left: 200px; 
     padding: 20px;
   }
   
@@ -62,14 +62,14 @@ src/App.css
   }
   
   .Navbar {
-    width: calc(100% - 200px); /* Adjust width based on sidebar */
+    width: calc(100% - 200px); 
     margin-left: 200px;
     background-color: #34495e;
     color: white;
     padding: 10px 20px;
   }
   
-  /* src/App.css or Sidebar.css */
+  
 
 .submenu-title {
     cursor: pointer;
@@ -102,12 +102,12 @@ src/App.css
   }
   
 
-  /* Sidebar.css */
+  
 
 .submenu-title {
     cursor: pointer;
     padding: 10px 0;
-    display: flex; /* Ensure the icon and text are aligned properly */
+    display: flex; 
     align-items: center;
     color: white;
     text-decoration: none;
@@ -115,6 +115,6 @@ src/App.css
   
   .submenu-title svg,
   .submenu-title .fa {
-    margin-right: 8px; /* Space between the icon and the text */
+    margin-right: 8px; 
   }
   

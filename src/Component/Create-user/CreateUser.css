@@ -1,9 +1,8 @@
-/* src/Component/CreateUser/CreateUser.css */
 
 .create-user-page {
     padding: 20px;
-    margin-left: 200px; /* This should match the width of your sidebar */
-    background-color: #ecf0f1; /* Optional: background color */
-    min-height: 100vh; /* Ensure it covers the entire viewport height */
+    margin-left: 200px; 
+    background-color: #ecf0f1; 
+    min-height: 100vh; 
   }
   

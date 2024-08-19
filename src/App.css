@@ -6,13 +6,10 @@ border-radius: 10px;
 
 .app {
   display: flex;
-  height: 100vh; /* Ensure the app takes the full viewport height */
+  height: 100vh; 
 }
 .img1{
-  /*
-* Created with https://www.css-gradient.com
-* Gradient link: https://www.css-gradient.com/?c1=8cdfe9&c2=1a191a&gt=l&gd=dtl
-*/
+
 background: #8CDFE9;
 background: linear-gradient(135deg, #8CDFE9, #1A191A);
 }
@@ -32,7 +29,7 @@ background: linear-gradient(135deg, #8CDFE9, #1A191A);
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: fixed; /* Fix the sidebar to the left */
+  position: fixed; 
   top: 0;
   left: 0;
 }
@@ -62,9 +59,9 @@ background: linear-gradient(135deg, #8CDFE9, #1A191A);
 }
 
 .content-with-sidebar {
-  margin-left: 200px; /* This should match the width of your sidebar */
+  margin-left: 200px; 
   padding: 20px;
   background-color: #ecf0f1;
   flex: 1;
-  overflow-y: auto; /* Enable scrolling if content overflows */
+  overflow-y: auto; 
 }
