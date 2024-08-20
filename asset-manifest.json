@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/customer-management-admin/static/css/main.615d78bb.css",
+    "main.js": "/customer-management-admin/static/js/main.2d907902.js",
+    "static/js/453.52df1bd5.chunk.js": "/customer-management-admin/static/js/453.52df1bd5.chunk.js",
+    "static/media/jbj-fintech-logo.webp": "/customer-management-admin/static/media/jbj-fintech-logo.a4f1e28f9ddbf396cf48.webp",
+    "index.html": "/customer-management-admin/index.html",
+    "main.615d78bb.css.map": "/customer-management-admin/static/css/main.615d78bb.css.map",
+    "main.2d907902.js.map": "/customer-management-admin/static/js/main.2d907902.js.map",
+    "453.52df1bd5.chunk.js.map": "/customer-management-admin/static/js/453.52df1bd5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.615d78bb.css",
+    "static/js/main.2d907902.js"
+  ]
+}
