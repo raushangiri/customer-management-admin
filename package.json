@@ -1,5 +1,5 @@
 {
-  "homepage": "https://raushangiri.github.io/repository",
+  "homepage": "https://raushangiri.github.io/customer-management-admin",
   "name": "customer-management",
   "version": "0.1.0",
   "private": true,
@@ -20,13 +20,14 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
+  
   "eslintConfig": {
     "extends": [
       "react-app",
