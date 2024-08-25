@@ -1,5 +1,5 @@
 {
-  "homepage": "https://raushangiri.github.io/repository",
+  "homepage": "https://raushangiri.github.io/cs-dashboard",
   "name": "customer-management",
   "version": "0.1.0",
   "private": true,
@@ -20,12 +20,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "build": "react-scripts build",
+    "start": "react-scripts start",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
