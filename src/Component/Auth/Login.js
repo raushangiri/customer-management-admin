@@ -16,27 +16,25 @@ function Login() {
         // Store the selected role in localStorage
         localStorage.setItem('userRole', selectedRole);
 
-        if(selectedRole==="Sales")
-            {
-                navigate('/sales-dashboard');
-            }
-           else if(selectedRole==="TVR")
-                {
-                    navigate('/tvr-dashboard');
-                }
-                else if(selectedRole==="bank-login")
-                    {
-                        navigate('/banklogin-dashboard');
-                    }
-                    else if(selectedRole==="CDR")
-                        {
-                            navigate('/CDRdashboard');
-                        }
-                        else if(selectedRole==="Admin")
-                            {
-                                navigate('/dashboard');
-                            }
-                        
+        if (selectedRole === "Sales") {
+            navigate('/sales-dashboard');
+        }
+        else if (selectedRole === "TVR") {
+            navigate('/tvr-dashboard');
+        }
+        else if (selectedRole === "bank-login") {
+            navigate('/banklogin-dashboard');
+        }
+        else if (selectedRole === "CDR") {
+            navigate('/CDRdashboard');
+        }
+        else if (selectedRole === "Admin") {
+            navigate('/dashboard');
+        }
+        else if (selectedRole === "Team-leader") {
+            navigate('/dashboard');
+        }
+
         // // Navigate to the dashboard
         // navigate('/dashboard');
     };
@@ -62,15 +60,17 @@ function Login() {
                             >
                                 <option value="">Select Role</option>
                                 <option value="Admin">Admin</option>
+                                <option value="Team-leader">Team Leader</option>
                                 <option value="Sales">Sales team</option>
                                 <option value="TVR">TVR team</option>
                                 <option value="CDR">CDR team</option>
                                 <option value="bank-login">Bank login team</option>
+
                                 {/* <option value="Bank">Bank login team</option> */}
                             </select>
                         </div>
-                        
-                        
+
+
                         {/* User ID Field */}
                         <div className="mb-3">
                             <label htmlFor="floatingInput" className="form-label">Enter Your User ID</label>

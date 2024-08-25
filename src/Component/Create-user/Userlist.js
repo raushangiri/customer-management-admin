@@ -57,6 +57,7 @@ const Userlist = () => {
               <th scope="col">User ID</th>
               <th scope="col">Name</th>
               <th scope="col">Role</th>
+              <th scope="col">Reporting</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -66,6 +67,7 @@ const Userlist = () => {
                 <td>{user.userId || 'N/A'}</td>
                 <td>{user.name}</td>
                 <td>{user.role}</td>
+                <td>" "</td>
                 <td>
                   <FontAwesomeIcon icon={faPenToSquare} />
                   <FontAwesomeIcon 

@@ -18,6 +18,10 @@ import bankLogindashboard from "./Component/Dashboard/bankLogin_dashboard";
 import Sales_dashboard from "./Component/Dashboard/Sales_dashboard";
 import tvr_dashboard from "./Component/Dashboard/tvr_dashboard";
 import CDRdashboard from './Component/Dashboard/CDRdashboard';
+import Team_member from './Component/Team_Leader/Team_member';
+import EditTeamMember from './Component/Team_Leader/EditTeamMember';
+import ViewDetails from './Component/Team_Leader/ViewDetails';
+
 
 function App() {
   return (
@@ -60,7 +64,9 @@ function Main() {
           <Route path="/tvr-team" element={<Tvr />} />
           <Route path="/cdr-team" element={<Cdr />} />
           <Route path="/bank-login-team" element={<Bank_login />} />
-
+          <Route path="/Team-Member" element={<Team_member />} />
+          <Route path="/view/:id" element={<ViewDetails />} />
+        <Route path="/edit/:id" element={<EditTeamMember />} />
 
 
           {/* Add more routes here */}

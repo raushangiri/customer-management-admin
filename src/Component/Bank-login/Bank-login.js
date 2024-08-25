@@ -163,7 +163,10 @@ const Bank_login = () => {
         'Business Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
         'LAP Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
         'Home Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-        'Personal Loan': ['Personal Loan']
+        'Personal Loan': ['Personal Loan'],
+        'Education Loan': ['Education Loan'],
+        'Insurance': ['Insurance'],
+        'Working capital Loan': ['Working capital Loan']
     };
 
     const NotInterestedOptions = {
@@ -631,233 +634,312 @@ const Bank_login = () => {
                         </form>
                     </div>
                 )}
-                {activeTab === 'references' && (
-                    <div className="tab-pane active">
+               {activeTab === 'references' && (
+          <div className="tab-pane active">
+            <form onSubmit={handleAddReference} className="mb-4">
+              <div className="mb-3 row">
+                <div className="col-md-4">
+                  <label htmlFor="referenceName" className="form-label fw-bold">Reference Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="referenceName"
+                    value={newReference.name}
+                    onChange={(e) => setNewReference({ ...newReference, name: e.target.value })}
+                    placeholder="Enter name"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="referenceMobileNumber" className="form-label fw-bold">Reference Mobile Number</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="referenceMobileNumber"
+                    value={newReference.mobileNumber}
+                    onChange={(e) => setNewReference({ ...newReference, mobileNumber: e.target.value })}
+                    placeholder="Enter mobile number"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="referenceOccupation" className="form-label fw-bold">Occupation Type</label>
+                  <select
+        className="form-select"
+        id="referenceOccupation"
+        
+      >
+        <option value="">Select</option>
+        <option value="salaried_employee">Salaried Employee</option>
+                        <option value="self_employed">Self-Employed</option>
+                        <option value="business_owner">Business Owner</option>
+                        <option value="freelancer">Freelancer</option>
+                        <option value="government_employee">Government Employee</option>
+                        <option value="retired">Retired</option>
+                        <option value="student">Student</option>
+                        <option value="housewife_homemaker">Housewife/Homemaker</option>
+                        <option value="agriculture_farmer">Agriculture/Farmer</option>
+                        <option value="consultant">Consultant</option>
+      </select>
+                </div>
 
+                <div className="col-md-4">
+                    <label htmlFor="natureOfBusiness" className="form-label fw-bold">Nature of Business</label>
+                    <select className="form-select" id="natureOfBusiness">
+                      <option value="">Select nature</option>
+                      <option value="manufacturing">Manufacturing</option>
+                      <option value="Trading">Trading</option>
+                      <option value="Retail">Retail</option>
+                      <option value="Wholesale">Wholesale</option>
+                      <option value="Information Technology">Information Technology</option>
+                      <option value="Finance and Banking">Finance and Banking</option>
+                      <option value="Real Estate and Construction">Real Estate and Construction</option>
+                      <option value="Hospitality">Hospitality</option>
+                      <option value="Healthcare">Healthcare</option>
+                      <option value="Education and Training">Education and Training</option>
+                      <option value="Transportation and Logistics">Transportation and Logistics</option>
+                      <option value="Agriculture and Farming">Agriculture and Farming</option>
+                      <option value="Import/Export">Import/Export</option>
+                      <option value="Media and Entertainment">Media and Entertainment</option>
+                    </select>
+</div>
+<div className="col-md-4">
+                  <label htmlFor="company_name" className="form-label fw-bold">Company Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="company_name"
+                    value={newReference.company_name}
+                    onChange={(e) => setNewReference({ ...newReference, company_name: e.target.value })}
+                    placeholder="Enter Company Name"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="referenceAddress" className="form-label fw-bold">Reference Address</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="referenceAddress"
+                    value={newReference.address}
+                    onChange={(e) => setNewReference({ ...newReference, address: e.target.value })}
+                    placeholder="Enter address"
+                    required
+                  />
+                </div>
+              </div>
 
-                        {/* Reference List */}
+              <button type="submit" className="btn btn-primary">Add Reference</button>
+            </form>
 
+            <div className="mb-4">
+              {/* <h5>Reference Details</h5> */}
+              {references.length > 0 ? (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Mobile Number</th>
+                      <th scope="col">Address</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {references.map((reference, index) => (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{reference.name}</td>
+                        <td>{reference.mobileNumber}</td>
+                        <td>{reference.address}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="alert alert-info" role="alert">
+                  No references added yet.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
+{activeTab === 'loan details' && (
+          <div className="tab-pane active">
 
-                        {/* Add Reference Form */}
-                        <form onSubmit={handleAddReference} className="mb-4">
-                            <div className="mb-3 row">
-                                <div className="col-md-4">
-                                    <label htmlFor="referenceName" className="form-label fw-bold">Reference Name</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="referenceName"
-                                        value={newReference.name}
-                                        onChange={(e) => setNewReference({ ...newReference, name: e.target.value })}
-                                        placeholder="Enter name"
-                                        required
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="referenceMobileNumber" className="form-label fw-bold">Reference Mobile Number</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="referenceMobileNumber"
-                                        value={newReference.mobileNumber}
-                                        onChange={(e) => setNewReference({ ...newReference, mobileNumber: e.target.value })}
-                                        placeholder="Enter mobile number"
-                                        required
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="referenceAddress" className="form-label fw-bold">Reference Address</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="referenceAddress"
-                                        value={newReference.address}
-                                        onChange={(e) => setNewReference({ ...newReference, address: e.target.value })}
-                                        placeholder="Enter address"
-                                        required
-                                    />
-                                </div>
-                            </div>
+            <form onSubmit={handleAddReference} className="mb-4">
+              <div className="mb-3 row">
+                <div className="col-md-4">
+                  <label htmlFor="referenceName" className="form-label fw-bold">Bank Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="referenceName"
+                    value={loandetail.bankName}
+                    onChange={(e) => setloandetail({ ...loandetail, bankName: e.target.value })}
+                    placeholder="Enter name"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="emiAmount" className="form-label fw-bold">EMI Amount</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="emiAmount"
+                    value={loandetail.emiAmount}
+                    onChange={(e) => setloandetail({ ...loandetail, emiAmount: e.target.value })}
+                    placeholder="Enter mobile number"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="loanTerm" className="form-label fw-bold">Loan Term</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="loanTerm"
+                    value={loandetail.loanTerm}
+                    onChange={(e) => setloandetail({ ...loandetail, loanTerm: e.target.value })}
+                    placeholder="Enter mobile number"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="loan_start_date" className="form-label fw-bold">Loan Start Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="loan_start_date"
+                    value={loandetail.loanstartDate}
+                    onChange={(e) => setloandetail({ ...loandetail, loanstartDate: e.target.value })}
+                    placeholder="Enter mobile number"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="loan_end_date" className="form-label fw-bold">Loan End Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="loan_end_date"
+                    value={loandetail.loan_end_date}
+                    onChange={(e) => setloandetail({ ...loandetail, loan_end_date: e.target.value })}
+                    
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="emi_date" className="form-label fw-bold">EMI Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="emi_date"
+                    value={loandetail.emiDate}
+                    onChange={(e) => setloandetail({ ...loandetail, emiDate: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="referenceAddress" className="form-label fw-bold">No of EMI Bounces</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="referenceAddress"
+                    value={loandetail.address}
+                    onChange={(e) => setloandetail({ ...loandetail, noofemiBounces: e.target.value })}
+                    placeholder="Enter address"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="referenceAddress" className="form-label fw-bold">Bounces Reason</label>
+                  <select className="form-select" id="referenceAddress"value={loandetail.bouncesReason}
+                    onChange={(e) => setloandetail({ ...loandetail, bouncesReason: e.target.value })}>
+                      <option value="">Select Reason</option>
+                      <option value="insuffisent_funds">Insuffisent Funds</option>
+                      <option value="technical_issue">Technical issue</option>
+                      </select>
+                  {/* <input
+                    type="text"
+                    className="form-control"
+                    id="referenceAddress"
+                    value={loandetail.bouncesReason}
+                    onChange={(e) => setloandetail({ ...loandetail, bouncesReason: e.target.value })}
+                    placeholder="Enter address"
+                    required
+                  /> */}
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="referenceAddress" className="form-label fw-bold">Car Details</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="referenceAddress"
+                    value={loandetail.carDetails}
+                    onChange={(e) => setloandetail({ ...loandetail, carDetails: e.target.value })}
+                    placeholder="Enter address"
+                    required
+                  />
+                </div>
+              </div>
 
-                            <button type="submit" className="btn btn-primary">Add Reference</button>
-                        </form>
+              <button type="submit" className="btn btn-primary">Add Reference</button>
+            </form>
 
-                        <div className="mb-4">
-                            {/* <h5>Reference Details</h5> */}
-                            {references.length > 0 ? (
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Mobile Number</th>
-                                            <th scope="col">Address</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {references.map((reference, index) => (
-                                            <tr key={index}>
-                                                <th scope="row">{index + 1}</th>
-                                                <td>{reference.name}</td>
-                                                <td>{reference.mobileNumber}</td>
-                                                <td>{reference.address}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            ) : (
-                                <div className="alert alert-info" role="alert">
-                                    No references added yet.
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'loan details' && (
-                    <div className="tab-pane active">
-
-
-                        {/* Reference List */}
-
-
-
-                        {/* Add Reference Form */}
-                        <form onSubmit={handleAddloanDetails} className="mb-4">
-                            <div className="mb-3 row">
-                                <div className="col-md-4">
-                                    <label htmlFor="referenceName" className="form-label fw-bold">Bank Name</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="referenceName"
-                                        value={loandetail.bankName}
-                                        onChange={(e) => setloandetail({ ...loandetail, bankName: e.target.value })}
-                                        placeholder="Enter name"
-                                        required
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="emiAmount" className="form-label fw-bold">EMI Amount</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="emiAmount"
-                                        value={loandetail.emiAmount}
-                                        onChange={(e) => setloandetail({ ...loandetail, emiAmount: e.target.value })}
-                                        placeholder="Enter mobile number"
-                                        required
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="emi_date" className="form-label fw-bold">EMI Date</label>
-                                    <input
-                                        type="date"
-                                        className="form-control"
-                                        id="emi_date"
-                                        value={loandetail.emiDate}
-                                        onChange={(e) => setloandetail({ ...loandetail, emiDate: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="loan_start_date" className="form-label fw-bold">Loan Start Date</label>
-                                    <input
-                                        type="date"
-                                        className="form-control"
-                                        id="loan_start_date"
-                                        value={loandetail.loanstartDate}
-                                        onChange={(e) => setloandetail({ ...loandetail, loanstartDate: e.target.value })}
-                                        placeholder="Enter mobile number"
-                                        required
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="referenceAddress" className="form-label fw-bold">No of EMI Bounces</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="referenceAddress"
-                                        value={loandetail.address}
-                                        onChange={(e) => setloandetail({ ...loandetail, noofemiBounces: e.target.value })}
-                                        placeholder="Enter address"
-                                        required
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="referenceAddress" className="form-label fw-bold">Bounces Reason</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="referenceAddress"
-                                        value={loandetail.bouncesReason}
-                                        onChange={(e) => setloandetail({ ...loandetail, bouncesReason: e.target.value })}
-                                        placeholder="Enter address"
-                                        required
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="referenceAddress" className="form-label fw-bold">Car Details</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="referenceAddress"
-                                        value={loandetail.carDetails}
-                                        onChange={(e) => setloandetail({ ...loandetail, carDetails: e.target.value })}
-                                        placeholder="Enter address"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <button type="submit" className="btn btn-primary">Add Loan Details</button>
-                        </form>
-
-                        <div className="mb-4">
-                            {/* <h5>Reference Details</h5> */}
-                            {newloandetail.length > 0 ? (
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Bank Name</th>
-                                            <th scope="col">EMI Amount</th>
-                                            <th scope="col">EMI Date</th>
-                                            <th scope="col">Loan Start Date</th>
-                                            <th scope="col">No of EMI Bounces</th>
-                                            <th scope="col">Bounces Reason</th>
-                                            <th scope="col">Car Details</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {newloandetail.map((newloandetail, index) => (
-                                            <tr key={index}>
-                                                {/* <th scope="row">{index + 1}</th> */}
-                                                <td>{newloandetail.bankName}</td>
-                                                <td>{newloandetail.emiAmount}</td>
-                                                <td>{newloandetail.emiDate}</td>
-                                                <td>{newloandetail.loanstartDate}</td>
-                                                <td>{newloandetail.noofemiBounces}</td>
-                                                <td>{newloandetail.bouncesReason}</td>
-                                                <td>{newloandetail.carDetails}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            ) : (
-                                <div className="alert alert-info" role="alert">
-                                    No bank added yet.
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )}
+            <div className="mb-4">
+              {/* <h5>Reference Details</h5> */}
+              {references.length > 0 ? (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Mobile Number</th>
+                      <th scope="col">Address</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {references.map((reference, index) => (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{reference.name}</td>
+                        <td>{reference.mobileNumber}</td>
+                        <td>{reference.address}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="alert alert-info" role="alert">
+                  No references added yet.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
                 {activeTab === 'bank statement' && (
                     <div className="tab-pane active">
                         <div className="container mt-4">
-                            <h3 className="text-center mb-4">Bank Statement Update Form</h3>
+                            <div className="row">
+                <div className="col-md-12 text-center">
+                  <h3 className="mb-4">Bank Statement Update Form</h3>
+                </div>
+                
+                  <div className="col-md-4 mb-4">
+                    <label className="form-label">Total AB</label>
+                    <input type="text" className="form-control" placeholder="0" />
+                  </div>
+                  <div className="col-md-4 mb-4">
+                    <label className="form-label">Six Months ABB</label>
+                    <input type="text" className="form-control" placeholder="0" />
+                  </div>
+                  <div className="col-md-4 mb-4">
+                    <label className="form-label">One Year ABB</label>
+                    <input type="text" className="form-control" placeholder="0" />
+                  </div>
+              </div>
                             <form>
                                 <table className="table table-bordered">
                                     <thead>

@@ -17,6 +17,41 @@ const Tvr = () => {
   const [uploadedDocuments, setUploadedDocuments] = useState([]);
   const [showModal1, setShowModal1] = useState(false);
   const [selectedDocumentFile, setSelectedDocumentFile] = useState(null);
+  const [callStatus, setCallStatus] = useState('');
+  const [disposition, setDisposition] = useState('');
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
+
+
+  const documentTypes = [
+    { value: 'photo_document', label: 'Photo Document' },
+    { value: 'pan_card_document', label: 'PAN Card Document' },
+    { value: 'aadhaar_card_document', label: 'Aadhaar Card Document' },
+    // Add other document types as needed
+  ];
+
+    // Handle checkbox change
+    const handleCheckboxChange = (e) => {
+      const { value, checked } = e.target;
+      if (checked) {
+        // Add document to the selected list
+        setSelectedDocuments((prev) => [...prev, value]);
+      } else {
+        // Remove document from the selected list
+        setSelectedDocuments((prev) => prev.filter((doc) => doc !== value));
+      }
+    };
+  
+    // Handle changes in Call Status
+    const handleCallStatusChange = (e) => {
+      setCallStatus(e.target.value);
+      setDisposition(''); // Reset disposition when call status changes
+    };
+  
+    // Handle changes in Disposition
+    const handleDispositionChange = (e) => {
+      setDisposition(e.target.value);
+    };
+
 
   const handleDocumentTypeChange = (event) => {
     setSelectedDocumentType(event.target.value);
@@ -64,7 +99,10 @@ const Tvr = () => {
     'Business Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
     'LAP Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
     'Home Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-    'Personal Loan': ['Personal Loan']
+    'Personal Loan': ['Personal Loan'],
+    'Education Loan': ['Education Loan'],
+    'Insurance': ['Insurance'],
+    'Working capital Loan': ['Working capital Loan']
   };
 
   const NotInterestedOptions = {
@@ -95,9 +133,121 @@ const Tvr = () => {
     setShowModal(false);
   };
 
-  const handleLoanTypeChange = (e) => {
-    setSelectedLoanType(e.target.value);
-    setSelectedCategory(''); // Reset category when loan type changes
+  // const handleLoanTypeChange = (e) => {
+  //   setSelectedLoanType(e.target.value);
+  //   setSelectedCategory(''); // Reset category when loan type changes
+  // };
+
+  // const [selectedLoanType, setSelectedLoanType] = useState('');
+  // const [selectedCategory, setSelectedCategory] = useState('');
+  const [documentList, setDocumentList] = useState([]);
+
+  const handleLoanTypeChange = (event) => {
+    setSelectedLoanType(event.target.value);
+    setSelectedCategory('');
+    setDocumentList([]);
+  };
+
+  const handleCategoryChange = (event) => {
+    const category = event.target.value;
+    setSelectedCategory(category);
+    const documents = documentsByLoanType[selectedLoanType][category] || [];
+    setDocumentList(documents);
+  };
+
+
+  const documentsByLoanType = {
+    "Home loan": {
+      "PROPRIETORSHIP": [
+        "PAN CARD",
+        "AADHAAR CARD",
+        "PHOTO",
+        "GST CERTIFICATE",
+        "MSME AND UDYAM",
+        "OWNERSHIP PROOF",
+        "2 YEAR FINANCIALS REQUIRED COMPANY (ITR, COI, PROFIT AND LOSS, BALANCE SHEET)",
+        "1 YEAR GST RETURN 3B",
+        "1 YEAR CURRENT ACCOUNT BANKING",
+        "1 YEAR SAVING ACCOUNT BANKING",
+        "LOAN SCHEDULE (IF ANY)",
+        "CO-APP DOCS - PAN CARD, ADHAR CARD & photo",
+        "COMPLETE PROPERTY PAPER WITH CHAIN",
+        "Other Documents"
+      ],
+      "PARTNERSHIP": [
+        "AADHAAR CARD (ALL PARTNERS)",
+        "PHOTO (ALL PARTNERS)",
+        "GST CERTIFICATE AND PARTNERSHIP DEED",
+        "PAN CARD (ALL PARTNERS)",
+        "OWNERSHIP PROOF",
+        "2 YEAR FINANCIALS REQUIRED COMPANY (ITR, COI, PROFIT AND LOSS, BALANCE SHEET)",
+        "1 YEAR GST RETURN 3B",
+        "1 YEAR CURRENT ACCOUNT BANKING",
+        "1 YEAR SAVING ACCOUNT BANKING (ALL PARTNERS)",
+        "LOAN SCHEDULE (IF ANY)",
+        "INDIVIDUAL ITR, COI ALL PARTNERS",
+        "COMPLETE PROPERTY PAPER WITH CHAIN",
+        "Other Documents"
+      ],
+      "PVT LTD FIRM": [
+        "PAN CARD (ALL DIRECTORS)",
+        "AADHAAR CARD (ALL DIRECTORS)",
+        "PHOTO (ALL DIRECTORS)",
+        "OWNERSHIP PROOF (ELECTRICITY BILL)",
+        "COMPANY KYC (PAN, TAN, COI, LOD AND LOS, MOA AND AOA, GST CERTIFICATE, MSME)",
+        "2 YEAR CA ATTESTED FINANCIALS REQUIRED COMPANY (ITR, COI, PROFIT AND LOSS, BALANCE SHEET, INDIPENDENT REPORT, DIRECTOR REPORT, 3CA 3CD)",
+        "2 YEAR FORM 26AS (ALL DIRECTORS AND COMPANY)",
+        "2 YEAR INDIVIDUAL FINANCIALS (ITR AND COI ALL DIRECTORS)",
+        "1 YEAR ALL CURRENT ACCOUNT BANKING",
+        "1 YEAR SAVING ACCOUNT BANKING (ALL DIRECTORS)",
+        "COMPLETE PROPERTY PAPER WITH CHAIN",
+        "Other Documents"
+      ],
+    },
+    "Auto loan": {
+      "External BT": [
+        "PHOTO",
+        "PAN CARD",
+        "AADHAAR CARD",
+        "RC BOTH SIDE",
+        "INSURANCE",
+        "LOAN TRACK",
+        "LATEST 6 MONTHS EMI DEBIT BANKING REQD",
+        "INCOME DOCS",
+        "E-BILL",
+        "IF RENTED REQD RENT AGREEMENT WITH OWNER E-BILL",
+        "Other Documents"
+      ],
+      "Internal BT": [
+        "PHOTO",
+        "PAN CARD",
+        "AADHAAR CARD",
+        "RC BOTH SIDE",
+        "INSURANCE",
+        "LATEST 6 MONTHS EMI DEBIT BANKING REQD",
+        "INCOME DOCS",
+        "E-BILL",
+        "IF RENTED REQD RENT AGREEMENT WITH OWNER E-BILL",
+        "Other Documents"
+      ],
+      "Refinance": [
+        "PHOTO",
+        "PAN CARD",
+        "AADHAAR CARD",
+        "RC BOTH SIDE",
+        "INSURANCE",
+        "LATEST 6 MONTHS EMI DEBIT BANKING REQD",
+        "INCOME DOCS",
+        "E-BILL",
+        "IF RENTED REQD RENT AGREEMENT WITH OWNER E-BILL",
+        "Other Documents"
+      ],
+      "New Car": [
+        "PHOTO",
+        "PAN CARD",
+        "AADHAAR CARD"
+      ]
+    }
   };
 
   return (
@@ -143,6 +293,14 @@ const Tvr = () => {
             onClick={() => setActiveTab('attachments')}
           >
             Attachments
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            className={`nav-link ${activeTab === 'disposition' ? 'active' : ''}`}
+            onClick={() => setActiveTab('disposition')}
+          >
+            disposition
           </button>
         </li>
 
@@ -520,13 +678,6 @@ const Tvr = () => {
         )}
         {activeTab === 'references' && (
           <div className="tab-pane active">
-
-
-            {/* Reference List */}
-
-
-
-            {/* Add Reference Form */}
             <form onSubmit={handleAddReference} className="mb-4">
               <div className="mb-3 row">
                 <div className="col-md-4">
@@ -550,6 +701,59 @@ const Tvr = () => {
                     value={newReference.mobileNumber}
                     onChange={(e) => setNewReference({ ...newReference, mobileNumber: e.target.value })}
                     placeholder="Enter mobile number"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="referenceOccupation" className="form-label fw-bold">Occupation Type</label>
+                  <select
+        className="form-select"
+        id="referenceOccupation"
+        
+      >
+        <option value="">Select</option>
+        <option value="salaried_employee">Salaried Employee</option>
+                        <option value="self_employed">Self-Employed</option>
+                        <option value="business_owner">Business Owner</option>
+                        <option value="freelancer">Freelancer</option>
+                        <option value="government_employee">Government Employee</option>
+                        <option value="retired">Retired</option>
+                        <option value="student">Student</option>
+                        <option value="housewife_homemaker">Housewife/Homemaker</option>
+                        <option value="agriculture_farmer">Agriculture/Farmer</option>
+                        <option value="consultant">Consultant</option>
+      </select>
+                </div>
+
+                <div className="col-md-4">
+                    <label htmlFor="natureOfBusiness" className="form-label fw-bold">Nature of Business</label>
+                    <select className="form-select" id="natureOfBusiness">
+                      <option value="">Select nature</option>
+                      <option value="manufacturing">Manufacturing</option>
+                      <option value="Trading">Trading</option>
+                      <option value="Retail">Retail</option>
+                      <option value="Wholesale">Wholesale</option>
+                      <option value="Information Technology">Information Technology</option>
+                      <option value="Finance and Banking">Finance and Banking</option>
+                      <option value="Real Estate and Construction">Real Estate and Construction</option>
+                      <option value="Hospitality">Hospitality</option>
+                      <option value="Healthcare">Healthcare</option>
+                      <option value="Education and Training">Education and Training</option>
+                      <option value="Transportation and Logistics">Transportation and Logistics</option>
+                      <option value="Agriculture and Farming">Agriculture and Farming</option>
+                      <option value="Import/Export">Import/Export</option>
+                      <option value="Media and Entertainment">Media and Entertainment</option>
+                    </select>
+</div>
+<div className="col-md-4">
+                  <label htmlFor="company_name" className="form-label fw-bold">Company Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="company_name"
+                    value={newReference.company_name}
+                    onChange={(e) => setNewReference({ ...newReference, company_name: e.target.value })}
+                    placeholder="Enter Company Name"
                     required
                   />
                 </div>
@@ -605,12 +809,6 @@ const Tvr = () => {
 {activeTab === 'loan details' && (
           <div className="tab-pane active">
 
-
-            {/* Reference List */}
-
-
-
-            {/* Add Reference Form */}
             <form onSubmit={handleAddReference} className="mb-4">
               <div className="mb-3 row">
                 <div className="col-md-4">
@@ -638,13 +836,14 @@ const Tvr = () => {
                   />
                 </div>
                 <div className="col-md-4">
-                  <label htmlFor="emi_date" className="form-label fw-bold">EMI Date</label>
+                  <label htmlFor="loanTerm" className="form-label fw-bold">Loan Term</label>
                   <input
-                    type="date"
+                    type="text"
                     className="form-control"
-                    id="emi_date"
-                    value={loandetail.emiDate}
-                    onChange={(e) => setloandetail({ ...loandetail, emiDate: e.target.value })}
+                    id="loanTerm"
+                    value={loandetail.loanTerm}
+                    onChange={(e) => setloandetail({ ...loandetail, loanTerm: e.target.value })}
+                    placeholder="Enter mobile number"
                     required
                   />
                 </div>
@@ -657,6 +856,29 @@ const Tvr = () => {
                     value={loandetail.loanstartDate}
                     onChange={(e) => setloandetail({ ...loandetail, loanstartDate: e.target.value })}
                     placeholder="Enter mobile number"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="loan_end_date" className="form-label fw-bold">Loan End Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="loan_end_date"
+                    value={loandetail.loan_end_date}
+                    onChange={(e) => setloandetail({ ...loandetail, loan_end_date: e.target.value })}
+                    
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="emi_date" className="form-label fw-bold">EMI Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="emi_date"
+                    value={loandetail.emiDate}
+                    onChange={(e) => setloandetail({ ...loandetail, emiDate: e.target.value })}
                     required
                   />
                 </div>
@@ -674,7 +896,13 @@ const Tvr = () => {
                 </div>
                 <div className="col-md-4">
                   <label htmlFor="referenceAddress" className="form-label fw-bold">Bounces Reason</label>
-                  <input
+                  <select className="form-select" id="referenceAddress"value={loandetail.bouncesReason}
+                    onChange={(e) => setloandetail({ ...loandetail, bouncesReason: e.target.value })}>
+                      <option value="">Select Reason</option>
+                      <option value="insuffisent_funds">Insuffisent Funds</option>
+                      <option value="technical_issue">Technical issue</option>
+                      </select>
+                  {/* <input
                     type="text"
                     className="form-control"
                     id="referenceAddress"
@@ -682,7 +910,7 @@ const Tvr = () => {
                     onChange={(e) => setloandetail({ ...loandetail, bouncesReason: e.target.value })}
                     placeholder="Enter address"
                     required
-                  />
+                  /> */}
                 </div>
                 <div className="col-md-4">
                   <label htmlFor="referenceAddress" className="form-label fw-bold">Car Details</label>
@@ -733,13 +961,54 @@ const Tvr = () => {
           </div>
         )}
 
-
-
-
-
         {activeTab === 'attachments' && (
   <div className="tab-pane active">
-    <form onSubmit={handleDocumentUpload}>
+
+
+<div>
+      <form>
+        <label className="form-label fw-bold">
+          Loan Type:
+          <select value={selectedLoanType} onChange={handleLoanTypeChange}>
+            <option value="">Select Loan Type</option>
+            {Object.keys(documentsByLoanType).map(loanType => (
+              <option key={loanType} value={loanType}>{loanType}</option>
+            ))}
+          </select>
+        </label>
+        <br />
+
+        {selectedLoanType && (
+          <label className="form-label fw-bold">
+            Category:
+            <select value={selectedCategory} onChange={handleCategoryChange}>
+              <option value="">Select Category</option>
+              {Object.keys(documentsByLoanType[selectedLoanType]).map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+          </label>
+        )}
+        <br />
+
+        {documentList.length > 0 && (
+          <div>
+            <h3>Documents Required</h3>
+            {documentList.map((doc, index) => (
+              <div key={index}>
+                <label className="form-label fw-bold">
+                  {doc}:
+                  <input type="file" />
+                </label>
+                <br />
+              </div>
+            ))}
+          </div>
+        )}
+      </form>
+    </div>
+
+    {/* <form onSubmit={handleDocumentUpload}>
       <div className="mb-3 row">
         <div className="col-md-6">
           <label htmlFor="documentType" className="form-label fw-bold">Select Document Type</label>
@@ -766,7 +1035,7 @@ const Tvr = () => {
       <button type="submit" className="btn btn-primary">
         Upload
       </button>
-    </form>
+    </form> */}
 
     {/* Document List with View and Delete Options */}
     <div className="mt-4">
@@ -812,7 +1081,117 @@ const Tvr = () => {
   </div>
 )}
 
+{activeTab === 'disposition' && (
+  <div className="tab-pane active">
+  <form>
+    {/* Call Status */}
+    <div className="mb-3 row">
+      <div className="col-md-6">
+        <label htmlFor="callStatus" className="form-label fw-bold">Call Status</label>
+        <select className="form-select" id="callStatus" value={callStatus} onChange={handleCallStatusChange}>
+          <option value="">Select</option>
+          <option value="connected">Connected</option>
+          <option value="not_connected">Not Connected</option>
+        </select>
+      </div>
+      
+      {/* Disposition */}
+      <div className="col-md-6">
+        <label htmlFor="disposition" className="form-label fw-bold">Disposition</label>
+        <select className="form-select" id="disposition" value={disposition} onChange={handleDispositionChange}>
+          <option value="">Select</option>
+          {callStatus === 'not_connected' ? (
+            <>
+              <option value="busy">Busy</option>
+              <option value="rnr">RNR</option>
+              <option value="call_drop">Call Drop</option>
+              <option value="switched_off">Switched Off</option>
+            </>
+          ) : (
+            <>
+              <option value="share_documents">Asked to share documents</option>
+              <option value="additional_documents">Asked to share additional documents</option>
+              <option value="follow_up">Follow-up</option>
+              <option value="document_shared">Document shared</option>
+              <option value="no_share">Do not want to share</option>
+              <option value="no_document">Don’t have document/will share later</option>
+            </>
+          )}
+        </select>
+      </div>
+   
+    {(disposition === 'share_documents' || disposition ==='additional_documents' ||disposition === 'follow_up' ||disposition === 'no_document') && (
+        <div className="col-md-6">
+          <label htmlFor="expectedDocumentDate" className="form-label fw-bold">Expected to send document by</label>
+          <input type="date" className="form-control" id="expectedDocumentDate" />
+        </div>
+      )}
+    {/* Document List */}
+    {(disposition === 'additional_documents' || disposition === 'document_shared' || disposition === 'share_documents') && (
+     
+      <div className="col-md-6">
+        <label htmlFor="documentList" className="form-label fw-bold">Document List</label>
+        <div
+          id="documentList"
+          style={{
+            maxHeight: '200px', 
+            overflowY: 'scroll', // Add a vertical scrollbar if the content exceeds the max height
+            border: '1px solid #ccc', // Optional: Add a border for better visibility
+            padding: '10px',
+            borderRadius: '5px',
+          }}
+        >
+          {documentTypes.map((doc) => (
+            <div key={doc.value} className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id={doc.value}
+                value={doc.value}
+                checked={selectedDocuments.includes(doc.value)}
+                onChange={handleCheckboxChange}
+              />
+              <label className="form-check-label" htmlFor={doc.value}>
+                {doc.label}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+    
+    )}
 
+    {/* Remark Field */}
+    {(disposition !== 'additional_documents' && disposition !== 'document_shared') && disposition && (
+      
+        <div className="col-md-6">
+          <label htmlFor="remark" className="form-label fw-bold">Reason</label>
+          <textarea type="text" className="form-control" id="remark" placeholder="Enter remark" />
+        </div>
+      
+    )}
+
+    {/* File Status */}
+  
+      <div className="col-md-6">
+        <label htmlFor="fileStatus" className="form-label fw-bold">File Status</label>
+        <select className="form-select" id="fileStatus">
+          <option value="">Select</option>
+          <option value="process_to_tvr">Process to TVR</option>
+          <option value="process_to_cdr">Process to CDR</option>
+          <option value="process_to_login_team">Process to Login Team</option>
+        </select>
+      </div>
+
+      {/* Date Picker for Expected Document Date */}
+      
+    
+    </div>
+    <button type="submit" className="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+)}
 
 
 

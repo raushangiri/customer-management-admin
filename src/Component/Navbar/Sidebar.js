@@ -7,7 +7,7 @@ import logo from "../Auth/jbj-fintech-logo.webp";
 
 const Sidebar = () => {
   const [showSubMenu, setShowSubMenu] = useState(false);
-   const userRole = localStorage.getItem('userRole'); // Get the user's role
+  const userRole = localStorage.getItem('userRole'); // Get the user's role
   // const userRole = "Admin" 
   //const userRole = "sales" 
   // const userRole = "tvr-team" 
@@ -22,12 +22,12 @@ const Sidebar = () => {
     <div className="sidebar border border-primary">
       <img src={logo} alt='logo' style={{ width: '90%' }} className='img1' />
       <ul>
-        
+
         {userRole === 'Admin' && (
           <>
-          <li>
-          <Link to="/dashboard">Dashboard</Link>
-        </li>
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
             <li>
               <div onClick={toggleSubMenu} className="submenu-title">
                 Manage User
@@ -35,8 +35,9 @@ const Sidebar = () => {
               </div>
               {showSubMenu && (
                 <ul className="submenu">
-                  <li><Link to="/create-user">Add User</Link></li>
+                  <li><Link to="/create-user">Create User</Link></li>
                   <li><Link to="/user-list">User List</Link></li>
+                  <li><Link to="/unlock-user">Unlock User</Link></li>
                   <li><Link to="/unlock-user">Unlock User</Link></li>
                 </ul>
               )}
@@ -47,39 +48,53 @@ const Sidebar = () => {
             <li><Link to="/reports">Reports</Link></li>
           </>
         )}
-
-{userRole === 'Sales' && (
+        {userRole === 'Team-leader' && (
           <>
-          <li>
-          <Link to="/sales-dashboard">Dashboard</Link>
-        </li>
-          <li><Link to="/sales-team">sales</Link></li>
-            </>
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/Team-Member"> Team Members</Link>
+            </li>
+            <li>
+              <Link to="/upload-csv">Upload File</Link>
+            </li>
+            <li><Link to="/reports">Reports</Link></li>
+          </>
+        )}
+
+        {userRole === 'Sales' && (
+          <>
+            <li>
+              <Link to="/sales-dashboard">Dashboard</Link>
+            </li>
+            <li><Link to="/sales-team">sales</Link></li>
+          </>
         )}
         {userRole === 'TVR' && (
           <>
-           <li>
-          <Link to="/tvr-dashboard">Dashboard</Link>
-        </li>
-              <li><Link to="/tvr-team">TVR</Link></li>
-            </>
+            <li>
+              <Link to="/tvr-dashboard">Dashboard</Link>
+            </li>
+            <li><Link to="/tvr-team">TVR</Link></li>
+          </>
         )}
-    
+
         {userRole === 'CDR' && (
           <>
-           <li>
-          <Link to="/cdr-dashboard">Dashboard</Link>
-        </li>
-        <li><Link to="/cdr-team">CDR</Link></li>
-        </>
+            <li>
+              <Link to="/cdr-dashboard">Dashboard</Link>
+            </li>
+            <li><Link to="/cdr-team">CDR</Link></li>
+          </>
         )}
-         {userRole === 'bank-login' && (
+        {userRole === 'bank-login' && (
           <>
-           <li>
-          <Link to="/banklogin-dashboard">Dashboard</Link>
-        </li>
-        <li><Link to="/bank-login-team">Bank Login Team</Link></li>
-        </>
+            <li>
+              <Link to="/banklogin-dashboard">Dashboard</Link>
+            </li>
+            <li><Link to="/bank-login-team">Bank Login Team</Link></li>
+          </>
         )}
         <li><Link to="/">Logout</Link></li>
 

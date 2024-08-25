@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 const Cdr = () => {
- 
+
   const [activeTab, setActiveTab] = useState('details');
   const [references, setReferences] = useState([]);
   const [newReference, setNewReference] = useState({ name: '', mobileNumber: '', address: '' });
-  const [loandetail, setloandetail] = useState({ bankName: '', emiAmount: '', emiDate: '',loanstartDate:'',noofemiBounces:'',bouncesReason:'',carDetails:'' });
+  const [loandetail, setloandetail] = useState({ bankName: '', emiAmount: '', emiDate: '', loanstartDate: '', noofemiBounces: '', bouncesReason: '', carDetails: '' });
   const [newloandetail, setNewloandetail] = useState([]);
   const [selectedLoanType, setSelectedLoanType] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -17,50 +17,84 @@ const Cdr = () => {
   const [uploadedDocuments, setUploadedDocuments] = useState([]);
   const [showModal1, setShowModal1] = useState(false);
   const [selectedDocumentFile, setSelectedDocumentFile] = useState(null);
+  const [callStatus, setCallStatus] = useState('');
+  const [disposition, setDisposition] = useState('');
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
+
+
+  const documentTypes = [
+    { value: 'photo_document', label: 'Photo Document' },
+    { value: 'pan_card_document', label: 'PAN Card Document' },
+    { value: 'aadhaar_card_document', label: 'Aadhaar Card Document' },
+    // Add other document types as needed
+  ];
+
+  // Handle checkbox change
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      // Add document to the selected list
+      setSelectedDocuments((prev) => [...prev, value]);
+    } else {
+      // Remove document from the selected list
+      setSelectedDocuments((prev) => prev.filter((doc) => doc !== value));
+    }
+  };
+
+  // Handle changes in Call Status
+  const handleCallStatusChange = (e) => {
+    setCallStatus(e.target.value);
+    setDisposition(''); // Reset disposition when call status changes
+  };
+
+  // Handle changes in Disposition
+  const handleDispositionChange = (e) => {
+    setDisposition(e.target.value);
+  };
 
 
   const months = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-];
+  ];
 
-const getPrevious12Months = () => {
+  const getPrevious12Months = () => {
     const previous12Months = [];
     const currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
 
     for (let i = 0; i < 12; i++) {
-        const monthName = months[currentMonth];
-        previous12Months.push({
-            month: monthName,
-            year: currentYear,
-            dayValues: Array(6).fill('') // Initialize with empty strings for days 5, 10, 15, 20, 25, 30
-        });
+      const monthName = months[currentMonth];
+      previous12Months.push({
+        month: monthName,
+        year: currentYear,
+        dayValues: Array(6).fill('') // Initialize with empty strings for days 5, 10, 15, 20, 25, 30
+      });
 
-        currentMonth = (currentMonth - 1 + 12) % 12;
-        if (currentMonth === 11) {
-            currentYear--;
-        }
+      currentMonth = (currentMonth - 1 + 12) % 12;
+      if (currentMonth === 11) {
+        currentYear--;
+      }
     }
     return previous12Months.reverse();
-};
+  };
 
-const [previous12Months, setPrevious12Months] = useState(getPrevious12Months());
+  const [previous12Months, setPrevious12Months] = useState(getPrevious12Months());
 
-const handleDayValueChange = (monthIndex, dayIndex, value) => {
+  const handleDayValueChange = (monthIndex, dayIndex, value) => {
     const updatedMonths = [...previous12Months];
     updatedMonths[monthIndex].dayValues[dayIndex] = value;
     setPrevious12Months(updatedMonths);
-};
+  };
 
-const calculateTotalAB = (dayValues) => {
+  const calculateTotalAB = (dayValues) => {
     return dayValues.reduce((total, value) => total + (parseFloat(value) || 0), 0);
-};
+  };
 
-const calculateTotalABB = (totalAB) => {
+  const calculateTotalABB = (totalAB) => {
     return totalAB / 6;
-};
+  };
 
   const handleDocumentTypeChange = (event) => {
     setSelectedDocumentType(event.target.value);
@@ -101,12 +135,12 @@ const calculateTotalABB = (totalAB) => {
     setReferences([...references, newReference]);
     setNewReference({ name: '', mobileNumber: '', address: '' });
   };
-  
+
 
   const handleAddloanDetails = (e) => {
     e.preventDefault();
     setNewloandetail([...newloandetail, loandetail]);
-    setloandetail({ bankName: '', emiAmount: '', emiDate: '',loanstartDate:'',noofemiBounces:'',bouncesReason:'',carDetails:'' });
+    setloandetail({ bankName: '', emiAmount: '', emiDate: '', loanstartDate: '', noofemiBounces: '', bouncesReason: '', carDetails: '' });
   };
 
   const loanMasterData = {
@@ -114,7 +148,10 @@ const calculateTotalABB = (totalAB) => {
     'Business Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
     'LAP Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
     'Home Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-    'Personal Loan': ['Personal Loan']
+    'Personal Loan': ['Personal Loan'],
+    'Education Loan': ['Education Loan'],
+    'Insurance': ['Insurance'],
+    'Working capital Loan': ['Working capital Loan']
   };
 
   const NotInterestedOptions = {
@@ -201,6 +238,14 @@ const calculateTotalABB = (totalAB) => {
             Attachments
           </button>
         </li>
+        <li className="nav-item">
+          <button
+            className={`nav-link ${activeTab === 'disposition' ? 'active' : ''}`}
+            onClick={() => setActiveTab('disposition')}
+          >
+            disposition
+          </button>
+        </li>
 
       </ul>
 
@@ -245,43 +290,43 @@ const calculateTotalABB = (totalAB) => {
                   <input type="text" className="form-control" id="previous_loan_type" placeholder="Enter name" />
                 </div>
               </div>
-              
+
             </form>
-<div>
-<div>
-  <h3> File Disposition History</h3>
-  <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Date</th>
-      <th scope="col">User Name</th>
-      <th scope="col">Loan Type</th>
-      <th scope="col">Category</th>
-      <th scope="col">Disposition</th>
-      <th scope="col">Remark</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
-          </div>
+            <div>
+              <div>
+                <h3> File Disposition History</h3>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Date</th>
+                      <th scope="col">User Name</th>
+                      <th scope="col">Loan Type</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Disposition</th>
+                      <th scope="col">Remark</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Mark</td>
+                      <td>Otto</td>
+                      <td>@mdo</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Jacob</td>
+                      <td>Thornton</td>
+                      <td>@fat</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td colspan="2">Larry the Bird</td>
+                      <td>@twitter</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
@@ -290,72 +335,72 @@ const calculateTotalABB = (totalAB) => {
             <form>
 
               <div className="mb-3 row">
-              <div className="col-md-6">
-      <label htmlFor="maritalStatus" className="form-label fw-bold">Is Interested?</label>
-      <select
-        className="form-select"
-        id="maritalStatus"
-        value={isInterested}
-        onChange={handleInterestChange}
-      >
-        <option value="">Select</option>
-        <option value="Intrested">Interested</option>
-        <option value="NotIntrested">Not Interested</option>
-      </select>
+                <div className="col-md-6">
+                  <label htmlFor="maritalStatus" className="form-label fw-bold">Is Interested?</label>
+                  <select
+                    className="form-select"
+                    id="maritalStatus"
+                    value={isInterested}
+                    onChange={handleInterestChange}
+                  >
+                    <option value="">Select</option>
+                    <option value="Intrested">Interested</option>
+                    <option value="NotIntrested">Not Interested</option>
+                  </select>
 
-      {/* Bootstrap Modal */}
-      {showModal && (
-        <div className="modal fade show" style={{ display: 'block' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Reason for Not Interested</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setShowModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={handleModalSubmit}>
-                  <div className="mb-3">
-                    <label htmlFor="notInterestedReason" className="form-label">Select Reason</label>
-                    <select
-                      className="form-select"
-                      id="notInterestedReason"
-                      value={notInterestedReason}
-                      onChange={(e) => setNotInterestedReason(e.target.value)}
-                    >
-                      <option value="">Select Reason</option>
-                      {NotInterestedOptions.notInterested.map((reason, index) => (
-                        <option key={index} value={reason}>{reason}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="remarks" className="form-label">Remarks</label>
-                    <textarea 
-                      type="textarea"
-                      className="form-control"
-                      id="remarks"
-                      value={remarks}
-                      onChange={(e) => setRemarks(e.target.value)}
-                      placeholder="Enter remarks"
-                    />
-                  </div>
-                  <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                    <button type="submit" className="btn btn-primary">Submit</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          {/* <div className="modal-backdrop fade show"></div> */}
-        </div>
-      )}
-    </div>
-                  <div className="col-md-6">
+                  {/* Bootstrap Modal */}
+                  {showModal && (
+                    <div className="modal fade show" style={{ display: 'block' }}>
+                      <div className="modal-dialog">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h5 className="modal-title">Reason for Not Interested</h5>
+                            <button
+                              type="button"
+                              className="btn-close"
+                              onClick={() => setShowModal(false)}
+                            ></button>
+                          </div>
+                          <div className="modal-body">
+                            <form onSubmit={handleModalSubmit}>
+                              <div className="mb-3">
+                                <label htmlFor="notInterestedReason" className="form-label">Select Reason</label>
+                                <select
+                                  className="form-select"
+                                  id="notInterestedReason"
+                                  value={notInterestedReason}
+                                  onChange={(e) => setNotInterestedReason(e.target.value)}
+                                >
+                                  <option value="">Select Reason</option>
+                                  {NotInterestedOptions.notInterested.map((reason, index) => (
+                                    <option key={index} value={reason}>{reason}</option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className="mb-3">
+                                <label htmlFor="remarks" className="form-label">Remarks</label>
+                                <textarea
+                                  type="textarea"
+                                  className="form-control"
+                                  id="remarks"
+                                  value={remarks}
+                                  onChange={(e) => setRemarks(e.target.value)}
+                                  placeholder="Enter remarks"
+                                />
+                              </div>
+                              <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                                <button type="submit" className="btn btn-primary">Submit</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      {/* <div className="modal-backdrop fade show"></div> */}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6">
                   <label htmlFor="typeOfLoan" className="form-label fw-bold">Type of Loan</label>
                   <select
                     className="form-select"
@@ -469,120 +514,113 @@ const calculateTotalABB = (totalAB) => {
                     {/* Add more options as needed */}
                   </select>
                 </div>
-                  <div className="col-md-6">
-                    <label htmlFor="totalNumberOfYearsAtCurrentResidence" className="form-label fw-bold">Years at Current Residence</label>
-                    <input type="number" className="form-control" id="totalNumberOfYearsAtCurrentResidence" placeholder="Enter number of years" />
-                  </div>
-                  <div className="col-md-6">
-                    <label htmlFor="totalTimeInDelhi" className="form-label fw-bold">Total Time in Delhi</label>
-                    <input type="text" className="form-control" id="totalTimeInDelhi" placeholder="Enter total time in Delhi" />
-                  </div>
+                <div className="col-md-6">
+                  <label htmlFor="totalNumberOfYearsAtCurrentResidence" className="form-label fw-bold">Years at Current Residence</label>
+                  <input type="number" className="form-control" id="totalNumberOfYearsAtCurrentResidence" placeholder="Enter number of years" />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="totalTimeInDelhi" className="form-label fw-bold">Total Time in Delhi</label>
+                  <input type="text" className="form-control" id="totalTimeInDelhi" placeholder="Enter total time in Delhi" />
+                </div>
 
-                  <div className="col-md-6">
-                    <label htmlFor="natureOfBusiness" className="form-label fw-bold">Nature of Business</label>
-                    <select className="form-select" id="natureOfBusiness">
-                      <option value="">Select nature</option>
-                      <option value="manufacturing">Manufacturing</option>
-                      <option value="Trading">Trading</option>
-                      <option value="Retail">Retail</option>
-                      <option value="Wholesale">Wholesale</option>
-                      <option value="Information Technology">Information Technology</option>
-                      <option value="Finance and Banking">Finance and Banking</option>
-                      <option value="Real Estate and Construction">Real Estate and Construction</option>
-                      <option value="Hospitality">Hospitality</option>
-                      <option value="Healthcare">Healthcare</option>
-                      <option value="Education and Training">Education and Training</option>
-                      <option value="Transportation and Logistics">Transportation and Logistics</option>
-                      <option value="Agriculture and Farming">Agriculture and Farming</option>
-                      <option value="Import/Export">Import/Export</option>
-                      <option value="Media and Entertainment">Media and Entertainment</option>
-                    </select>
-</div>
-                    <div className="col-md-6">
-                      <label htmlFor="occupationType" className="form-label fw-bold">Occupation Type</label>
-                      <select className="form-select" id="occupationType">
-                        <option value="">Select type</option>
-                        <option value="salaried_employee">Salaried Employee</option>
-                        <option value="self_employed">Self-Employed</option>
-                        <option value="business_owner">Business Owner</option>
-                        <option value="freelancer">Freelancer</option>
-                        <option value="government_employee">Government Employee</option>
-                        <option value="retired">Retired</option>
-                        <option value="student">Student</option>
-                        <option value="housewife_homemaker">Housewife/Homemaker</option>
-                        <option value="agriculture_farmer">Agriculture/Farmer</option>
-                        <option value="consultant">Consultant</option>
-                      </select>
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="officeAddress" className="form-label fw-bold">Office Address</label>
-                      <input type="text" className="form-control" id="officeAddress" placeholder="Enter office address" />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="officeAddressLandmark" className="form-label fw-bold">Office Address Landmark</label>
-                      <input type="text" className="form-control" id="officeAddressLandmark" placeholder="Enter landmark" />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="noOfYearsAtCurrentOrganization" className="form-label fw-bold">Years at Current Organization</label>
-                      <input type="number" className="form-control" id="noOfYearsAtCurrentOrganization" placeholder="Enter number of years" />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="gstItrFiled" className="form-label fw-bold">GST/ITR Filed</label>
-                      <select className="form-select" id="gstItrFiled">
-                        <option value="">Select</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                      </select>
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="gstAndItrIncome" className="form-label fw-bold">GST and ITR Income</label>
-                      <input type="number" className="form-control" id="gstAndItrIncome" placeholder="Enter income" />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="serviceType" className="form-label fw-bold">Service Type</label>
-                      <select className="form-select" id="serviceType">
-                        <option value="">Select type</option>
-                        <option value="it_services">IT Services</option>
-                        <option value="financial_services">Financial Services</option>
-                        <option value="legal_services">Legal Services</option>
-                        <option value="healthcare_services">Healthcare Services</option>
-                        <option value="educational_services">Educational Services</option>
-                        <option value="transportation_services">Transportation Services</option>
-                        <option value="hospitality_services">Hospitality Services</option>
-                        <option value="consultancy_services">Consultancy Services</option>
-                        <option value="retail_services">Retail Services</option>
-                        <option value="utility_services">Utility Services (Electricity, Water, etc.)</option>
-                        <option value="maintenance_repair_services">Maintenance and Repair Services</option>
-                        <option value="marketing_advertising_services">Marketing and Advertising Services</option>
-                      </select>
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="inHandSalary" className="form-label fw-bold">In-Hand Salary</label>
-                      <input type="number" className="form-control" id="inHandSalary" placeholder="Enter salary" />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="otherIncome" className="form-label fw-bold">Other Income</label>
-                      <input type="number" className="form-control" id="otherIncome" placeholder="Enter other income" />
-                    </div>
-                  </div>
-               
+                <div className="col-md-6">
+                  <label htmlFor="natureOfBusiness" className="form-label fw-bold">Nature of Business</label>
+                  <select className="form-select" id="natureOfBusiness">
+                    <option value="">Select nature</option>
+                    <option value="manufacturing">Manufacturing</option>
+                    <option value="Trading">Trading</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Wholesale">Wholesale</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Finance and Banking">Finance and Banking</option>
+                    <option value="Real Estate and Construction">Real Estate and Construction</option>
+                    <option value="Hospitality">Hospitality</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Education and Training">Education and Training</option>
+                    <option value="Transportation and Logistics">Transportation and Logistics</option>
+                    <option value="Agriculture and Farming">Agriculture and Farming</option>
+                    <option value="Import/Export">Import/Export</option>
+                    <option value="Media and Entertainment">Media and Entertainment</option>
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="occupationType" className="form-label fw-bold">Occupation Type</label>
+                  <select className="form-select" id="occupationType">
+                    <option value="">Select type</option>
+                    <option value="salaried_employee">Salaried Employee</option>
+                    <option value="self_employed">Self-Employed</option>
+                    <option value="business_owner">Business Owner</option>
+                    <option value="freelancer">Freelancer</option>
+                    <option value="government_employee">Government Employee</option>
+                    <option value="retired">Retired</option>
+                    <option value="student">Student</option>
+                    <option value="housewife_homemaker">Housewife/Homemaker</option>
+                    <option value="agriculture_farmer">Agriculture/Farmer</option>
+                    <option value="consultant">Consultant</option>
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="officeAddress" className="form-label fw-bold">Office Address</label>
+                  <input type="text" className="form-control" id="officeAddress" placeholder="Enter office address" />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="officeAddressLandmark" className="form-label fw-bold">Office Address Landmark</label>
+                  <input type="text" className="form-control" id="officeAddressLandmark" placeholder="Enter landmark" />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="noOfYearsAtCurrentOrganization" className="form-label fw-bold">Years at Current Organization</label>
+                  <input type="number" className="form-control" id="noOfYearsAtCurrentOrganization" placeholder="Enter number of years" />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="gstItrFiled" className="form-label fw-bold">GST/ITR Filed</label>
+                  <select className="form-select" id="gstItrFiled">
+                    <option value="">Select</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="gstAndItrIncome" className="form-label fw-bold">GST and ITR Income</label>
+                  <input type="number" className="form-control" id="gstAndItrIncome" placeholder="Enter income" />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="serviceType" className="form-label fw-bold">Service Type</label>
+                  <select className="form-select" id="serviceType">
+                    <option value="">Select type</option>
+                    <option value="it_services">IT Services</option>
+                    <option value="financial_services">Financial Services</option>
+                    <option value="legal_services">Legal Services</option>
+                    <option value="healthcare_services">Healthcare Services</option>
+                    <option value="educational_services">Educational Services</option>
+                    <option value="transportation_services">Transportation Services</option>
+                    <option value="hospitality_services">Hospitality Services</option>
+                    <option value="consultancy_services">Consultancy Services</option>
+                    <option value="retail_services">Retail Services</option>
+                    <option value="utility_services">Utility Services (Electricity, Water, etc.)</option>
+                    <option value="maintenance_repair_services">Maintenance and Repair Services</option>
+                    <option value="marketing_advertising_services">Marketing and Advertising Services</option>
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="inHandSalary" className="form-label fw-bold">In-Hand Salary</label>
+                  <input type="number" className="form-control" id="inHandSalary" placeholder="Enter salary" />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="otherIncome" className="form-label fw-bold">Other Income</label>
+                  <input type="number" className="form-control" id="otherIncome" placeholder="Enter other income" />
+                </div>
+              </div>
 
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
-                
+
+              <button type="submit" className="btn btn-primary">
+                Submit
+              </button>
+
             </form>
           </div>
         )}
         {activeTab === 'references' && (
           <div className="tab-pane active">
-
-
-            {/* Reference List */}
-
-
-
-            {/* Add Reference Form */}
             <form onSubmit={handleAddReference} className="mb-4">
               <div className="mb-3 row">
                 <div className="col-md-4">
@@ -606,6 +644,59 @@ const calculateTotalABB = (totalAB) => {
                     value={newReference.mobileNumber}
                     onChange={(e) => setNewReference({ ...newReference, mobileNumber: e.target.value })}
                     placeholder="Enter mobile number"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="referenceOccupation" className="form-label fw-bold">Occupation Type</label>
+                  <select
+        className="form-select"
+        id="referenceOccupation"
+        
+      >
+        <option value="">Select</option>
+        <option value="salaried_employee">Salaried Employee</option>
+                        <option value="self_employed">Self-Employed</option>
+                        <option value="business_owner">Business Owner</option>
+                        <option value="freelancer">Freelancer</option>
+                        <option value="government_employee">Government Employee</option>
+                        <option value="retired">Retired</option>
+                        <option value="student">Student</option>
+                        <option value="housewife_homemaker">Housewife/Homemaker</option>
+                        <option value="agriculture_farmer">Agriculture/Farmer</option>
+                        <option value="consultant">Consultant</option>
+      </select>
+                </div>
+
+                <div className="col-md-4">
+                    <label htmlFor="natureOfBusiness" className="form-label fw-bold">Nature of Business</label>
+                    <select className="form-select" id="natureOfBusiness">
+                      <option value="">Select nature</option>
+                      <option value="manufacturing">Manufacturing</option>
+                      <option value="Trading">Trading</option>
+                      <option value="Retail">Retail</option>
+                      <option value="Wholesale">Wholesale</option>
+                      <option value="Information Technology">Information Technology</option>
+                      <option value="Finance and Banking">Finance and Banking</option>
+                      <option value="Real Estate and Construction">Real Estate and Construction</option>
+                      <option value="Hospitality">Hospitality</option>
+                      <option value="Healthcare">Healthcare</option>
+                      <option value="Education and Training">Education and Training</option>
+                      <option value="Transportation and Logistics">Transportation and Logistics</option>
+                      <option value="Agriculture and Farming">Agriculture and Farming</option>
+                      <option value="Import/Export">Import/Export</option>
+                      <option value="Media and Entertainment">Media and Entertainment</option>
+                    </select>
+</div>
+<div className="col-md-4">
+                  <label htmlFor="company_name" className="form-label fw-bold">Company Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="company_name"
+                    value={newReference.company_name}
+                    onChange={(e) => setNewReference({ ...newReference, company_name: e.target.value })}
+                    placeholder="Enter Company Name"
                     required
                   />
                 </div>
@@ -661,14 +752,8 @@ const calculateTotalABB = (totalAB) => {
 {activeTab === 'loan details' && (
           <div className="tab-pane active">
 
-
-            {/* Reference List */}
-
-
-
-            {/* Add Reference Form */}
-            <form onSubmit={handleAddloanDetails} className="mb-4">
-            <div className="mb-3 row">
+            <form onSubmit={handleAddReference} className="mb-4">
+              <div className="mb-3 row">
                 <div className="col-md-4">
                   <label htmlFor="referenceName" className="form-label fw-bold">Bank Name</label>
                   <input
@@ -694,13 +779,14 @@ const calculateTotalABB = (totalAB) => {
                   />
                 </div>
                 <div className="col-md-4">
-                  <label htmlFor="emi_date" className="form-label fw-bold">EMI Date</label>
+                  <label htmlFor="loanTerm" className="form-label fw-bold">Loan Term</label>
                   <input
-                    type="date"
+                    type="text"
                     className="form-control"
-                    id="emi_date"
-                    value={loandetail.emiDate}
-                    onChange={(e) => setloandetail({ ...loandetail, emiDate: e.target.value })}
+                    id="loanTerm"
+                    value={loandetail.loanTerm}
+                    onChange={(e) => setloandetail({ ...loandetail, loanTerm: e.target.value })}
+                    placeholder="Enter mobile number"
                     required
                   />
                 </div>
@@ -713,6 +799,29 @@ const calculateTotalABB = (totalAB) => {
                     value={loandetail.loanstartDate}
                     onChange={(e) => setloandetail({ ...loandetail, loanstartDate: e.target.value })}
                     placeholder="Enter mobile number"
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="loan_end_date" className="form-label fw-bold">Loan End Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="loan_end_date"
+                    value={loandetail.loan_end_date}
+                    onChange={(e) => setloandetail({ ...loandetail, loan_end_date: e.target.value })}
+                    
+                    required
+                  />
+                </div>
+                <div className="col-md-4">
+                  <label htmlFor="emi_date" className="form-label fw-bold">EMI Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="emi_date"
+                    value={loandetail.emiDate}
+                    onChange={(e) => setloandetail({ ...loandetail, emiDate: e.target.value })}
                     required
                   />
                 </div>
@@ -730,7 +839,13 @@ const calculateTotalABB = (totalAB) => {
                 </div>
                 <div className="col-md-4">
                   <label htmlFor="referenceAddress" className="form-label fw-bold">Bounces Reason</label>
-                  <input
+                  <select className="form-select" id="referenceAddress"value={loandetail.bouncesReason}
+                    onChange={(e) => setloandetail({ ...loandetail, bouncesReason: e.target.value })}>
+                      <option value="">Select Reason</option>
+                      <option value="insuffisent_funds">Insuffisent Funds</option>
+                      <option value="technical_issue">Technical issue</option>
+                      </select>
+                  {/* <input
                     type="text"
                     className="form-control"
                     id="referenceAddress"
@@ -738,7 +853,7 @@ const calculateTotalABB = (totalAB) => {
                     onChange={(e) => setloandetail({ ...loandetail, bouncesReason: e.target.value })}
                     placeholder="Enter address"
                     required
-                  />
+                  /> */}
                 </div>
                 <div className="col-md-4">
                   <label htmlFor="referenceAddress" className="form-label fw-bold">Car Details</label>
@@ -754,189 +869,306 @@ const calculateTotalABB = (totalAB) => {
                 </div>
               </div>
 
-              <button type="submit" className="btn btn-primary">Add Loan Details</button>
+              <button type="submit" className="btn btn-primary">Add Reference</button>
             </form>
 
             <div className="mb-4">
               {/* <h5>Reference Details</h5> */}
-              {newloandetail.length > 0 ? (
+              {references.length > 0 ? (
                 <table className="table">
                   <thead>
                     <tr>
-                      <th scope="col">Bank Name</th>
-                      <th scope="col">EMI Amount</th>
-                      <th scope="col">EMI Date</th>
-                      <th scope="col">Loan Start Date</th>
-                      <th scope="col">No of EMI Bounces</th>
-                      <th scope="col">Bounces Reason</th>
-                      <th scope="col">Car Details</th>
-
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Mobile Number</th>
+                      <th scope="col">Address</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {newloandetail.map((newloandetail, index) => (
+                    {references.map((reference, index) => (
                       <tr key={index}>
-                        {/* <th scope="row">{index + 1}</th> */}
-                        <td>{newloandetail.bankName}</td>
-                        <td>{newloandetail.emiAmount}</td>
-                        <td>{newloandetail.emiDate}</td>
-                        <td>{newloandetail.loanstartDate}</td>
-                        <td>{newloandetail.noofemiBounces}</td>
-                        <td>{newloandetail.bouncesReason}</td>
-                        <td>{newloandetail.carDetails}</td>
+                        <th scope="row">{index + 1}</th>
+                        <td>{reference.name}</td>
+                        <td>{reference.mobileNumber}</td>
+                        <td>{reference.address}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               ) : (
                 <div className="alert alert-info" role="alert">
-                  No bank added yet.
+                  No references added yet.
                 </div>
               )}
             </div>
           </div>
         )}
 
- {activeTab === 'bank statement' && (
-    <div className="tab-pane active">
-   <div className="container mt-4">
-            <h3 className="text-center mb-4">Bank Statement Update Form</h3>
-            <form>
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                            <th>Day 5</th>
-                            <th>Day 10</th>
-                            <th>Day 15</th>
-                            <th>Day 20</th>
-                            <th>Day 25</th>
-                            <th>Day 30</th>
-                            <th>Total AB</th>
-                            <th>Total ABB</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {previous12Months.map((monthData, monthIndex) => {
-                            const totalAB = calculateTotalAB(monthData.dayValues);
-                            const totalABB = calculateTotalABB(totalAB);
-
-                            return (
-                                <tr key={monthIndex}>
-                                    <td>{`${monthData.month}-${monthData.year.toString().slice(-2)}`}</td>
-                                    {monthData.dayValues.map((value, dayIndex) => (
-                                        <td key={dayIndex}>
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                value={value}
-                                                onChange={(e) =>
-                                                    handleDayValueChange(monthIndex, dayIndex, e.target.value)
-                                                }
-                                                // placeholder={`Value for Day ${[5, 10, 15, 20, 25, 30][dayIndex]}`}
-                                            />
-                                        </td>
-                                    ))}
-                                    <td>{totalAB.toFixed(0)}</td>
-                                    <td>{totalABB.toFixed(0)}</td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-                <div className="text-center">
-                    <button type="submit" className="btn btn-primary">Update Bank Statement</button>
+        {activeTab === 'bank statement' && (
+          <div className="tab-pane active">
+            <div className="container mt-4">
+              <div className="row">
+                <div className="col-md-12 text-center">
+                  <h3 className="mb-4">Bank Statement Update Form</h3>
                 </div>
+                
+                  <div className="col-md-4 mb-4">
+                    <label className="form-label">Total AB</label>
+                    <input type="text" className="form-control" placeholder="0" />
+                  </div>
+                  <div className="col-md-4 mb-4">
+                    <label className="form-label">Six Months ABB</label>
+                    <input type="text" className="form-control" placeholder="0" />
+                  </div>
+                  <div className="col-md-4 mb-4">
+                    <label className="form-label">One Year ABB</label>
+                    <input type="text" className="form-control" placeholder="0" />
+                  </div>
+              </div>
+
+
+            <form>
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Month</th>
+                    <th>Day 5</th>
+                    <th>Day 10</th>
+                    <th>Day 15</th>
+                    <th>Day 20</th>
+                    <th>Day 25</th>
+                    <th>Day 30</th>
+                    <th>Total AB</th>
+                    <th>Total ABB</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {previous12Months.map((monthData, monthIndex) => {
+                    const totalAB = calculateTotalAB(monthData.dayValues);
+                    const totalABB = calculateTotalABB(totalAB);
+
+                    return (
+                      <tr key={monthIndex}>
+                        <td>{`${monthData.month}-${monthData.year.toString().slice(-2)}`}</td>
+                        {monthData.dayValues.map((value, dayIndex) => (
+                          <td key={dayIndex}>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={value}
+                              onChange={(e) =>
+                                handleDayValueChange(monthIndex, dayIndex, e.target.value)
+                              }
+                            // placeholder={`Value for Day ${[5, 10, 15, 20, 25, 30][dayIndex]}`}
+                            />
+                          </td>
+                        ))}
+                        <td>{totalAB.toFixed(0)}</td>
+                        <td>{totalABB.toFixed(0)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div className="text-center">
+                <button type="submit" className="btn btn-primary">Update Bank Statement</button>
+              </div>
             </form>
-        </div>
-    </div>
- )
-}
-
-
-
-
-        {activeTab === 'attachments' && (
-  <div className="tab-pane active">
-    <form onSubmit={handleDocumentUpload}>
-      <div className="mb-3 row">
-        <div className="col-md-6">
-          <label htmlFor="documentType" className="form-label fw-bold">Select Document Type</label>
-          <select className="form-select" id="documentType" value={selectedDocumentType} onChange={handleDocumentTypeChange}>
-            <option value="">Select</option>
-            <option value="photo_document">Photo Document</option>
-            <option value="pan_card_document">PAN Card Document</option>
-            <option value="aadhaar_card_document">Aadhaar Card Document</option>
-            <option value="rc_document">RC Document</option>
-            <option value="insurance_document">Insurance Document</option>
-            <option value="loan_track_document">Loan Track Document</option>
-            <option value="emi_debit_banking_document">Latest Six Months EMI Debit Banking Document</option>
-            <option value="income_docs">Income Documents</option>
-            <option value="e_bill_document">E-Bill Document</option>
-            <option value="rent_agreement_document">Rent Agreement with Owner E-Bill (if rented)</option>
-          </select>
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="documentFile" className="form-label fw-bold">Upload Document</label>
-          <input type="file" className="form-control" id="documentFile" onChange={handleFileChange} multiple />
-        </div>
-      </div>
-
-      <button type="submit" className="btn btn-primary">
-        Upload
-      </button>
-    </form>
-
-    {/* Document List with View and Delete Options */}
-    <div className="mt-4">
-      <h5 className="fw-bold">Uploaded Documents</h5>
-      <ul className="list-group">
-        {uploadedDocuments.map((doc, index) => (
-          <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-            {doc.type}
-            <div>
-              <button className="btn btn-outline-primary btn-sm me-2" onClick={() => handleViewDocument(doc)}>
-                <i className="bi bi-eye"></i> View
-              </button>
-              <button className="btn btn-outline-danger btn-sm" onClick={() => handleDeleteDocument(index)}>
-                <i className="bi bi-trash"></i> Delete
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-
-    {/* Bootstrap Modal for Viewing Document */}
-    {showModal1 && (
-      <div className="modal fade show" style={{ display: 'block' }}>
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">View Document</h5>
-              <button
-                type="button"
-                className="btn-close"
-                onClick={() => setShowModal1(false)}
-              ></button>
-            </div>
-            <div className="modal-body">
-              <embed src={selectedDocumentFile} width="100%" height="500px" />
-            </div>
           </div>
-        </div>
-        {/* <div className="modal-backdrop fade show"></div> */}
-      </div>
-    )}
-  </div>
-)}
-
-
-
-
-
-      </div>
     </div>
+      )
+}
+      {activeTab === 'attachments' && (
+        <div className="tab-pane active">
+          <form onSubmit={handleDocumentUpload}>
+            <div className="mb-3 row">
+              <div className="col-md-6">
+                <label htmlFor="documentType" className="form-label fw-bold">Select Document Type</label>
+                <select className="form-select" id="documentType" value={selectedDocumentType} onChange={handleDocumentTypeChange}>
+                  <option value="">Select</option>
+                  <option value="photo_document">Photo Document</option>
+                  <option value="pan_card_document">PAN Card Document</option>
+                  <option value="aadhaar_card_document">Aadhaar Card Document</option>
+                  <option value="rc_document">RC Document</option>
+                  <option value="insurance_document">Insurance Document</option>
+                  <option value="loan_track_document">Loan Track Document</option>
+                  <option value="emi_debit_banking_document">Latest Six Months EMI Debit Banking Document</option>
+                  <option value="income_docs">Income Documents</option>
+                  <option value="e_bill_document">E-Bill Document</option>
+                  <option value="rent_agreement_document">Rent Agreement with Owner E-Bill (if rented)</option>
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="documentFile" className="form-label fw-bold">Upload Document</label>
+                <input type="file" className="form-control" id="documentFile" onChange={handleFileChange} multiple />
+              </div>
+            </div>
+
+            <button type="submit" className="btn btn-primary">
+              Upload
+            </button>
+          </form>
+
+          {/* Document List with View and Delete Options */}
+          <div className="mt-4">
+            <h5 className="fw-bold">Uploaded Documents</h5>
+            <ul className="list-group">
+              {uploadedDocuments.map((doc, index) => (
+                <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                  {doc.type}
+                  <div>
+                    <button className="btn btn-outline-primary btn-sm me-2" onClick={() => handleViewDocument(doc)}>
+                      <i className="bi bi-eye"></i> View
+                    </button>
+                    <button className="btn btn-outline-danger btn-sm" onClick={() => handleDeleteDocument(index)}>
+                      <i className="bi bi-trash"></i> Delete
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Bootstrap Modal for Viewing Document */}
+          {showModal1 && (
+            <div className="modal fade show" style={{ display: 'block' }}>
+              <div className="modal-dialog modal-lg">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">View Document</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => setShowModal1(false)}
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <embed src={selectedDocumentFile} width="100%" height="500px" />
+                  </div>
+                </div>
+              </div>
+              {/* <div className="modal-backdrop fade show"></div> */}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'disposition' && (
+        <div className="tab-pane active">
+          <form>
+            {/* Call Status */}
+            <div className="mb-3 row">
+              <div className="col-md-6">
+                <label htmlFor="callStatus" className="form-label fw-bold">Call Status</label>
+                <select className="form-select" id="callStatus" value={callStatus} onChange={handleCallStatusChange}>
+                  <option value="">Select</option>
+                  <option value="connected">Connected</option>
+                  <option value="not_connected">Not Connected</option>
+                </select>
+              </div>
+
+              {/* Disposition */}
+              <div className="col-md-6">
+                <label htmlFor="disposition" className="form-label fw-bold">Disposition</label>
+                <select className="form-select" id="disposition" value={disposition} onChange={handleDispositionChange}>
+                  <option value="">Select</option>
+                  {callStatus === 'not_connected' ? (
+                    <>
+                      <option value="busy">Busy</option>
+                      <option value="rnr">RNR</option>
+                      <option value="call_drop">Call Drop</option>
+                      <option value="switched_off">Switched Off</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="share_documents">Asked to share documents</option>
+                      <option value="additional_documents">Asked to share additional documents</option>
+                      <option value="follow_up">Follow-up</option>
+                      <option value="document_shared">Document shared</option>
+                      <option value="no_share">Do not want to share</option>
+                      <option value="no_document">Don’t have document/will share later</option>
+                    </>
+                  )}
+                </select>
+              </div>
+
+              {(disposition === 'share_documents' || disposition === 'additional_documents' || disposition === 'follow_up' || disposition === 'no_document') && (
+                <div className="col-md-6">
+                  <label htmlFor="expectedDocumentDate" className="form-label fw-bold">Expected to send document by</label>
+                  <input type="date" className="form-control" id="expectedDocumentDate" />
+                </div>
+              )}
+              {/* Document List */}
+              {(disposition === 'additional_documents' || disposition === 'document_shared' || disposition === 'share_documents') && (
+
+                <div className="col-md-6">
+                  <label htmlFor="documentList" className="form-label fw-bold">Document List</label>
+                  <div
+                    id="documentList"
+                    style={{
+                      maxHeight: '200px',
+                      overflowY: 'scroll', // Add a vertical scrollbar if the content exceeds the max height
+                      border: '1px solid #ccc', // Optional: Add a border for better visibility
+                      padding: '10px',
+                      borderRadius: '5px',
+                    }}
+                  >
+                    {documentTypes.map((doc) => (
+                      <div key={doc.value} className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id={doc.value}
+                          value={doc.value}
+                          checked={selectedDocuments.includes(doc.value)}
+                          onChange={handleCheckboxChange}
+                        />
+                        <label className="form-check-label" htmlFor={doc.value}>
+                          {doc.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              )}
+
+              {/* Remark Field */}
+              {(disposition !== 'additional_documents' && disposition !== 'document_shared') && disposition && (
+
+                <div className="col-md-6">
+                  <label htmlFor="remark" className="form-label fw-bold">Reason</label>
+                  <textarea type="text" className="form-control" id="remark" placeholder="Enter remark" />
+                </div>
+
+              )}
+
+              {/* File Status */}
+
+              <div className="col-md-6">
+                <label htmlFor="fileStatus" className="form-label fw-bold">File Status</label>
+                <select className="form-select" id="fileStatus">
+                  <option value="">Select</option>
+                  <option value="process_to_tvr">Process to TVR</option>
+                  <option value="process_to_cdr">Process to CDR</option>
+                  <option value="process_to_login_team">Process to Login Team</option>
+                </select>
+              </div>
+
+              {/* Date Picker for Expected Document Date */}
+
+
+            </div>
+            <button type="submit" className="btn btn-primary">Submit</button>
+          </form>
+        </div>
+
+      )}
+
+
+
+    </div>
+    </div >
 
   )
 

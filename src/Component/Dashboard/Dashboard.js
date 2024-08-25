@@ -104,6 +104,30 @@ const Dashboard = () => {
       </div>
     </div>
   </div>
+  <div class="col-sm-4 mb-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">MTD-Total File Completed</h5>
+        <p className='fs-4'>10</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4 mb-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">MTD-Total File Rejected</h5>
+        <p className='fs-4'>10</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4 mb-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">MTD-Total Disbursal File</h5>
+        <p className='fs-4'>10</p>
+      </div>
+    </div>
+  </div>
 </div>
     
     </>

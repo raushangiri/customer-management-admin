@@ -21,11 +21,18 @@ const SalesForm = () => {
 
 
   const documentTypes = [
-    { value: 'photo_document', label: 'Photo Document' },
-    { value: 'pan_card_document', label: 'PAN Card Document' },
-    { value: 'aadhaar_card_document', label: 'Aadhaar Card Document' },
-    // Add other document types as needed
+    { value: 'photo_document.jpg', label: 'Photo Document' },
+    { value: 'pan_card_document.pdf', label: 'PAN Card Document' },
+    { value: 'aadhaar_card_document.pdf', label: 'Aadhaar Card Document' },
+    { value: 'rc_document.pdf', label: 'RC Document' },
+    { value: 'insurance_document.pdf', label: 'Insurance Document' },
+    { value: 'loan_track_document.pdf', label: 'Loan Track Document' },
+    { value: 'emi_debit_banking_document.pdf', label: 'Latest Six Months EMI Debit Banking Document' },
+    { value: 'income_docs.pdf', label: 'Income Documents' },
+    { value: 'e_bill_document.pdf', label: 'E-Bill Document' },
+    { value: 'rent_agreement_document.pdf', label: 'Rent Agreement with Owner E-Bill' },
   ];
+  
 
   // Handle checkbox change
   const handleCheckboxChange = (e) => {
@@ -164,7 +171,11 @@ const SalesForm = () => {
     'Business Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
     'LAP Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
     'Home Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-    'Personal Loan': ['Personal Loan']
+    'Personal Loan': ['Personal Loan'],
+    'Education Loan': ['Education Loan'],
+    'Insurance': ['Insurance'],
+    'Working capital Loan': ['Working capital Loan']
+
   };
 
   const NotInterestedOptions = {
