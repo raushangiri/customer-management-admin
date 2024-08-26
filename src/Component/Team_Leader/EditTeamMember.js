@@ -11,7 +11,8 @@ const EditTeamMember = () => {
     id: id,
     name: 'John Doe',
     role: 'Team Leader',
-    department: 'Sales',
+    department: 'Sales Team',
+
   });
 
   const handleInputChange = (e) => {
