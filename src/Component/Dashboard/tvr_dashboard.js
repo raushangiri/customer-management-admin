@@ -1,7 +1,7 @@
 
 import React from 'react'
 import Navbar from "../Navbar/Navbar"
-const Tvr_dashboard = () => {
+const tvr_dashboard = () => {
   return (
     <>
     {/* <Navbar/> */}
@@ -111,4 +111,4 @@ const Tvr_dashboard = () => {
   )
 }
 
-export default Tvr_dashboard
+export default tvr_dashboard

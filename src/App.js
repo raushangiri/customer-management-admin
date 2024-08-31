@@ -16,7 +16,7 @@ import Cdr from './Component/CDR/Cdr';
 import Bank_login from './Component/Bank-login/Bank-login';
 import BankLogin_dashboard from "./Component/Dashboard/bankLogin_dashboard";
 import Sales_dashboard from "./Component/Dashboard/Sales_dashboard";
-import Tvr_dashboard from "./Component/Dashboard/Tvr_dashboard";
+import Tvr_dashboard from "./Component/Dashboard/tvr_dashboard";
 import CDRdashboard from './Component/Dashboard/CDRdashboard';
 import Team_member from './Component/Team_Leader/Team_member';
 import EditTeamMember from './Component/Team_Leader/EditTeamMember';
