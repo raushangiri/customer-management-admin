@@ -1,7 +1,7 @@
 
 import React from 'react'
 import Navbar from "../Navbar/Navbar"
-const BankLogin_dashboard = () => {
+const Banklogindashboard = () => {
   return (
     <>
     {/* <Navbar/> */}
@@ -110,4 +110,4 @@ const BankLogin_dashboard = () => {
   )
 }
 
-export default BankLogin_dashboard
+export default Banklogindashboard
