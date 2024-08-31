@@ -14,9 +14,7 @@ import Sales from './Component/Sales/Sales';
 import Tvr from './Component/TVR/Tvr';
 import Cdr from './Component/CDR/Cdr';
 import Bank_login from './Component/Bank-login/Bank-login';
-import bankLogindashboard from "./Component/Dashboard/bankLogin_dashboard";
 import Sales_dashboard from "./Component/Dashboard/Sales_dashboard";
-import tvr_dashboard from "./Component/Dashboard/tvr_dashboard";
 import CDRdashboard from './Component/Dashboard/CDRdashboard';
 
 function App() {
