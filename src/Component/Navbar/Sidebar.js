@@ -23,10 +23,13 @@ const Sidebar = () => {
       <img src={logo} alt='logo' style={{ width: '90%' }} className='img1' />
       <ul>
 
-        {userRole === 'Admin' && (
+        {userRole === 'admin' && (
           <>
             <li>
               <Link to="/dashboard">Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/search">Search File Details</Link>
             </li>
             <li>
               <div onClick={toggleSubMenu} className="submenu-title">
@@ -38,7 +41,6 @@ const Sidebar = () => {
                   <li><Link to="/create-user">Create User</Link></li>
                   <li><Link to="/user-list">User List</Link></li>
                   <li><Link to="/unlock-user">Unlock User</Link></li>
-                  <li><Link to="/unlock-user">Unlock User</Link></li>
                 </ul>
               )}
             </li>
@@ -48,7 +50,7 @@ const Sidebar = () => {
             <li><Link to="/reports">Reports</Link></li>
           </>
         )}
-        {userRole === 'Team-leader' && (
+        {userRole === 'team_leader' && (
           <>
             <li>
               <Link to="/dashboard">Dashboard</Link>
@@ -57,13 +59,16 @@ const Sidebar = () => {
               <Link to="/Team-Member"> Team Members</Link>
             </li>
             <li>
+              <Link to="/search">Search File Details</Link>
+            </li>
+            <li>
               <Link to="/upload-csv">Upload File</Link>
             </li>
             <li><Link to="/reports">Reports</Link></li>
           </>
         )}
 
-        {userRole === 'Sales' && (
+        {userRole === 'sales_team' && (
           <>
             <li>
               <Link to="/sales-dashboard">Dashboard</Link>
@@ -71,7 +76,7 @@ const Sidebar = () => {
             <li><Link to="/sales-team">sales</Link></li>
           </>
         )}
-        {userRole === 'TVR' && (
+        {userRole === 'tvr_team' && (
           <>
             <li>
               <Link to="/tvr-dashboard">Dashboard</Link>
@@ -80,7 +85,7 @@ const Sidebar = () => {
           </>
         )}
 
-        {userRole === 'CDR' && (
+        {userRole === 'cdr_team' && (
           <>
             <li>
               <Link to="/cdr-dashboard">Dashboard</Link>
@@ -88,7 +93,7 @@ const Sidebar = () => {
             <li><Link to="/cdr-team">CDR</Link></li>
           </>
         )}
-        {userRole === 'bank-login' && (
+        {userRole === 'bank_login' && (
           <>
             <li>
               <Link to="/banklogin-dashboard">Dashboard</Link>

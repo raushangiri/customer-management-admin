@@ -14,9 +14,9 @@ import Sales from './Component/Sales/Sales';
 import Tvr from './Component/TVR/Tvr';
 import Cdr from './Component/CDR/Cdr';
 import Bank_login from './Component/Bank-login/Bank-login';
-import bankLogindashboard from "./Component/Dashboard/bankLogin_dashboard";
+import BankLogin_dashboard from "./Component/Dashboard/BankLogin_dashboard";
 import Sales_dashboard from "./Component/Dashboard/Sales_dashboard";
-import tvr_dashboard from "./Component/Dashboard/tvr_dashboard";
+import Tvr_dashboard from "./Component/Dashboard/Tvr_dashboard";
 import CDRdashboard from './Component/Dashboard/CDRdashboard';
 import Team_member from './Component/Team_Leader/Team_member';
 import EditTeamMember from './Component/Team_Leader/EditTeamMember';
@@ -50,10 +50,10 @@ function Main() {
           <Route path="/" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/sales-dashboard" element={<Sales_dashboard />} />
-          <Route path="/tvr-dashboard" element={<tvr_dashboard />} />
+          <Route path="/tvr-dashboard" element={<Tvr_dashboard />} />
           <Route path="/CDRdashboard" element={<CDRdashboard />} />
 
-          <Route path="/banklogin-dashboard" element={<bankLogindashboard />} />
+          <Route path="/banklogin-dashboard" element={<BankLogin_dashboard />} />
 
           <Route path="/create-user" element={<CreateUser />} />
           <Route path="/unlock-user" element={<UnlockUser />} />
@@ -64,6 +64,7 @@ function Main() {
           <Route path="/tvr-team" element={<Tvr />} />
           <Route path="/cdr-team" element={<Cdr />} />
           <Route path="/bank-login-team" element={<Bank_login />} />
+          <Route path="/search" element={<Bank_login />} />
           <Route path="/Team-Member" element={<Team_member />} />
           <Route path="/view/:id" element={<ViewDetails />} />
         <Route path="/edit/:id" element={<EditTeamMember />} />
