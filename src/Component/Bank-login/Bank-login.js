@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { statuses, bank_details } from './Data'; // Adjust the path if necessary
 
 const Bank_login = () => {

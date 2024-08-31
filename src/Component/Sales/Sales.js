@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 
 const SalesForm = () => {
   const [activeTab, setActiveTab] = useState('details');
-  const [references, setReferences] = useState([]);
-  const [newReference, setNewReference] = useState({ name: '', mobileNumber: '', address: '' });
+  // const [references, setReferences] = useState([]);
+  // const [newReference, setNewReference] = useState({ name: '', mobileNumber: '', address: '' });
   const [selectedLoanType, setSelectedLoanType] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isInterested, setIsInterested] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [notInterestedReason, setNotInterestedReason] = useState('');
   const [remarks, setRemarks] = useState('');
-  const [selectedDocumentType, setSelectedDocumentType] = useState('');
+  // const [selectedDocumentType, setSelectedDocumentType] = useState('');
   // const [uploadedDocuments, setUploadedDocuments] = useState([]);
   const [showModal1, setShowModal1] = useState(false);
   const [selectedDocumentFile, setSelectedDocumentFile] = useState(null);
@@ -55,9 +55,9 @@ const SalesForm = () => {
     setDisposition(e.target.value);
   };
 
-  const handleDocumentTypeChange = (event) => {
-    setSelectedDocumentType(event.target.value);
-  };
+  // const handleDocumentTypeChange = (event) => {
+  //   setSelectedDocumentType(event.target.value);
+  // };
 
   // Handle file input change
   // const handleFileChange = (event) => {
@@ -68,12 +68,12 @@ const SalesForm = () => {
   // };
 
   // Handle document upload (submit)
-  const handleDocumentUpload = (event) => {
-    event.preventDefault();
-    // You can add additional logic here if needed.
-    // For now, it just resets the form fields.
-    setSelectedDocumentType('');
-  };
+  // const handleDocumentUpload = (event) => {
+  //   event.preventDefault();
+  //   // You can add additional logic here if needed.
+  //   // For now, it just resets the form fields.
+  //   setSelectedDocumentType('');
+  // };
 
 
   const uploadedDocuments = [
@@ -152,11 +152,11 @@ const SalesForm = () => {
   // };
 
 
-  const handleAddReference = (e) => {
-    e.preventDefault();
-    setReferences([...references, newReference]);
-    setNewReference({ name: '', mobileNumber: '', address: '' });
-  };
+  // const handleAddReference = (e) => {
+  //   e.preventDefault();
+  //   setReferences([...references, newReference]);
+  //   setNewReference({ name: '', mobileNumber: '', address: '' });
+  // };
 
 
   const loanMasterData = {

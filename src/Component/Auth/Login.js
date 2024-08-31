@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import logo from "./jbj-fintech-logo.webp";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const [selectedRole, setSelectedRole] = useState("");

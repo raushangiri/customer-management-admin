@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/cs-dashboard/static/css/main.615d78bb.css",
-    "main.js": "/cs-dashboard/static/js/main.0d019982.js",
-    "static/js/453.52df1bd5.chunk.js": "/cs-dashboard/static/js/453.52df1bd5.chunk.js",
-    "static/media/jbj-fintech-logo.webp": "/cs-dashboard/static/media/jbj-fintech-logo.a4f1e28f9ddbf396cf48.webp",
-    "index.html": "/cs-dashboard/index.html",
-    "main.615d78bb.css.map": "/cs-dashboard/static/css/main.615d78bb.css.map",
-    "main.0d019982.js.map": "/cs-dashboard/static/js/main.0d019982.js.map",
-    "453.52df1bd5.chunk.js.map": "/cs-dashboard/static/js/453.52df1bd5.chunk.js.map"
+    "main.css": "/static/css/main.615d78bb.css",
+    "main.js": "/static/js/main.2f602daa.js",
+    "static/js/453.52df1bd5.chunk.js": "/static/js/453.52df1bd5.chunk.js",
+    "static/media/jbj-fintech-logo.webp": "/static/media/jbj-fintech-logo.a4f1e28f9ddbf396cf48.webp",
+    "index.html": "/index.html",
+    "main.615d78bb.css.map": "/static/css/main.615d78bb.css.map",
+    "main.2f602daa.js.map": "/static/js/main.2f602daa.js.map",
+    "453.52df1bd5.chunk.js.map": "/static/js/453.52df1bd5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.615d78bb.css",
-    "static/js/main.0d019982.js"
+    "static/js/main.2f602daa.js"
   ]
 }
