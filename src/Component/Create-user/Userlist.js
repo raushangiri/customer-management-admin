@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+const baseurl = process.env.REACT_APP_API_BASE_URL;
 
 const Userlist = () => {
   const [users, setUsers] = useState([]);
@@ -10,7 +11,7 @@ const Userlist = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:3006/api/v1/getalluser'); // API endpoint to get all users
+        const response = await fetch(`${baseurl}/getalluser`); // API endpoint to get all users
         const data = await response.json();
         setUsers(data.Data); // Update state with fetched data
       } catch (error) {
@@ -24,7 +25,7 @@ const Userlist = () => {
   // Function to handle user deletion
   const handleDeleteUser = async (userId) => {
     try {
-      const response = await fetch('http://localhost:3006/api/v1/deleteUser', {
+      const response = await fetch(`${baseurl}/deleteUser`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +58,8 @@ const Userlist = () => {
               <th scope="col">User ID</th>
               <th scope="col">Name</th>
               <th scope="col">Role</th>
-              <th scope="col">Reporting</th>
+              <th scope="col">Reporting To</th>
+              <th scope="col">Department</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -67,7 +69,12 @@ const Userlist = () => {
                 <td>{user.userId || 'N/A'}</td>
                 <td>{user.name}</td>
                 <td>{user.role}</td>
-                <td>" "</td>
+                <td>{user.reportingTo || 'N/A'}</td>
+                <td>
+                  {user.department && user.department.length > 0
+                    ? user.department.join(', ')
+                    : 'N/A'}
+                </td>
                 <td>
                   <FontAwesomeIcon icon={faPenToSquare} />
                   <FontAwesomeIcon 
