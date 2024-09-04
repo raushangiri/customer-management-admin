@@ -1,162 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { statuses, bank_details } from '../../Component/Bank-login/Data'; // Adjust the path if necessary
+import React, {useContext, useState } from 'react';
 import { Link } from "react-router-dom";
+import { UserFormContext } from '../ContentHook/OverviewContext'; // Ensure this path is correct
+
 const PersonalDetails = () => {
-    const [activeTab, setActiveTab] = useState('details');
-    const [references, setReferences] = useState([]);
-    const [newReference, setNewReference] = useState({ name: '', mobileNumber: '', address: '' });
-    const [loandetail, setloandetail] = useState({ bankName: '', emiAmount: '', emiDate: '', loanstartDate: '', noofemiBounces: '', bouncesReason: '', carDetails: '' });
-    const [newloandetail, setNewloandetail] = useState([]);
+    
     // const [selectedLoanType, setSelectedLoanType] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [isInterested, setIsInterested] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [notInterestedReason, setNotInterestedReason] = useState('');
     const [remarks, setRemarks] = useState('');
-    const [selectedDocumentType, setSelectedDocumentType] = useState('');
-    const [uploadedDocuments, setUploadedDocuments] = useState([]);
-    const [showModal1, setShowModal1] = useState(false);
-    const [selectedDocumentFile, setSelectedDocumentFile] = useState(null);
-    const [loginStatus, setLoginStatus] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
-  const [selectedReason, setSelectedReason] = useState('');
-  const [selectedBank, setSelectedBank] = useState('');
-  const [bankDetail, setBankDetail] = useState({ "RM NAME": '', "RM CONTACT NO": '' });
   const [selectedLoanType, setSelectedLoanType] = useState('');
-
-  // Filter bank details based on selectedLoanType
-  const filteredBanks = bank_details.filter(bank => bank["Loan Type"] === selectedLoanType);
-
-  // Helper function to get bank details
-  const getBankDetails = (bankName) => {
-    return filteredBanks.find(bank => bank["BANK NAME"] === bankName) || {};
-  };
-
-  useEffect(() => {
-    setBankDetail(getBankDetails(selectedBank));
-  }, [selectedBank]);
-
-  const handleLoginStatusChange = (event) => {
-    setLoginStatus(event.target.value);
-    if (event.target.value === 'Yes') {
-      setSelectedStatus('');
-      setSelectedReason('');
-      setSelectedBank('');
-      setBankDetail({ "RM NAME": '', "RM CONTACT NO": '' }); // Reset bank details
-    }
-  };
-
-  const handleStatusChange = (event) => {
-    const status = event.target.value;
-    setSelectedStatus(status);
-    setSelectedReason('');
-  };
-
-  const handleReasonChange = (event) => {
-    setSelectedReason(event.target.value);
-  };
-
-  const handleBankChange = (event) => {
-    const bankName = event.target.value;
-    setSelectedBank(bankName);
-  };
-
-  const filteredReasons = statuses.find(status => status.login_status === selectedStatus)?.reasons || [];
-  const bankOptions = filteredBanks.map(bank => bank["BANK NAME"]);
-
-
-
-
-    const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-
-    const getPrevious12Months = () => {
-        const previous12Months = [];
-        const currentDate = new Date();
-        let currentMonth = currentDate.getMonth();
-        let currentYear = currentDate.getFullYear();
-
-        for (let i = 0; i < 12; i++) {
-            const monthName = months[currentMonth];
-            previous12Months.push({
-                month: monthName,
-                year: currentYear,
-                dayValues: Array(6).fill('') // Initialize with empty strings for days 5, 10, 15, 20, 25, 30
-            });
-
-            currentMonth = (currentMonth - 1 + 12) % 12;
-            if (currentMonth === 11) {
-                currentYear--;
-            }
-        }
-        return previous12Months.reverse();
-    };
-
-    const [previous12Months, setPrevious12Months] = useState(getPrevious12Months());
-
-    const handleDayValueChange = (monthIndex, dayIndex, value) => {
-        const updatedMonths = [...previous12Months];
-        updatedMonths[monthIndex].dayValues[dayIndex] = value;
-        setPrevious12Months(updatedMonths);
-    };
-
-    const calculateTotalAB = (dayValues) => {
-        return dayValues.reduce((total, value) => total + (parseFloat(value) || 0), 0);
-    };
-
-    const calculateTotalABB = (totalAB) => {
-        return totalAB / 6;
-    };
-
-    const handleDocumentTypeChange = (event) => {
-        setSelectedDocumentType(event.target.value);
-    };
-
-    // Handle file input change
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setUploadedDocuments([...uploadedDocuments, { type: selectedDocumentType, file }]);
-        }
-    };
-
-    // Handle document upload (submit)
-    const handleDocumentUpload = (event) => {
-        event.preventDefault();
-        // You can add additional logic here if needed.
-        // For now, it just resets the form fields.
-        setSelectedDocumentType('');
-    };
-
-    // Handle view document
-    const handleViewDocument = (doc) => {
-        const fileURL = URL.createObjectURL(doc.file);
-        setSelectedDocumentFile(fileURL);
-        setShowModal1(true);
-    };
-
-    // Handle delete document
-    const handleDeleteDocument = (index) => {
-        const updatedDocuments = uploadedDocuments.filter((_, i) => i !== index);
-        setUploadedDocuments(updatedDocuments);
-    };
-
-
-    const handleAddReference = (e) => {
-        e.preventDefault();
-        setReferences([...references, newReference]);
-        setNewReference({ name: '', mobileNumber: '', address: '' });
-    };
-
-
-    const handleAddloanDetails = (e) => {
-        e.preventDefault();
-        setNewloandetail([...newloandetail, loandetail]);
-        setloandetail({ bankName: '', emiAmount: '', emiDate: '', loanstartDate: '', noofemiBounces: '', bouncesReason: '', carDetails: '' });
-    };
 
     const loanMasterData = {
         'Auto Loan': ['External Bt', 'Internal Bt', 'Refinance', 'New Car', 'Sale Purchage'],
@@ -203,6 +57,13 @@ const PersonalDetails = () => {
         setSelectedLoanType(e.target.value);
         setSelectedCategory(''); // Reset category when loan type changes
     };
+
+    
+        const { 
+          formData, 
+          setFormData
+        } = useContext(UserFormContext);
+        // console.log(formData,"personal page formData")
   return (
     <>
      <div className="tab-pane active">
@@ -214,8 +75,8 @@ const PersonalDetails = () => {
                                     <select
                                         className="form-select"
                                         id="maritalStatus"
-                                        value={isInterested}
-                                        onChange={handleInterestChange}
+                                        value={formData.is_interested}
+                                        onChange={(e) => setFormData({ ...formData, is_interested: e.target.value })}
                                     >
                                         <option value="">Select</option>
                                         <option value="Intrested">Interested</option>
@@ -275,55 +136,80 @@ const PersonalDetails = () => {
                                     )}
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="typeOfLoan" className="form-label fw-bold">Type of Loan</label>
-                                    <select
-                                        className="form-select"
-                                        id="typeOfLoan"
-                                        value={selectedLoanType}
-                                        onChange={handleLoanTypeChange}
-                                    >
-                                        <option value="">Select loan type</option>
-                                        {Object.keys(loanMasterData).map((loanType) => (
-                                            <option key={loanType} value={loanType}>
-                                                {loanType}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
+    <label htmlFor="type_of_loan" className="form-label fw-bold">Type of Loan</label>
+    <select
+        className="form-select"
+        id="type_of_loan"
+        value={formData.type_of_loan}
+        onChange={(e) => {
+            const selectedType = e.target.value;
+            setFormData({
+                ...formData,
+                type_of_loan: selectedType,
+                selected_category: '' // Reset selected category when loan type changes
+            });
+        }}
+    >
+        <option value="">Select loan type</option>
+        {Object.keys(loanMasterData).map((loanType) => (
+            <option key={loanType} value={loanType}>
+                {loanType}
+            </option>
+        ))}
+    </select>
+</div>
+
+<div className="col-md-6">
+    <label htmlFor="selected_category" className="form-label fw-bold">Loan Category</label>
+    <select
+        className="form-select"
+        id="selected_category"
+        value={formData.selected_category}
+        onChange={(e) => setFormData({ ...formData, selected_category: e.target.value })}
+        disabled={!formData.type_of_loan} // Disable if no loan type is selected
+    >
+        <option value="">Select category</option>
+        {formData.type_of_loan &&
+            loanMasterData[formData.type_of_loan].map((category) => (
+                <option key={category} value={category}>
+                    {category}
+                </option>
+            ))}
+    </select>
+</div>
 
                                 <div className="col-md-6">
-                                    <label htmlFor="loanCategory" className="form-label fw-bold">Loan Category</label>
-                                    <select
-                                        className="form-select"
-                                        id="loanCategory"
-                                        value={selectedCategory}
-                                        onChange={(e) => setSelectedCategory(e.target.value)}
-                                        disabled={!selectedLoanType} // Disable if no loan type is selected
-                                    >
-                                        <option value="">Select category</option>
-                                        {selectedLoanType &&
-                                            loanMasterData[selectedLoanType].map((category) => (
-                                                <option key={category} value={category}>
-                                                    {category}
-                                                </option>
-                                            ))}
-                                    </select>
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="requiredAmount" className="form-label fw-bold">Required Amount</label>
-                                    <input type="text" className="form-control" id="requiredAmount" placeholder="Enter required amount" />
+                                    <label htmlFor="required_amount" className="form-label fw-bold">Required Amount</label>
+                                    <input type="text" 
+                                    className="form-control" 
+                                    id="required_amount" 
+                                    value={formData.required_amount}
+                                    onChange={(e) => setFormData({ ...formData, required_amount: e.target.value })}
+                                    placeholder="Enter required amount" />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="mobileNumber" className="form-label fw-bold">Mobile Number</label>
-                                    <input type="text" className="form-control" id="mobileNumber" placeholder="Enter mobile number" />
+                                    <input type="text" className="form-control" 
+                                    value={formData.mobileNumber}
+                                    onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })}
+                                    id="mobileNumber" 
+                                    placeholder="Enter mobile number" />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="name" className="form-label fw-bold">Name</label>
-                                    <input type="text" className="form-control" id="name" placeholder="Enter name" />
+                                    <input type="text" 
+                                    className="form-control" 
+                                    value={formData.name} 
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                                    id="name" 
+                                    placeholder="Enter name" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="occupationType" className="form-label fw-bold">Occupation Type</label>
-                                    <select className="form-select" id="occupationType">
+                                    <label htmlFor="occupation_type" className="form-label fw-bold">Occupation Type</label>
+                                    <select className="form-select" id="occupation_type"
+                                    value={formData.occupation_type}
+                                    onChange={(e) => setFormData({ ...formData, occupation_type: e.target.value })}
+                                    >
                                         <option value="">Select type</option>
                                         <option value="salaried_employee">Salaried Employee</option>
                                         <option value="self_employed">Self-Employed</option>
@@ -339,8 +225,11 @@ const PersonalDetails = () => {
                                     </select>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="natureOfBusiness" className="form-label fw-bold">Nature of Business</label>
-                                    <select className="form-select" id="natureOfBusiness">
+                                    <label htmlFor="nature_of_business" className="form-label fw-bold">Nature of Business</label>
+                                    <select className="form-select" id="nature_of_business"
+                                    value={formData.nature_of_business}
+                                    onChange={(e) => setFormData({ ...formData, nature_of_business: e.target.value })}
+                                    >
                                         <option value="">Select nature</option>
                                         <option value="manufacturing">Manufacturing</option>
                                         <option value="Trading">Trading</option>
@@ -360,8 +249,11 @@ const PersonalDetails = () => {
                                     </select>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="serviceType" className="form-label fw-bold">Service Type</label>
-                                    <select className="form-select" id="serviceType">
+                                    <label htmlFor="service_type" className="form-label fw-bold">Service Type</label>
+                                    <select className="form-select" id="service_type"
+                                    value={formData.service_type}
+                                    onChange={(e) => setFormData({ ...formData, service_type: e.target.value })}
+                                    >
                                         <option value="">Select type</option>
                                         <option value="it_services">IT Services</option>
                                         <option value="financial_services">Financial Services</option>
@@ -379,8 +271,11 @@ const PersonalDetails = () => {
                                     </select>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="typeOfResident" className="form-label fw-bold">Type of Resident</label>
-                                    <select className="form-select" id="typeOfResident">
+                                    <label htmlFor="type_of_resident" className="form-label fw-bold">Type of Resident</label>
+                                    <select className="form-select" id="type_of_resident"
+                                    value={formData.type_of_resident}
+                                    onChange={(e) => setFormData({ ...formData, type_of_resident: e.target.value })}
+                                    >
                                         <option value="">Select type</option>
                                         <option value="rented">Rented</option>
                                         <option value="owned">Owned</option>
@@ -388,46 +283,87 @@ const PersonalDetails = () => {
                                     </select>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="permanentAddress" className="form-label fw-bold">Permanent Address</label>
-                                    <input type="text" className="form-control" id="permanentAddress" placeholder="Enter permanent address" />
+                                    <label htmlFor="permanent_address" className="form-label fw-bold" id='permanent_address'>Permanent Address</label>
+                                    <input type="text"
+                                    value={formData.permanent_address}
+                                    onChange={(e) => setFormData({ ...formData, permanent_address: e.target.value })}
+                                    className="form-control" id="permanent_address" name='permanent_address' placeholder="Enter permanent address" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="permanentAddressLandmark" className="form-label fw-bold">Permanent Address Landmark</label>
-                                    <input type="text" className="form-control" id="permanentAddressLandmark" placeholder="Enter landmark" />
+                                    <label htmlFor="permanent_address_landmark" className="form-label fw-bold">Permanent Address Landmark</label>
+                                    <input type="text"
+                                            value={formData.permanent_address_landmark}
+                                            onChange={(e) => setFormData({ ...formData, permanent_address_landmark: e.target.value })}
+                                name='permanent_address_landmark'
+                                    className="form-control" id="permanent_address_landmark" placeholder="Enter landmark" />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="officialEmailId" className="form-label fw-bold">Official Email ID</label>
-                                    <input type="email" className="form-control" id="officialEmailId" placeholder="Enter official email ID" />
+                                    <input type="email" className="form-control"
+                                    value={formData.official_email_id}
+                                    name='official_email_id'
+                                    onChange={(e) => setFormData({ ...formData, official_email_id: e.target.value })}
+            
+                                    id="official_email_id" placeholder="Enter official email ID" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="personalEmailId" className="form-label fw-bold">Personal Email ID</label>
-                                    <input type="email" className="form-control" id="personalEmailId" placeholder="Enter personal email ID" />
+                                    <label htmlFor="personal_email_id" className="form-label fw-bold">Personal Email ID</label>
+                                    <input type="email" className="form-control" 
+                                      value={formData.personal_email_id}
+                                      onChange={(e) => setFormData({ ...formData, personal_email_id: e.target.value })}
+
+                                    id="personal_email_id" name='personal_email_id' placeholder="Enter personal email ID" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="officeName" className="form-label fw-bold">Office Name</label>
-                                    <input type="text" className="form-control" id="officeName" placeholder="Enter office name" />
+                                    <label htmlFor="office_name" className="form-label fw-bold">Office Name</label>
+                                    <input type="text"
+                                    value={formData.office_name}
+                                    onChange={(e) => setFormData({ ...formData, office_name: e.target.value })}
+                                    className="form-control" id="office_name" name='office_name' placeholder="Enter office name" />
                                 </div>
 
 
                                 <div className="col-md-6">
-                                    <label htmlFor="dateOfBirth" className="form-label fw-bold">Date of Birth</label>
-                                    <input type="date" className="form-control" id="dateOfBirth" />
+                                    <label htmlFor="date_of_birth" className="form-label fw-bold">Date of Birth</label>
+                                    <input type="date" className="form-control" id="dateOfBirth" 
+                                    name='date_of_birth'
+                                    value={formData.date_of_birth}
+                                
+                                    onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
+                                    />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="alternateNumber" className="form-label fw-bold">Alternate Number</label>
-                                    <input type="text" className="form-control" id="alternateNumber" placeholder="Enter alternate number" />
+                                    <label htmlFor="alternate_number" className="form-label fw-bold">Alternate Number</label>
+                                    <input type="text" className="form-control" 
+                                    id="alternate_number" 
+                                    name='alternate_number'
+                                    value={formData.alternate_number}
+                                    onChange={(e) => setFormData({ ...formData, alternate_number: e.target.value })}
+                                    placeholder="Enter alternate number" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="motherName" className="form-label fw-bold">Mother's Name</label>
-                                    <input type="text" className="form-control" id="motherName" placeholder="Enter mother's name" />
+                                    <label htmlFor="mother_name" className="form-label fw-bold">Mother's Name</label>
+                                    <input type="text"
+                                    name='mother_name'
+                                    value={formData.mother_name}
+                                    onChange={(e) => setFormData({ ...formData, mother_name: e.target.value })}
+                                    className="form-control" id="mother_name" placeholder="Enter mother's name" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="fatherName" className="form-label fw-bold">Father's Name</label>
-                                    <input type="text" className="form-control" id="fatherName" placeholder="Enter father's name" />
+                                    <label htmlFor="father_name" className="form-label fw-bold">Father's Name</label>
+                                    <input type="text" 
+                                    name='father_name'
+                                    value={formData.father_name}
+                                    onChange={(e) => setFormData({ ...formData, father_name: e.target.value })}
+                                    className="form-control" id="father_name" placeholder="Enter father's name" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="maritalStatus" className="form-label fw-bold">Marital Status</label>
-                                    <select className="form-select" id="maritalStatus">
+                                    <label htmlFor="marital_status" className="form-label fw-bold">Marital Status</label>
+                                    <select className="form-select" id="marital_status"
+                                     name='marital_status'
+                                     value={formData.marital_status}
+                                     onChange={(e) => setFormData({ ...formData, marital_status: e.target.value })}
+                                    >
                                         <option value="">Select status</option>
                                         <option value="single">Single</option>
                                         <option value="married">Married</option>
@@ -437,57 +373,101 @@ const PersonalDetails = () => {
                                     </select>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="spouseName" className="form-label fw-bold">Spouse's Name</label>
-                                    <input type="text" className="form-control" id="spouseName" placeholder="Enter spouse's name" />
+                                    <label htmlFor="spouse_name" className="form-label fw-bold">Spouse's Name</label>
+                                    <input type="text"
+                                    name='spouse_name'
+                                    value={formData.spouse_name}
+                                    onChange={(e) => setFormData({ ...formData, spouse_name: e.target.value })}
+                                    className="form-control" id="spouseName" placeholder="Enter spouse's name" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="currentAddress" className="form-label fw-bold">Current Address</label>
-                                    <input type="text" className="form-control" id="currentAddress" placeholder="Enter current address" />
+                                    <label htmlFor="current_address" className="form-label fw-bold">Current Address</label>
+                                    <input type="text" 
+                                    name='current_address'
+                                    value={formData.current_address}
+                                    onChange={(e) => setFormData({ ...formData, current_address: e.target.value })}
+                                    className="form-control" id="currentAddress" placeholder="Enter current address" />
                                 </div>
                                 
                                 <div className="col-md-6">
-                                    <label htmlFor="totalNumberOfYearsAtCurrentResidence" className="form-label fw-bold">Years at Current Residence</label>
-                                    <input type="text" className="form-control" id="totalNumberOfYearsAtCurrentResidence" placeholder="Enter number of years" />
+                                    <label htmlFor="years_at_current_residence" className="form-label fw-bold">Years at Current Residence</label>
+                                    <input type="text"
+                                    name='years_at_current_residence'
+                                    value={formData.years_at_current_residence}
+                                    onChange={(e) => setFormData({ ...formData, years_at_current_residence: e.target.value })}
+                                    className="form-control" id="years_at_current_residence" placeholder="Enter number of years" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="totalTimeInDelhi" className="form-label fw-bold">Total Time in Delhi</label>
-                                    <input type="text" className="form-control" id="totalTimeInDelhi" placeholder="Enter total time in Delhi" />
+                                    <label htmlFor="total_time_in_delhi" className="form-label fw-bold">Total Time in Delhi</label>
+                                    <input type="text"
+                                    name='total_time_in_delhi'
+                                    value={formData.total_time_in_delhi}
+                                    onChange={(e) => setFormData({ ...formData, total_time_in_delhi: e.target.value })}
+                                    className="form-control" id="total_time_in_delhi" placeholder="Enter total time in Delhi" />
                                 </div>
 
                                 
                                 
                                 <div className="col-md-6">
-                                    <label htmlFor="officeAddress" className="form-label fw-bold">Office Address</label>
-                                    <input type="text" className="form-control" id="officeAddress" placeholder="Enter office address" />
+                                    <label htmlFor="office_address" className="form-label fw-bold">Office Address</label>
+                                    <input type="text"
+                                    name='office_address'
+                                    value={formData.office_address}
+                                    onChange={(e) => setFormData({ ...formData, office_address: e.target.value })}
+                                    className="form-control" id="office_address" placeholder="Enter office address" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="officeAddressLandmark" className="form-label fw-bold">Office Address Landmark</label>
-                                    <input type="text" className="form-control" id="officeAddressLandmark" placeholder="Enter landmark" />
+                                    <label htmlFor="office_address_landmark" className="form-label fw-bold">Office Address Landmark</label>
+                                    <input type="text"
+                                    name='office_address_landmark'
+                                    value={formData.office_address_landmark}
+                                    onChange={(e) => setFormData({ ...formData, office_address_landmark: e.target.value })}
+                                    className="form-control" id="office_address_landmark" placeholder="Enter landmark" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="noOfYearsAtCurrentOrganization" className="form-label fw-bold">Years at Current Organization</label>
-                                    <input type="text" className="form-control" id="noOfYearsAtCurrentOrganization" placeholder="Enter number of years" />
+                                    <label htmlFor="years_at_current_organization" className="form-label fw-bold">Years at Current Organization</label>
+                                    <input type="text" 
+                                    name='years_at_current_organization'
+                                    value={formData.years_at_current_organization}
+                                    onChange={(e) => setFormData({ ...formData, years_at_current_organization: e.target.value })}
+                                    className="form-control" id="years_at_current_organization" placeholder="Enter number of years" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="gstItrFiled" className="form-label fw-bold">GST/ITR Filed</label>
-                                    <select className="form-select" id="gstItrFiled">
+                                    <label htmlFor="gst_itr_filed" className="form-label fw-bold">GST/ITR Filed</label>
+                                    <select className="form-select" id="gst_itr_filed"
+                                    name='gst_itr_filed'
+                                    value={formData.gst_itr_filed}
+                                    onChange={(e) => setFormData({ ...formData, gst_itr_filed: e.target.value })}
+                                    >
                                         <option value="">Select</option>
                                         <option value="yes">Yes</option>
                                         <option value="no">No</option>
                                     </select>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="gstAndItrIncome" className="form-label fw-bold">GST and ITR Income</label>
-                                    <input type="text" className="form-control" id="gstAndItrIncome" placeholder="Enter income" />
+                                    <label htmlFor="gst_and_itr_income" className="form-label fw-bold">GST and ITR Income</label>
+                                    <input type="text"
+                                    name='gst_and_itr_income'
+                                    value={formData.gst_and_itr_income}
+                                    onChange={(e) => setFormData({ ...formData, gst_and_itr_income: e.target.value })}
+                                    className="form-control" id="gstAndItrIncome" placeholder="Enter income" />
                                 </div>
                                
                                 <div className="col-md-6">
-                                    <label htmlFor="inHandSalary" className="form-label fw-bold">In-Hand Salary</label>
-                                    <input type="text" className="form-control" id="inHandSalary" placeholder="Enter salary" />
+                                    <label htmlFor="in_hand_salary" className="form-label fw-bold">In-Hand Salary</label>
+                                    <input type="text"
+                                    name='in_hand_salary'
+                                    value={formData.in_hand_salary}
+                                    onChange={(e) => setFormData({ ...formData, in_hand_salary: e.target.value })}
+                                    className="form-control" id="in_hand_salary" placeholder="Enter salary" />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="otherIncome" className="form-label fw-bold">Other Income</label>
-                                    <input type="text" className="form-control" id="otherIncome" placeholder="Enter other income" />
+                                    <label htmlFor="other_income" className="form-label fw-bold">Other Income</label>
+                                    <input type="text"
+                                    name='other_income'
+                                    value={formData.other_income}
+                                    onChange={(e) => setFormData({ ...formData, other_income: e.target.value })}
+                                    className="form-control" id="other_income" placeholder="Enter other income" />
                                 </div>
                             </div>
 
@@ -503,3 +483,6 @@ const PersonalDetails = () => {
 }
 
 export default PersonalDetails
+
+
+

@@ -20,8 +20,9 @@ import CDRdashboard from './Component/Dashboard/CDRdashboard';
 import Team_member from './Component/Team_Leader/Team_member';
 import EditTeamMember from './Component/Team_Leader/EditTeamMember';
 import ViewDetails from './Component/Team_Leader/ViewDetails';
-
-
+import ChangePassword from './Component/Auth/changePassword';
+// import { OverviewProvider } from './Component/ContentHook/OverviewContext';
+import { UserFormProvider } from './Component/ContentHook/OverviewContext';
 function App() {
   return (
     <Router>
@@ -34,10 +35,11 @@ function Main() {
   const location = useLocation();
 
   // Determine if the current path is not "/"
-  const isAuthRoute = location.pathname === "/";
+  const isAuthRoute = location.pathname === "/" || location.pathname === "/change-password"
 
   return (
     <div className="App">
+      <UserFormProvider>
       {!isAuthRoute && (
         <>
           {/* <Navbar /> */}
@@ -67,11 +69,13 @@ function Main() {
           <Route path="/Team-Member" element={<Team_member />} />
           <Route path="/view/:id" element={<ViewDetails />} />
         <Route path="/edit/:id" element={<EditTeamMember />} />
+        <Route path="/change-password" element={<ChangePassword />} />
 
+        
 
-          {/* Add more routes here */}
         </Routes>
       </div>
+      </UserFormProvider>
     </div>
   );
 }

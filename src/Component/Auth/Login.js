@@ -136,8 +136,10 @@ function Login() {
                                 onChange={handlePasswordChange}
                             />
                         </div>
+                        <Link to="/change-password"> <p>Change Password</p></Link>
                         {/* Login Button */}
                         <div className='text-center mb-3'>
+                            
                             <button type="button" className="btn btn-primary loginButton" style={{ width: '25%' }} onClick={handleLogin}>
                                 Login
                             </button>

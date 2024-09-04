@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 import './CreateUser.css'; // Import your CSS file
+import Sidebar from '../Navbar/Sidebar';
 const baseurl = process.env.REACT_APP_API_BASE_URL;
 
 const CreateUser = () => {
@@ -108,6 +109,7 @@ const CreateUser = () => {
 
   return (
     <>
+    
       <h3 className='text-center mt-5 pt-5'>Add New User</h3>
       <div className='container mb-5' style={{ width: '60%', background: "#2c3e50" }}>
         <div className="mb-3">
