@@ -1,209 +1,53 @@
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// const baseurl = process.env.REACT_APP_API_BASE_URL;
-
-// const OverviewDetails = () => {
-//   const [mobileNumber, setMobileNumber] = useState('');
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     previousLoanBankName: '',
-//     previousLoanType: '',
-//     previousProductModel: '',
-//     previousLoanAmount: '',
-//     previousLoanSanctionDate: '',
-//     previousLoanInsuranceValue: ''
-//   });
-
-//   // Function to fetch data based on mobile number
-//   const fetchData = async (mobileNumber) => {
-//     try {
-//       const customerNumber = mobileNumber;
-//       const response = await axios.get(`${baseurl}/getfiledata?customerNumber=${customerNumber}`);
-//       if (response.data) {
-//         const data = response.data;
-//         setFormData({
-//           name: data.customerName || '',
-//           previousLoanBankName: data.bankName || '',
-//           previousLoanType: data.loanType || '', // Assuming loanType is part of the response
-//           previousProductModel: data.model || '',
-//           previousLoanAmount: data.loanAmount || '',
-//           previousLoanSanctionDate: data.sanctionDate || '', // Assuming sanctionDate is part of the response
-//           previousLoanInsuranceValue: data.insurance || ''
-//         });
-//       }
-//     } catch (error) {
-//       console.error('Error fetching data:', error);
-//     }
-//   };
-
-//   // Handle change in mobile number
-//   const handleMobileNumberChange = (e) => {
-//     setMobileNumber(e.target.value);
-//   };
-
-//   // Handle blur event to fetch data when focus leaves the input field
-//   const handleMobileNumberBlur = () => {
-//     if (mobileNumber) {
-//       fetchData(mobileNumber);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <div className="tab-pane active">
-//         <form className='mb-5'>
-//           <div className="mb-3 row">
-//             <div className="col-md-6">
-//               <label htmlFor="customerNumber" className="form-label fw-bold">Mobile Number</label>
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 id="customerNumber"
-//                 placeholder="Enter mobile number"
-//                 value={mobileNumber}
-//                 onChange={handleMobileNumberChange}
-//                 onBlur={handleMobileNumberBlur} // Fetch data on blur event
-//               />
-//             </div>
-//             <div className="col-md-6">
-//               <label htmlFor="name" className="form-label fw-bold">Name</label>
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 id="name"
-//                 placeholder="Enter name"
-//                 value={formData.name || ''}
-//                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-//               />
-//             </div>
-//             <div className="col-md-6">
-//               <label htmlFor="previousLoanBankName" className="form-label fw-bold">Previous Loan Bank Name</label>
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 id="previousLoanBankName"
-//                 placeholder="Enter previous loan bank name"
-//                 value={formData.previousLoanBankName || ''}
-//                 onChange={(e) => setFormData({ ...formData, previousLoanBankName: e.target.value })}
-//               />
-//             </div>
-//             <div className="col-md-6">
-//               <label htmlFor="previousLoanType" className="form-label fw-bold">Previous Loan Type</label>
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 id="previousLoanType"
-//                 placeholder="Enter previous loan type"
-//                 value={formData.previousLoanType || ''}
-//                 onChange={(e) => setFormData({ ...formData, previousLoanType: e.target.value })}
-//               />
-//             </div>
-//             <div className="col-md-6">
-//               <label htmlFor="previousProductModel" className="form-label fw-bold">Previous Product Model</label>
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 id="previousProductModel"
-//                 placeholder="Enter previous product model"
-//                 value={formData.previousProductModel || ''}
-//                 onChange={(e) => setFormData({ ...formData, previousProductModel: e.target.value })}
-//               />
-//             </div>
-//             <div className="col-md-6">
-//               <label htmlFor="previousLoanAmount" className="form-label fw-bold">Previous Loan Amount</label>
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 id="previousLoanAmount"
-//                 placeholder="Enter previous loan amount"
-//                 value={formData.previousLoanAmount || ''}
-//                 onChange={(e) => setFormData({ ...formData, previousLoanAmount: e.target.value })}
-//               />
-//             </div>
-//             <div className="col-md-6">
-//               <label htmlFor="previousLoanSanctionDate" className="form-label fw-bold">Previous Loan Sanction Date</label>
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 id="previousLoanSanctionDate"
-//                 placeholder="Enter previous loan sanction date"
-//                 value={formData.previousLoanSanctionDate || ''}
-//                 onChange={(e) => setFormData({ ...formData, previousLoanSanctionDate: e.target.value })}
-//               />
-//             </div>
-//             <div className="col-md-6">
-//               <label htmlFor="previousLoanInsuranceValue" className="form-label fw-bold">Previous Loan Insurance Value</label>
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 id="previousLoanInsuranceValue"
-//                 placeholder="Enter previous loan insurance value"
-//                 value={formData.previousLoanInsuranceValue || ''}
-//                 onChange={(e) => setFormData({ ...formData, previousLoanInsuranceValue: e.target.value })}
-//               />
-//             </div>
-//           </div>
-//         </form>
-//         <div>
-//           <h3>File Disposition History</h3>
-//           <table className="table">
-//             <thead>
-//               <tr>
-//                 <th scope="col">Date</th>
-//                 <th scope="col">User Name</th>
-//                 <th scope="col">Loan Type</th>
-//                 <th scope="col">Category</th>
-//                 <th scope="col">Disposition</th>
-//                 <th scope="col">Remark</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {/* Example data */}
-//               <tr>
-//                 <th scope="row">1</th>
-//                 <td>Mark</td>
-//                 <td>Otto</td>
-//                 <td>@mdo</td>
-//               </tr>
-//               <tr>
-//                 <th scope="row">2</th>
-//                 <td>Jacob</td>
-//                 <td>Thornton</td>
-//                 <td>@fat</td>
-//               </tr>
-//               <tr>
-//                 <th scope="row">3</th>
-//                 <td colspan="2">Larry the Bird</td>
-//                 <td>@twitter</td>
-//               </tr>
-//             </tbody>
-//           </table>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default OverviewDetails;
-// OverviewDetails.js
-import React, { useContext } from 'react';
-import { UserFormContext } from '../ContentHook/OverviewContext'; // Ensure this path is correct
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const OverviewDetails = () => {
-  const { 
-    mobileNumber, 
-    fetchData,
-    formData, 
-    handleMobileNumberChange, 
-    handleMobileNumberBlur, 
-    setFormData 
-  } = useContext(UserFormContext); // Use UserFormContext here
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [formData, setFormData] = useState({
+    customerName: '',
+    loan_bank_name: '',
+    previousLoanType: '',
+    previousProductModel: '',
+    loan_amount: '',
+    previousLoanSanctionDate: '',
+    previousLoanInsuranceValue: '',
+  });
 
-  console.log(formData.type_of_loan,"type_of_loan")
+  // Handler functions
+  const handleMobileNumberChange = (e) => {
+    setMobileNumber(e.target.value);
+  };
+
+  const handleMobileNumberBlur = () => {
+    if (mobileNumber) {
+      fetchFileData(mobileNumber);
+    }
+  };
+
   const handleMobileNumberEnter = (e) => {
     if (e.key === 'Enter') {
-        e.preventDefault(); // Prevent default behavior
-        handleMobileNumberBlur();
+      fetchFileData(mobileNumber);
+    }
+  };
+
+  // Fetch API data
+  const fetchFileData = async (mobileNumber) => {
+    try {
+      const response = await axios.get(`http://localhost:3007/api/v1/getfiledata/${mobileNumber}`);
+      const data = response.data;
+
+      // Map the API data to form fields
+      setFormData({
+        customerName: data.customer_name || '',
+        loan_bank_name: data.previous_loan_bank_name || '',
+        previousLoanType: data.previous_loan_type || '',
+        previousProductModel: data.previous_product_model || '',
+        loan_amount: data.previous_loan_amount || '',
+        previousLoanSanctionDate: data.previous_loan_sanction_date || '',
+        previousLoanInsuranceValue: data.previous_loan_insurance_value || '',
+      });
+    } catch (error) {
+      console.error('Error fetching file data:', error);
     }
   };
 
@@ -212,6 +56,7 @@ const OverviewDetails = () => {
       <div className="tab-pane active">
         <form className='mb-5'>
           <div className="mb-3 row">
+            {/* Mobile Number */}
             <div className="col-md-6">
               <label htmlFor="customerNumber" className="form-label fw-bold">Mobile Number</label>
               <input
@@ -222,9 +67,11 @@ const OverviewDetails = () => {
                 value={mobileNumber}
                 onChange={handleMobileNumberChange}
                 onBlur={handleMobileNumberBlur}
-                onKeyDown={handleMobileNumberEnter}
+                onKeyDown={handleMobileNumberEnter} // Trigger fetch on "Enter" key
               />
             </div>
+
+            {/* Name */}
             <div className="col-md-6">
               <label htmlFor="name" className="form-label fw-bold">Name</label>
               <input
@@ -232,10 +79,12 @@ const OverviewDetails = () => {
                 className="form-control"
                 id="name"
                 placeholder="Enter name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.customerName}
+                onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
               />
             </div>
+
+            {/* Previous Loan Bank Name */}
             <div className="col-md-6">
               <label htmlFor="loan_bank_name" className="form-label fw-bold">Previous Loan Bank Name</label>
               <input
@@ -247,6 +96,8 @@ const OverviewDetails = () => {
                 onChange={(e) => setFormData({ ...formData, loan_bank_name: e.target.value })}
               />
             </div>
+
+            {/* Previous Loan Type */}
             <div className="col-md-6">
               <label htmlFor="previousLoanType" className="form-label fw-bold">Previous Loan Type</label>
               <input
@@ -258,6 +109,8 @@ const OverviewDetails = () => {
                 onChange={(e) => setFormData({ ...formData, previousLoanType: e.target.value })}
               />
             </div>
+
+            {/* Previous Product Model */}
             <div className="col-md-6">
               <label htmlFor="previousProductModel" className="form-label fw-bold">Previous Product Model</label>
               <input
@@ -269,6 +122,8 @@ const OverviewDetails = () => {
                 onChange={(e) => setFormData({ ...formData, previousProductModel: e.target.value })}
               />
             </div>
+
+            {/* Previous Loan Amount */}
             <div className="col-md-6">
               <label htmlFor="loan_amount" className="form-label fw-bold">Previous Loan Amount</label>
               <input
@@ -280,6 +135,8 @@ const OverviewDetails = () => {
                 onChange={(e) => setFormData({ ...formData, loan_amount: e.target.value })}
               />
             </div>
+
+            {/* Previous Loan Sanction Date */}
             <div className="col-md-6">
               <label htmlFor="previousLoanSanctionDate" className="form-label fw-bold">Previous Loan Sanction Date</label>
               <input
@@ -291,6 +148,8 @@ const OverviewDetails = () => {
                 onChange={(e) => setFormData({ ...formData, previousLoanSanctionDate: e.target.value })}
               />
             </div>
+
+            {/* Previous Loan Insurance Value */}
             <div className="col-md-6">
               <label htmlFor="previousLoanInsuranceValue" className="form-label fw-bold">Previous Loan Insurance Value</label>
               <input
@@ -304,6 +163,8 @@ const OverviewDetails = () => {
             </div>
           </div>
         </form>
+
+        {/* File Disposition History */}
         <div>
           <h3>File Disposition History</h3>
           <table className="table">
@@ -318,17 +179,17 @@ const OverviewDetails = () => {
               </tr>
             </thead>
             <tbody>
-              {/* Example data */}
+              {/* Replace this section with dynamic data */}
               <tr>
                 <th scope="row">1</th>
                 <td>Mark</td>
-                <td>Otto</td>
+                <td>Home Loan</td>
                 <td>@mdo</td>
               </tr>
               <tr>
                 <th scope="row">2</th>
                 <td>Jacob</td>
-                <td>Thornton</td>
+                <td>Auto Loan</td>
                 <td>@fat</td>
               </tr>
               <tr>
@@ -345,4 +206,3 @@ const OverviewDetails = () => {
 };
 
 export default OverviewDetails;
-

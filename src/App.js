@@ -23,6 +23,7 @@ import ViewDetails from './Component/Team_Leader/ViewDetails';
 import ChangePassword from './Component/Auth/changePassword';
 // import { OverviewProvider } from './Component/ContentHook/OverviewContext';
 import { UserFormProvider } from './Component/ContentHook/OverviewContext';
+import EditUser from './Component/Create-user/EditUser';
 function App() {
   return (
     <Router>
@@ -70,6 +71,7 @@ function Main() {
           <Route path="/view/:id" element={<ViewDetails />} />
         <Route path="/edit/:id" element={<EditTeamMember />} />
         <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/editUser/:userId" element={<EditUser />} />
 
         
 
