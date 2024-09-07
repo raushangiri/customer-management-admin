@@ -1,26 +1,31 @@
-import React, { createContext, useState, useCallback } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import axios from 'axios';
+const baseurl = process.env.REACT_APP_API_BASE_URL;
 
-export const UserFormContext  = createContext();
+// Create Context
+const OverviewContext = createContext();
 
-export const UserFormProvider  = ({ children }) => {
-  // State to manage mobile number
-  const [mobileNumber, setMobileNumber] = useState("");
+// Create Provider Component
+export const OverviewProvider = ({ children }) => {
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [error1, setError1] = useState(''); // State to track error message
 
-  // State to manage all form data
   const [formData, setFormData] = useState({
-    mobileNumber:'',
-    loan_bank_name:"",
-product_model:"",
-loan_amount:"",
-loan_sanction_date:"",
-loan_insurance_value:"",
-loan_end_date:"",
-    name: '',
+    file_number: '',
+    mobileNumber: '',
+    customerName: '',
+    loan_bank_name: '',
+    previousLoanType: '',
+    previousProductModel: '',
+    loan_amount: '',
+    previousLoanSanctionDate: '',
+    previousLoanInsuranceValue: '',
     is_interested: '',
     type_of_loan: '',
     loan_category: '',
     required_amount: '',
+    mobile_number: '',
+    name: '',
     occupation_type: '',
     nature_of_business: '',
     service_type: '',
@@ -44,210 +49,211 @@ loan_end_date:"",
     years_at_current_organization: '',
     gst_itr_filed: '',
     gst_and_itr_income: '',
-    in_hand_salary: '',
+    inhand_salary: '',
     other_income: '',
-    reference_name: '',
-    reference_mobile_number: '',
-    company_name: '',
-    reference_address: '',
-    bank_name: '',
-    emi_amount: '',
-    loan_term: '',
-    loan_start_date: '',
-    loan_end_date: '',
-    emi_date: '',
-    no_of_emi_bounces: '',
-    bounces_reason: '',
-    car_details: '',
+reference_name: '',
+reference_mobile_number: '',
+reference_occupation_type: '',
+reference_nature_of_business: '',
+company_name: '',
+reference_address: '',
+
   });
 
-  const baseurl = process.env.REACT_APP_API_BASE_URL;
-
-  // Fetch data based on mobile number
-  const fetchData = useCallback(async (mobileNumber) => {
-    try {
-      const response = await axios.get(`${baseurl}/getfiledata?customerNumber=${mobileNumber}`);
-      console.log('API response:', response.data);
-  
-      if (response.data && Object.keys(response.data).length > 0) {
-        const data = response.data;
-        setFormData({
-            
-            mobileNumber:mobileNumber,
-            loan_bank_name:data.bankName || "",
-            product_model: data.model || "",
-            loan_amount:data.loanAmount || "",
-            loan_sanction_date:data.loan_sanction_date || "",
-            loan_insurance_value:data.insurance||"",
-            loan_end_date:data.loan_end_date||"",
-          name: data.customerName || '',
-          is_interested: data.is_interested || '',
-          type_of_loan: data.type_of_loan || '',
-          loan_category: data.loan_category || '',
-          required_amount: data.required_amount || '',
-          occupation_type: data.occupation_type || '',
-          nature_of_business: data.nature_of_business || '',
-          service_type: data.service_type || '',
-          type_of_resident: data.type_of_resident || '',
-          permanent_address: data.permanent_address || '',
-          permanent_address_landmark: data.permanent_address_landmark || '',
-          official_email_id: data.official_email_id || '',
-          personal_email_id: data.personal_email_id || '',
-          office_name: data.office_name || '',
-          date_of_birth: data.date_of_birth || '',
-          alternate_number: data.alternate_number || '',
-          mother_name: data.mother_name || '',
-          father_name: data.father_name || '',
-          marital_status: data.marital_status || '',
-          spouse_name: data.spouse_name || '',
-          current_address: data.current_address || '',
-          years_at_current_residence: data.years_at_current_residence || '',
-          total_time_in_delhi: data.total_time_in_delhi || '',
-          office_address: data.office_address || '',
-          office_address_landmark: data.office_address_landmark || '',
-          years_at_current_organization: data.years_at_current_organization || '',
-          gst_itr_filed: data.gst_itr_filed || '',
-          gst_and_itr_income: data.gst_and_itr_income || '',
-          in_hand_salary: data.in_hand_salary || '',
-          other_income: data.other_income || '',
-          reference_name: data.reference_name || '',
-          reference_mobile_number: data.reference_mobile_number || '',
-          company_name: data.company_name || '',
-          reference_address: data.reference_address || '',
-          bank_name: data.bank_name || '',
-          emi_amount: data.emi_amount || '',
-          loan_term: data.loan_term || '',
-          loan_start_date: data.loan_start_date || '',
-          loan_end_date: data.loan_end_date || '',
-          emi_date: data.emi_date || '',
-          no_of_emi_bounces: data.no_of_emi_bounces || '',
-          bounces_reason: data.bounces_reason || '',
-          car_details: data.car_details || '',
-        });
-      } else {
-        // Reset formData to initial values if no data is found
-        setFormData({
-          name: '',
-          is_interested: '',
-          type_of_loan: '',
-          loan_category: '',
-          required_amount: '',
-          occupation_type: '',
-          nature_of_business: '',
-          service_type: '',
-          type_of_resident: '',
-          permanent_address: '',
-          permanent_address_landmark: '',
-          official_email_id: '',
-          personal_email_id: '',
-          office_name: '',
-          date_of_birth: '',
-          alternate_number: '',
-          mother_name: '',
-          father_name: '',
-          marital_status: '',
-          spouse_name: '',
-          current_address: '',
-          years_at_current_residence: '',
-          total_time_in_delhi: '',
-          office_address: '',
-          office_address_landmark: '',
-          years_at_current_organization: '',
-          gst_itr_filed: '',
-          gst_and_itr_income: '',
-          in_hand_salary: '',
-          other_income: '',
-          reference_name: '',
-          reference_mobile_number: '',
-          company_name: '',
-          reference_address: '',
-          bank_name: '',
-          emi_amount: '',
-          loan_term: '',
-          loan_start_date: '',
-          loan_end_date: '',
-          emi_date: '',
-          no_of_emi_bounces: '',
-          bounces_reason: '',
-          car_details: '',
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // Optionally reset formData on error as well
-      setFormData({
-        name: '',
-        is_interested: '',
-        type_of_loan: '',
-        loan_category: '',
-        required_amount: '',
-        occupation_type: '',
-        nature_of_business: '',
-        service_type: '',
-        type_of_resident: '',
-        permanent_address: '',
-        permanent_address_landmark: '',
-        official_email_id: '',
-        personal_email_id: '',
-        office_name: '',
-        date_of_birth: '',
-        alternate_number: '',
-        mother_name: '',
-        father_name: '',
-        marital_status: '',
-        spouse_name: '',
-        current_address: '',
-        years_at_current_residence: '',
-        total_time_in_delhi: '',
-        office_address: '',
-        office_address_landmark: '',
-        years_at_current_organization: '',
-        gst_itr_filed: '',
-        gst_and_itr_income: '',
-        in_hand_salary: '',
-        other_income: '',
-        reference_name: '',
-        reference_mobile_number: '',
-        company_name: '',
-        reference_address: '',
-        bank_name: '',
-        emi_amount: '',
-        loan_term: '',
-        loan_start_date: '',
-        loan_end_date: '',
-        emi_date: '',
-        no_of_emi_bounces: '',
-        bounces_reason: '',
-        car_details: '',
-      });
-    }
-  }, [baseurl]);
-  
-  
-
-  // Handle change in mobile number
-  const handleMobileNumberChange = (e) => {
-    setMobileNumber(e.target.value);
+  // Function to reset formData
+  const resetFormData = () => {
+    setFormData({
+      file_number: '',
+      mobileNumber: '',
+      customerName: '',
+      loan_bank_name: '',
+      previousLoanType: '',
+      previousProductModel: '',
+      loan_amount: '',
+      previousLoanSanctionDate: '',
+      previousLoanInsuranceValue: '',
+      is_interested: '',
+      type_of_loan: '',
+      loan_category: '',
+      required_amount: '',
+      mobile_number: '',
+      name: '',
+      occupation_type: '',
+      nature_of_business: '',
+      service_type: '',
+      type_of_resident: '',
+      permanent_address: '',
+      permanent_address_landmark: '',
+      official_email_id: '',
+      personal_email_id: '',
+      office_name: '',
+      date_of_birth: '',
+      alternate_number: '',
+      mother_name: '',
+      father_name: '',
+      marital_status: '',
+      spouse_name: '',
+      current_address: '',
+      years_at_current_residence: '',
+      total_time_in_delhi: '',
+      office_address: '',
+      office_address_landmark: '',
+      years_at_current_organization: '',
+      gst_itr_filed: '',
+      gst_and_itr_income: '',
+      inhand_salary: '',
+      other_income: '',
+      reference_name: '',
+reference_mobile_number: '',
+reference_occupation_type: '',
+reference_nature_of_business: '',
+company_name: '',
+reference_address: '',
+    });
+    setError1('');
   };
 
-  // Handle blur event to fetch data when focus leaves the input field
-  const handleMobileNumberBlur = () => {
-    if (mobileNumber) {
-      fetchData(mobileNumber);
+  const fetchFileData = async (mobileNumber) => {
+    try {
+      // Reset form data before fetching new data
+      resetFormData();
+
+      const response = await axios.get(`${baseurl}/getfiledata/${mobileNumber}`);
+      
+      const data = response.data;
+      if (!data) {
+        setError1('There is no file with this Number'); // Set error message if no data
+        return;
+      }
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        file_number: data.file_number || '',
+        mobileNumber: mobileNumber || '',
+        customerName: data.customer_name || '',
+        loan_bank_name: data.previous_loan_bank_name || '',
+        previousLoanType: data.previous_loan_type || '',
+        previousProductModel: data.previous_product_model || '',
+        loan_amount: data.previous_loan_amount || '',
+        previousLoanSanctionDate: data.previous_loan_sanction_date || '',
+        previousLoanInsuranceValue: data.previous_loan_insurance_value || '',
+      }));
+
+      // Fetch personal data using the fetched file number
+      fetchpersonalData(data.file_number);
+      fetchreferenceData(data.file_number);
+    } catch (error) {
+      console.error('Error fetching file data:', error);
+    }
+  };
+
+  const fetchpersonalData = async (file_number) => {
+    try {
+      const response = await axios.get(`${baseurl}/getpersonadetails/${file_number}`);
+      const data = response.data.data;
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        is_interested: data.is_interested || '',
+        type_of_loan: data.type_of_loan || '',
+        loan_category: data.loan_category || '',
+        required_amount: data.required_amount || '',
+        mobile_number: mobileNumber || '',
+        name: formData.name || '',
+        occupation_type: data.occupation_type || '',
+        nature_of_business: data.nature_of_business || '',
+        service_type: data.service_type || '',
+        type_of_resident: data.type_of_resident || '',
+        permanent_address: data.permanent_address || '',
+        permanent_address_landmark: data.permanent_address_landmark || '',
+        official_email_id: data.official_email_id || '',
+        personal_email_id: data.personal_email_id || '',
+        office_name: data.office_name || '',
+        date_of_birth: data.date_of_birth || '',
+        alternate_number: data.alternate_number || '',
+        mother_name: data.mother_name || '',
+        father_name: data.father_name || '',
+        marital_status: data.marital_status || '',
+        spouse_name: data.spouse_name || '',
+        current_address: data.current_address || '',
+        years_at_current_residence: data.years_at_current_residence || '',
+        total_time_in_delhi: data.total_time_in_delhi || '',
+        office_address: data.office_address || '',
+        office_address_landmark: data.office_address_landmark || '',
+        years_at_current_organization: data.years_at_current_organization || '',
+        gst_itr_filed: data.gst_itr_filed || '',
+        gst_and_itr_income: data.gst_and_itr_income || '',
+        inhand_salary: data.inhand_salary || '',
+        other_income: data.other_income || '',
+      }));
+    } catch (error) {
+      console.error('Error fetching personal data:', error);
+    }
+  };
+
+  const fetchreferenceData = async (file_number) => {
+    try {
+      const response = await axios.get(`${baseurl}/getreferencedetail/${file_number}`);
+      const data = response.data.data;
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        reference_name: data.reference_name||'',
+        reference_mobile_number: data.reference_mobile_number||'',
+        reference_occupation_type: data.occupation_type||'',
+        reference_nature_of_business: data.nature_of_business||'',
+        company_name: data.company_name||'',
+        reference_address: data.reference_address||'',
+      }));
+    } catch (error) {
+      console.error('Error fetching personal data:', error);
+    }
+  };
+
+
+
+
+
+
+
+  const handleSubmit = async (formType) => {
+    try {
+      if (formType === 'overview') {
+        // Update overview data
+        await axios.post(`${baseurl}/createpersonaldetails/${formData.file_number}`, formData);
+      } else if (formType === 'personal') {
+        // Update personal data
+        await axios.post(`${baseurl}/createpersonaldetails/${formData.file_number}`, formData);
+        resetFormData();
+      }
+      else if (formType === 'reference') {
+        // Update personal data
+        await axios.post(`${baseurl}/createreferencedetail/${formData.file_number}`, formData);
+        resetFormData();
+      }
+      
+      // Optionally, you can fetch updated data to reflect changes
+      fetchFileData(formData.mobileNumber);
+    } catch (error) {
+      console.error('Error updating data:', error);
+      // Handle error accordingly
     }
   };
 
   return (
-    <UserFormContext.Provider
-      value={{
-        mobileNumber,
-        formData,
-        handleMobileNumberChange,
-        handleMobileNumberBlur,
-        setFormData,
-      }}
-    >
+    <OverviewContext.Provider value={{ mobileNumber,
+      handleSubmit, 
+      setMobileNumber, 
+      formData, 
+      setFormData,error1 ,
+     fetchFileData,
+     fetchpersonalData,
+     fetchreferenceData 
+     
+     }}>
       {children}
-    </UserFormContext.Provider>
+    </OverviewContext.Provider>
   );
 };
+
+// Custom Hook
+export const useOverview = () => useContext(OverviewContext);

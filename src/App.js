@@ -22,7 +22,7 @@ import EditTeamMember from './Component/Team_Leader/EditTeamMember';
 import ViewDetails from './Component/Team_Leader/ViewDetails';
 import ChangePassword from './Component/Auth/changePassword';
 // import { OverviewProvider } from './Component/ContentHook/OverviewContext';
-import { UserFormProvider } from './Component/ContentHook/OverviewContext';
+import { OverviewProvider } from './Component/ContentHook/OverviewContext';
 import EditUser from './Component/Create-user/EditUser';
 function App() {
   return (
@@ -40,7 +40,7 @@ function Main() {
 
   return (
     <div className="App">
-      <UserFormProvider>
+      <OverviewProvider>
       {!isAuthRoute && (
         <>
           {/* <Navbar /> */}
@@ -77,7 +77,7 @@ function Main() {
 
         </Routes>
       </div>
-      </UserFormProvider>
+      </OverviewProvider>
     </div>
   );
 }
