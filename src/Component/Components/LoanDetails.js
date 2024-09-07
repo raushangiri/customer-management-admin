@@ -1,366 +1,266 @@
 import React, { useState, useEffect } from 'react';
-
-import { statuses, bank_details } from '../../Component/Bank-login/Data'; // Adjust the path if necessary
+import Select from 'react-select';
+import axios from 'axios';
+import { useOverview } from '../ContentHook/OverviewContext';
 
 const LoanDetails = () => {
+  const [Loandetails, setLoandetails] = useState([]);
+  const baseurl = process.env.REACT_APP_API_BASE_URL;
 
-    const [activeTab, setActiveTab] = useState('details');
-    const [references, setReferences] = useState([]);
-    const [newReference, setNewReference] = useState({ name: '', mobileNumber: '', address: '' });
-    const [loandetail, setloandetail] = useState({ bankName: '', emiAmount: '', emiDate: '', loanstartDate: '', noofemiBounces: '', bouncesReason: '', carDetails: '' });
-    const [newloandetail, setNewloandetail] = useState([]);
-    // const [selectedLoanType, setSelectedLoanType] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [isInterested, setIsInterested] = useState('');
-    const [showModal, setShowModal] = useState(false);
-    const [notInterestedReason, setNotInterestedReason] = useState('');
-    const [remarks, setRemarks] = useState('');
-    const [selectedDocumentType, setSelectedDocumentType] = useState('');
-    const [uploadedDocuments, setUploadedDocuments] = useState([]);
-    const [showModal1, setShowModal1] = useState(false);
-    const [selectedDocumentFile, setSelectedDocumentFile] = useState(null);
-    const [loginStatus, setLoginStatus] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
-  const [selectedReason, setSelectedReason] = useState('');
-  const [selectedBank, setSelectedBank] = useState('');
-  const [bankDetail, setBankDetail] = useState({ "RM NAME": '', "RM CONTACT NO": '' });
+  
+  const [loandetail, setloandetail] = useState({
+    bank_name: '',
+    emi_amount: '',
+    emi_date: '',
+    loan_start_date: '',
+    loan_end_date: '',
+    no_of_emi_bounces: '',
+    bounces_reason: '',
+    car_details: '',
+  });
+  const [bankOptions, setBankOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedLoanType, setSelectedLoanType] = useState('');
+  const [fileNumber, setFileNumber] = useState(''); // Update this with the actual file number you need
+  const { mobileNumber, fetchFileData, formData, setFormData, handleSubmit } = useOverview();
 
-  // Filter bank details based on selectedLoanType
-  const filteredBanks = bank_details.filter(bank => bank["Loan Type"] === selectedLoanType);
-
-  // Helper function to get bank details
-  const getBankDetails = (bankName) => {
-    return filteredBanks.find(bank => bank["BANK NAME"] === bankName) || {};
-  };
-
+  // Fetch bank list from API
   useEffect(() => {
-    setBankDetail(getBankDetails(selectedBank));
-  }, [selectedBank]);
+    const fetchBankList = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getlist`);
+        const banks = response.data.bankNames.map(bank => ({
+          value: bank,  // Use the bank name as the value
+          label: bank   // Use the bank name as the label
+        }));
+        setBankOptions(banks);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching bank list:', error);
+        setLoading(false);
+      }
+    };
+    fetchBankList();
+  }, []);
 
-  const handleLoginStatusChange = (event) => {
-    setLoginStatus(event.target.value);
-    if (event.target.value === 'Yes') {
-      setSelectedStatus('');
-      setSelectedReason('');
-      setSelectedBank('');
-      setBankDetail({ "RM NAME": '', "RM CONTACT NO": '' }); // Reset bank details
+  const handleAddReference = async (e) => {
+    e.preventDefault();
+    try {
+      // Post loan details to the API
+      const response = await axios.post(`${baseurl}/createLoandetails/${formData.file_number}`, loandetail);
+      if (response.status ===200) {
+        alert('Loan details added successfully!');
+        fetchLoanDetails(formData.file_number, setLoandetails);
+      } else {
+        alert('Failed to save loan details');
+      }
+    } catch (error) {
+      console.error('Error saving loan details:', error);
+      alert('Error saving loan details');
     }
   };
 
-  const handleStatusChange = (event) => {
-    const status = event.target.value;
-    setSelectedStatus(status);
-    setSelectedReason('');
+  // Handle selection of bank from dropdown
+  const handleBankSelect = (selectedOption) => {
+    setloandetail({ ...loandetail, bank_name: selectedOption.value });
   };
 
-  const handleReasonChange = (event) => {
-    setSelectedReason(event.target.value);
-  };
+  useEffect(() => {
+    if (formData.file_number) {
+      fetchLoanDetails(formData.file_number, setLoandetails);
+    }
+  }, [formData.file_number]);
 
-  const handleBankChange = (event) => {
-    const bankName = event.target.value;
-    setSelectedBank(bankName);
-  };
+  const fetchLoanDetails = async (fileNumber, setLoandetails) => {
+    try {
+        const response = await axios.get(`${baseurl}/getLoandetails/${fileNumber}`);
 
-  const filteredReasons = statuses.find(status => status.login_status === selectedStatus)?.reasons || [];
-  const bankOptions = filteredBanks.map(bank => bank["BANK NAME"]);
-
-
-
-
-    const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-
-    const getPrevious12Months = () => {
-        const previous12Months = [];
-        const currentDate = new Date();
-        let currentMonth = currentDate.getMonth();
-        let currentYear = currentDate.getFullYear();
-
-        for (let i = 0; i < 12; i++) {
-            const monthName = months[currentMonth];
-            previous12Months.push({
-                month: monthName,
-                year: currentYear,
-                dayValues: Array(6).fill('') // Initialize with empty strings for days 5, 10, 15, 20, 25, 30
-            });
-
-            currentMonth = (currentMonth - 1 + 12) % 12;
-            if (currentMonth === 11) {
-                currentYear--;
-            }
-        }
-        return previous12Months.reverse();
-    };
-
-    const [previous12Months, setPrevious12Months] = useState(getPrevious12Months());
-
-    const handleDayValueChange = (monthIndex, dayIndex, value) => {
-        const updatedMonths = [...previous12Months];
-        updatedMonths[monthIndex].dayValues[dayIndex] = value;
-        setPrevious12Months(updatedMonths);
-    };
-
-    const calculateTotalAB = (dayValues) => {
-        return dayValues.reduce((total, value) => total + (parseFloat(value) || 0), 0);
-    };
-
-    const calculateTotalABB = (totalAB) => {
-        return totalAB / 6;
-    };
-
-    const handleDocumentTypeChange = (event) => {
-        setSelectedDocumentType(event.target.value);
-    };
-
-    // Handle file input change
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setUploadedDocuments([...uploadedDocuments, { type: selectedDocumentType, file }]);
-        }
-    };
-
-    // Handle document upload (submit)
-    const handleDocumentUpload = (event) => {
-        event.preventDefault();
-        // You can add additional logic here if needed.
-        // For now, it just resets the form fields.
-        setSelectedDocumentType('');
-    };
-
-    // Handle view document
-    const handleViewDocument = (doc) => {
-        const fileURL = URL.createObjectURL(doc.file);
-        setSelectedDocumentFile(fileURL);
-        setShowModal1(true);
-    };
-
-    // Handle delete document
-    const handleDeleteDocument = (index) => {
-        const updatedDocuments = uploadedDocuments.filter((_, i) => i !== index);
-        setUploadedDocuments(updatedDocuments);
-    };
+        // Directly set the response data if it's an array
+        if (Array.isArray(response.data.data)) {
+            setLoandetails(response.data.data); // Set the array of loan details
+            console.log(response.data.data, "data"); // Log the data array
+        } 
+    } catch (error) {
+        console.error('Error fetching loan details:', error);
+    }
+};
 
 
-    const handleAddReference = (e) => {
-        e.preventDefault();
-        setReferences([...references, newReference]);
-        setNewReference({ name: '', mobileNumber: '', address: '' });
-    };
 
 
-    const handleAddloanDetails = (e) => {
-        e.preventDefault();
-        setNewloandetail([...newloandetail, loandetail]);
-        setloandetail({ bankName: '', emiAmount: '', emiDate: '', loanstartDate: '', noofemiBounces: '', bouncesReason: '', carDetails: '' });
-    };
-
-    const loanMasterData = {
-        'Auto Loan': ['External Bt', 'Internal Bt', 'Refinance', 'New Car', 'Sale Purchage'],
-        'Business Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-        'LAP Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-        'Home Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-        'Personal Loan': ['Personal Loan'],
-        'Education Loan': ['Education Loan'],
-        'Insurance': ['Insurance'],
-        'Working capital Loan': ['Working capital Loan'],
-        'Small Business Loan':['small business loan'],
-        'Drop Down OD':['Drop Down OD']
-      };
-
-    const NotInterestedOptions = {
-        notInterested: [
-            'No need Loan',
-            'Need after 1 Month',
-            'Abuse on Call',
-            'Do not want to provide details',
-            'Threat to complain',
-            'Asked not to call again',
-        ]
-    };
-    const handleInterestChange = (e) => {
-        const value = e.target.value;
-        setIsInterested(value);
-        if (value === 'NotIntrested') {
-            setShowModal(true);
-        } else {
-            setShowModal(false);
-        }
-    };
-
-    const handleModalSubmit = (e) => {
-        e.preventDefault();
-        // Handle form submission inside the modal
-        console.log('Reason:', notInterestedReason);
-        console.log('Remarks:', remarks);
-        setShowModal(false);
-    };
-
-    const handleLoanTypeChange = (e) => {
-        setSelectedLoanType(e.target.value);
-        setSelectedCategory(''); // Reset category when loan type changes
-    };
-
+ 
   return (
     <>
-    <div className="tab-pane active">
+      <div className="tab-pane active">
+        <form onSubmit={handleAddReference} className="mb-4">
+          <div className="mb-3 row">
+            <div className="col-md-4">
+              <label htmlFor="bank_name" className="form-label fw-bold">Bank Name</label>
+              {loading ? (
+                <p>Loading banks...</p>
+              ) : (
+                <Select
+                  id="bank_name"
+                  options={bankOptions}
+                  value={bankOptions.find(option => option.value === loandetail.bank_name)}
+                  onChange={handleBankSelect}
+                  placeholder="Select a bank"
+                  isSearchable={true}
+                  required
+                />
+              )}
+            </div>
 
-<form onSubmit={handleAddReference} className="mb-4">
-  <div className="mb-3 row">
-    <div className="col-md-4">
-      <label htmlFor="referenceName" className="form-label fw-bold">Bank Name</label>
-      <input
-        type="text"
-        className="form-control"
-        id="referenceName"
-        value={loandetail.bankName}
-        onChange={(e) => setloandetail({ ...loandetail, bankName: e.target.value })}
-        placeholder="Enter name"
-        required
-      />
-    </div>
-    <div className="col-md-4">
-      <label htmlFor="emiAmount" className="form-label fw-bold">EMI Amount</label>
-      <input
-        type="text"
-        className="form-control"
-        id="emiAmount"
-        value={loandetail.emiAmount}
-        onChange={(e) => setloandetail({ ...loandetail, emiAmount: e.target.value })}
-        placeholder="Enter mobile number"
-        required
-      />
-    </div>
-    <div className="col-md-4">
-      <label htmlFor="loanTerm" className="form-label fw-bold">Loan Term</label>
-      <input
-        type="text"
-        className="form-control"
-        id="loanTerm"
-        value={loandetail.loanTerm}
-        onChange={(e) => setloandetail({ ...loandetail, loanTerm: e.target.value })}
-        placeholder="Enter mobile number"
-        required
-      />
-    </div>
-    <div className="col-md-4">
-      <label htmlFor="loan_start_date" className="form-label fw-bold">Loan Start Date</label>
-      <input
-        type="date"
-        className="form-control"
-        id="loan_start_date"
-        value={loandetail.loanstartDate}
-        onChange={(e) => setloandetail({ ...loandetail, loanstartDate: e.target.value })}
-        placeholder="Enter mobile number"
-        required
-      />
-    </div>
-    <div className="col-md-4">
-      <label htmlFor="loan_end_date" className="form-label fw-bold">Loan End Date</label>
-      <input
-        type="date"
-        className="form-control"
-        id="loan_end_date"
-        value={loandetail.loan_end_date}
-        onChange={(e) => setloandetail({ ...loandetail, loan_end_date: e.target.value })}
-        
-        required
-      />
-    </div>
-    <div className="col-md-4">
-      <label htmlFor="emi_date" className="form-label fw-bold">EMI Date</label>
-      <input
-        type="date"
-        className="form-control"
-        id="emi_date"
-        value={loandetail.emiDate}
-        onChange={(e) => setloandetail({ ...loandetail, emiDate: e.target.value })}
-        required
-      />
-    </div>
-    <div className="col-md-4">
-      <label htmlFor="referenceAddress" className="form-label fw-bold">No of EMI Bounces</label>
-      <input
-        type="text"
-        className="form-control"
-        id="referenceAddress"
-        value={loandetail.address}
-        onChange={(e) => setloandetail({ ...loandetail, noofemiBounces: e.target.value })}
-        placeholder="Enter address"
-        required
-      />
-    </div>
-    <div className="col-md-4">
-      <label htmlFor="referenceAddress" className="form-label fw-bold">Bounces Reason</label>
-      <select className="form-select" id="referenceAddress"value={loandetail.bouncesReason}
-        onChange={(e) => setloandetail({ ...loandetail, bouncesReason: e.target.value })}>
-          <option value="">Select Reason</option>
-          <option value="insuffisent_funds">Insuffisent Funds</option>
-          <option value="technical_issue">Technical issue</option>
-          </select>
-      {/* <input
-        type="text"
-        className="form-control"
-        id="referenceAddress"
-        value={loandetail.bouncesReason}
-        onChange={(e) => setloandetail({ ...loandetail, bouncesReason: e.target.value })}
-        placeholder="Enter address"
-        required
-      /> */}
-    </div>
-    <div className="col-md-4">
-      <label htmlFor="referenceAddress" className="form-label fw-bold">Car Details</label>
-      <input
-        type="text"
-        className="form-control"
-        id="referenceAddress"
-        value={loandetail.carDetails}
-        onChange={(e) => setloandetail({ ...loandetail, carDetails: e.target.value })}
-        placeholder="Enter address"
-        required
-      />
-    </div>
-  </div>
+            <div className="col-md-4">
+              <label htmlFor="emi_amount" className="form-label fw-bold">EMI Amount</label>
+              <input
+                type="number"
+                className="form-control"
+                id="emi_amount"
+                value={loandetail.emi_amount}
+                onChange={(e) => setloandetail({ ...loandetail, emi_amount: e.target.value })}
+                placeholder="Enter EMI Amount"
+                required
+              />
+            </div>
 
-  <button type="submit" className="btn btn-primary">Add Reference</button>
-</form>
+            <div className="col-md-4">
+              <label htmlFor="loan_term" className="form-label fw-bold">Loan Term</label>
+              <input
+                type="text"
+                className="form-control"
+                id="loan_term"
+                value={loandetail.loan_term}
+                onChange={(e) => setloandetail({ ...loandetail, loan_term: e.target.value })}
+                placeholder="Enter Loan Term"
+                required
+              />
+            </div>
 
-<div className="mb-4">
-  {/* <h5>Reference Details</h5> */}
-  {references.length > 0 ? (
-    <table className="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Mobile Number</th>
-          <th scope="col">Address</th>
-        </tr>
-      </thead>
-      <tbody>
-        {references.map((reference, index) => (
-          <tr key={index}>
-            <th scope="row">{index + 1}</th>
-            <td>{reference.name}</td>
-            <td>{reference.mobileNumber}</td>
-            <td>{reference.address}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  ) : (
-    <div className="alert alert-info" role="alert">
-      No references added yet.
-    </div>
-  )}
-</div>
-</div>
+            <div className="col-md-4">
+              <label htmlFor="loan_start_date" className="form-label fw-bold">Loan Start Date</label>
+              <input
+                type="date"
+                className="form-control"
+                id="loan_start_date"
+                value={loandetail.loan_start_date}
+                onChange={(e) => setloandetail({ ...loandetail, loan_start_date: e.target.value })}
+                required
+              />
+            </div>
+
+            <div className="col-md-4">
+              <label htmlFor="loan_end_date" className="form-label fw-bold">Loan End Date</label>
+              <input
+                type="date"
+                className="form-control"
+                id="loan_end_date"
+                value={loandetail.loan_end_date}
+                onChange={(e) => setloandetail({ ...loandetail, loan_end_date: e.target.value })}
+                required
+              />
+            </div>
+
+            <div className="col-md-4">
+              <label htmlFor="emi_amount" className="form-label fw-bold">EMI Date</label>
+              <input
+                type="date"
+                className="form-control"
+                id="emi_amount"
+                value={loandetail.emi_date}
+                onChange={(e) => setloandetail({ ...loandetail, emi_date: e.target.value })}
+                required
+              />
+            </div>
+
+            <div className="col-md-4">
+              <label htmlFor="no_of_emi_bounces" className="form-label fw-bold">No of EMI Bounces</label>
+              <input
+                type="number"
+                className="form-control"
+                id="no_of_emi_bounces"
+                value={loandetail.no_of_emi_bounces}
+                onChange={(e) => setloandetail({ ...loandetail, no_of_emi_bounces: e.target.value })}
+                placeholder="Enter No of EMI Bounces"
+                required
+              />
+            </div>
+
+            <div className="col-md-4">
+              <label htmlFor="bounces_reason" className="form-label fw-bold">Bounces Reason</label>
+              <select
+                className="form-select"
+                id="bounces_reason"
+                value={loandetail.bounces_reason}
+                onChange={(e) => setloandetail({ ...loandetail, bounces_reason: e.target.value })}
+                required
+              >
+                <option value="">Select Reason</option>
+                <option value="insufficient_funds">Insufficient Funds</option>
+                <option value="technical_issue">Technical Issue</option>
+              </select>
+            </div>
+
+            <div className="col-md-4">
+              <label htmlFor="car_details" className="form-label fw-bold">Car Details</label>
+              <input
+                type="text"
+                className="form-control"
+                id="car_details"
+                value={loandetail.car_details}
+                onChange={(e) => setloandetail({ ...loandetail, car_details: e.target.value })}
+                placeholder="Enter Car Details"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="btn btn-primary">Add Reference</button>
+        </form>
+
+        <div className="mb-4">
+        {Loandetails.length > 0 ? (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Bank Name</th>
+                  <th scope="col">EMI Amount</th>
+                  <th scope="col">Loan Term</th>
+                  <th scope="col">Loan Start Date</th>
+                  <th scope="col">Loan End Date</th>
+                  <th scope="col">EMI Date</th>
+                  <th scope="col">No of EMI Bounces</th>
+                  <th scope="col">Bounces Reason</th>
+                  <th scope="col">Car Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Loandetails.map((reference, index) => (
+                  <tr key={reference._id}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{reference.bank_name}</td>
+                    <td>{reference.emi_amount}</td>
+                    <td>{reference.loan_term}</td>
+                    <td>{reference.loan_start_date}</td>
+                    <td>{reference.loan_end_date}</td>
+                    <td>{reference.emi_date}</td>
+                    <td>{reference.no_of_emi_bounces}</td>
+                    <td>{reference.bounces_reason}</td>
+                    <td>{reference.car_details}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="alert alert-info" role="alert">
+              No loan details found.
+            </div>
+          )}
+        </div>
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default LoanDetails
+export default LoanDetails;

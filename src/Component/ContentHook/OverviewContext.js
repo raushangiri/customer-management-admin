@@ -11,6 +11,7 @@ export const OverviewProvider = ({ children }) => {
   const [error1, setError1] = useState(''); // State to track error message
 
   const [formData, setFormData] = useState({
+    
     file_number: '',
     mobileNumber: '',
     customerName: '',
@@ -208,12 +209,6 @@ reference_address: '',
       console.error('Error fetching personal data:', error);
     }
   };
-
-
-
-
-
-
 
   const handleSubmit = async (formType) => {
     try {

@@ -49,10 +49,12 @@ function Login() {
                 const token = data.token;
                 const decodedToken = jwtDecode(token);
                 const userRole = decodedToken.role;
+                const userId = decodedToken.userId;
 
                 // Store the token and role in localStorage
                 localStorage.setItem('authToken', token);
                 localStorage.setItem('userRole', userRole);
+                localStorage.setItem('userId', userId);
 
                 // Show success toast
                 toast.success("Login successful!", { position: "top-center" });

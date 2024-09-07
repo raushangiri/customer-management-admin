@@ -7,14 +7,14 @@
 //     <br/>
 //     <div className='container 'style={{ width: '40%',background:"#2c3e50" }}>
         
-//     <div class="mb-3">
-//   <label for="formFile" class="form-label text-light">Select File to upload</label>
-//   <input class="form-control" type="file" id="formFile"/>
+//     <div className="mb-3">
+//   <label for="formFile" className="form-label text-light">Select File to upload</label>
+//   <input className="form-control" type="file" id="formFile"/>
 // </div>
 
-// <div class="d-flext text-center" >
-// <button type="button" class="btn btn-primary mb-3 mx-2">Upload CSV</button>
-// <button type="button" class="btn btn-outline-light mb-3">Cancel</button>
+// <div className="d-flext text-center" >
+// <button type="button" className="btn btn-primary mb-3 mx-2">Upload CSV</button>
+// <button type="button" className="btn btn-outline-light mb-3">Cancel</button>
 // </div>
 
 // </div>
@@ -94,11 +94,11 @@ const UploadCsv = () => {
         <br/>
         <div className='container 'style={{ width: '40%',background:"#2c3e50" }}>
             
-        <div class="mb-3">
-      <label for="formFile" class="form-label text-light">Select File to upload</label>
-  <input class="form-control" accept=".xlsx, .xls" onChange={handleFileChange} type="file" id="formFile"/>
-      <button onClick={handleFileUpload} disabled={loading} type="button" class="btn btn-primary mb-3 mx-2">{loading ? "Uploading..." : "Upload CSV"}</button>
-      <button type="button" class="btn btn-outline-light mb-3">Cancel</button>
+        <div className="mb-3">
+      <label for="formFile" className="form-label text-light">Select File to upload</label>
+  <input className="form-control" accept=".xlsx, .xls" onChange={handleFileChange} type="file" id="formFile"/>
+      <button onClick={handleFileUpload} disabled={loading} type="button" className="btn btn-primary mb-3 mx-2">{loading ? "Uploading..." : "Upload CSV"}</button>
+      <button type="button" className="btn btn-outline-light mb-3">Cancel</button>
       
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>

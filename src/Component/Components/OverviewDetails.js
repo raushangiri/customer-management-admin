@@ -209,13 +209,14 @@
 // export default OverviewDetails;
 
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useOverview } from '../ContentHook/OverviewContext';
 
 const OverviewDetails = () => {
   const { mobileNumber, setMobileNumber, formData, setFormData, fetchFileData  } = useOverview();
 
  
+  const baseurl = process.env.REACT_APP_API_BASE_URL;
 
 
   // Handler functions
@@ -235,6 +236,35 @@ const OverviewDetails = () => {
     }
   };
 
+  const [dispositionData, setDispositionData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    // Function to fetch data from the API
+    const fetchDispositionData = async () => {
+      try {
+        const response = await fetch(`${baseurl}/getdesposition/${formData.file_number}`);
+        const result = await response.json();
+        
+        if (response.ok) {
+          setDispositionData(result.data);  // Assuming the data is in the 'data' field
+        } else {
+          setError('Error fetching data');
+        }
+      } catch (err) {
+        setError('Failed to fetch data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDispositionData();
+  }, [formData.file_number]);
+
+  if (loading) return <div className="spinner-grow text-light" role="status">
+  <span className="visually-hidden">Loading...</span>
+</div>;
+  // if (error) return <div>{error}</div>;
   return (
     <>
       <div className="tab-pane active">
@@ -350,40 +380,36 @@ const OverviewDetails = () => {
 
         {/* File Disposition History */}
         <div>
-          <h3>File Disposition History</h3>
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">User Name</th>
-                <th scope="col">Loan Type</th>
-                <th scope="col">Category</th>
-                <th scope="col">Disposition</th>
-                <th scope="col">Remark</th>
+      <h3>File Disposition History</h3>
+      <table className="table">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">User Name</th>
+            <th scope="col">Call Status</th>
+            <th scope="col">Disposition</th>
+            <th scope="col">Remark</th>
+          </tr>
+        </thead>
+        <tbody>
+          {dispositionData.length > 0 ? (
+            dispositionData.map((item, index) => (
+              <tr key={item._id}>
+                <td>{new Date(item.createdAt).toLocaleDateString()}</td>
+                <td>{item.user_name}</td> {/* Update this with the actual username from your data */}
+                <td>{item.call_status}</td>
+                <td>{item.disposition}</td>
+                <td>{item.remark || "No Remark"}</td>
               </tr>
-            </thead>
-            <tbody>
-              {/* Replace this section with dynamic data */}
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Home Loan</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Auto Loan</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5">No data available</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
       </div>
     </>
   );

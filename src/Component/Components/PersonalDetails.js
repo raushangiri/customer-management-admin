@@ -14,15 +14,15 @@ const PersonalDetails = () => {
     const [selectedLoanType, setSelectedLoanType] = useState('');
 
     const loanMasterData = {
-        'Auto Loan': ['External Bt', 'Internal Bt', 'Refinance', 'New Car', 'Sale Purchage'],
+        'Auto Loan': ['External BT', 'Internal BT', 'Refinance', 'New Car', 'Sale Purchage'],
         'Business Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-        'LAP Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
+        'Land and Property Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
         'Home Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
         'Personal Loan': ['Personal Loan'],
         'Education Loan': ['Education Loan'],
         'Insurance': ['Insurance'],
-        'Working capital Loan': ['Working capital Loan'],
-        'Small Business Loan': ['small business loan'],
+        'Working Capital Loan': ['Working Capital Loan'],
+        'Small Business Loan': ['Small Business Loan'],
         'Drop Down OD': ['Drop Down OD']
     };
 
@@ -53,8 +53,8 @@ const PersonalDetails = () => {
     const handleModalSubmit = (e) => {
         e.preventDefault();
         // Handle form submission inside the modal
-        console.log('Reason:', notInterestedReason);
-        console.log('Remarks:', remarks);
+        // console.log('Reason:', notInterestedReason);
+        // console.log('Remarks:', remarks);
         setShowModal(false);
     };
 
@@ -69,10 +69,7 @@ const PersonalDetails = () => {
         }
       }, [mobileNumber]);
     
-      // Log formData whenever it updates
-      useEffect(() => {
-        console.log(formData.is_interested, 'formData');
-      }, [formData]);
+    
 
       const onSubmit = (event) => {
         event.preventDefault();
@@ -199,22 +196,23 @@ const PersonalDetails = () => {
 
 
 <div className="col-md-6">
-    <label htmlFor="selected_category" className="form-label fw-bold">Loan Category</label>
-    <select
-        className="form-select"
-        id="selected_category"
-        value={formData.selected_category}
-        onChange={(e) => setFormData({ ...formData, selected_category: e.target.value })}
-        disabled={!formData.type_of_loan} // Disable if no loan type is selected
-    >
-        <option value="">Select category</option>
-        {formData.type_of_loan && loanMasterData[formData.type_of_loan]?.map((category) => (
-            <option key={category} value={category}>
-                {category}
-            </option>
-        ))}
-    </select>
-</div>
+                <label htmlFor="loan_category" className="form-label fw-bold">Loan Category</label>
+                <select
+                    className="form-select"
+                    id="loan_category"
+                    value={formData.loan_category}
+                    onChange={(e) => setFormData({ ...formData, loan_category: e.target.value })}
+                    disabled={!formData.type_of_loan} // Disable if no loan type is selected
+                >
+                    <option value="">Select category</option>
+                    {formData.type_of_loan && loanMasterData[formData.type_of_loan]?.map((category) => (
+                        <option key={category} value={category}>
+                            {category}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
 
 
                         <div className="col-md-6">
@@ -493,12 +491,12 @@ const PersonalDetails = () => {
                         </div>
 
                         <div className="col-md-6">
-                            <label htmlFor="in_hand_salary" className="form-label fw-bold">In-Hand Salary</label>
+                            <label htmlFor="inhand_salary" className="form-label fw-bold">In-Hand Salary</label>
                             <input type="text"
-                                name='in_hand_salary'
-                                value={formData.in_hand_salary}
-                                onChange={(e) => setFormData({ ...formData, in_hand_salary: e.target.value })}
-                                className="form-control" id="in_hand_salary" placeholder="Enter salary" />
+                                name='inhand_salary'
+                                value={formData.inhand_salary}
+                                onChange={(e) => setFormData({ ...formData, inhand_salary: e.target.value })}
+                                className="form-control" id="inhand_salary" placeholder="Enter salary" />
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="other_income" className="form-label fw-bold">Other Income</label>

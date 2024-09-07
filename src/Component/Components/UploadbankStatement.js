@@ -194,8 +194,8 @@ const UploadbankStatement = () => {
     const handleModalSubmit = (e) => {
         e.preventDefault();
         // Handle form submission inside the modal
-        console.log('Reason:', notInterestedReason);
-        console.log('Remarks:', remarks);
+        // console.log('Reason:', notInterestedReason);
+        // console.log('Remarks:', remarks);
         setShowModal(false);
     };
 

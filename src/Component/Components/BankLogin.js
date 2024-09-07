@@ -323,7 +323,7 @@
                                 
 //                                 </div>
 //                                 <div className='text-center'>
-//                                 <button type="button" class="btn btn-primary mt-3 text-center">Submit</button>
+//                                 <button type="button" className="btn btn-primary mt-3 text-center">Submit</button>
 //                                 </div>
 //                             </>
 //                         )}
@@ -346,12 +346,14 @@ const BankLogin = () => {
     const [bankDetail, setBankDetail] = useState({ "RM NAME": '', "RM CONTACT NO": '' });
     const [bankNames, setBankNames] = useState([]); // State to store bank names from API
     const [remarks, setRemarks] = useState('');
+    const baseurl = process.env.REACT_APP_API_BASE_URL;
+
     // Fetch bank names from the API
     useEffect(() => {
         // Define the Loan_Type you want to query
         const loanType = "Auto Loan"; // You can set this dynamically as needed
     
-        axios.post('http://localhost:3007/api/v1/getBankNames', { Loan_Type: loanType })
+        axios.post(`${baseurl}/getBankNames`, { Loan_Type: loanType })
             .then(response => {
                 if (response.data.success) {
                     setBankNames(response.data.bankNames);

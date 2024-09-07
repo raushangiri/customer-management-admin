@@ -18,7 +18,6 @@ export const UserFormProvider = ({ children }) => {
   const fetchPersonalData = useCallback(async (mobileNumber) => {
     try {
       const response = await axios.get(`${baseurl}/api/personal?mobileNumber=${mobileNumber}`);
-      console.log('Personal data response:', response.data);
 
       setPersonalData(response.data || {});
     } catch (error) {
@@ -31,7 +30,6 @@ export const UserFormProvider = ({ children }) => {
   const fetchFileData = useCallback(async (fileNumber) => {
     try {
       const response = await axios.get(`${baseurl}/api/file/${fileNumber}`);
-      console.log('File data response:', response.data);
 
       setFileData(response.data || {});
     } catch (error) {

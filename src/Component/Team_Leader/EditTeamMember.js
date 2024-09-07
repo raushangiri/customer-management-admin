@@ -23,7 +23,6 @@ const EditTeamMember = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     // Submit the form data to your backend or API
-    console.log('Updated team member:', teamMember);
     navigate(-1); // Redirect back to the team list
   };
 
