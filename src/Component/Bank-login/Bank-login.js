@@ -75,20 +75,21 @@ const Bank_login = () => {
                 </li>
                 <li className="nav-item">
                     <button
-                        className={`nav-link ${activeTab === 'disbursal_details' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('disbursal_details')}
-                    >
-                        Disbursal Details
-                    </button>
-                </li>
-                <li className="nav-item">
-                    <button
                         className={`nav-link ${activeTab === 'approval_details' ? 'active' : ''}`}
                         onClick={() => setActiveTab('approval_details')}
                     >
                         Approval Details
                     </button>
                 </li>
+                <li className="nav-item">
+                    <button
+                        className={`nav-link ${activeTab === 'disbursal_details' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('disbursal_details')}
+                    >
+                        Disbursal Details
+                    </button>
+                </li>
+                
                 <li className="nav-item">
           <button
             className={`nav-link ${activeTab === 'disposition' ? 'active' : ''}`}

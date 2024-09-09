@@ -31,6 +31,8 @@ const Sidebar = () => {
             <li>
               <Link to="/search">Search File Details</Link>
             </li>
+            <li><Link to="/file-history">File History</Link></li>
+
             <li>
               <div onClick={toggleSubMenu} className="submenu-title">
                 Manage User
@@ -50,7 +52,7 @@ const Sidebar = () => {
             <li><Link to="/reports">Reports</Link></li>
           </>
         )}
-        {userRole === 'team_leader' && (
+        {userRole === 'Team leader' && (
           <>
             <li>
               <Link to="/dashboard">Dashboard</Link>
@@ -68,15 +70,16 @@ const Sidebar = () => {
           </>
         )}
 
-        {userRole === 'sales_team' && (
+        {userRole === 'sales' && (
           <>
             <li>
               <Link to="/sales-dashboard">Dashboard</Link>
             </li>
-            <li><Link to="/sales-team">sales</Link></li>
+            <li><Link to="/sales-team">Search File</Link></li>
+            <li><Link to="/file-history">File History</Link></li>
           </>
         )}
-        {userRole === 'tvr_team' && (
+        {userRole === 'TVR' && (
           <>
             <li>
               <Link to="/tvr-dashboard">Dashboard</Link>
@@ -85,7 +88,7 @@ const Sidebar = () => {
           </>
         )}
 
-        {userRole === 'cdr_team' && (
+        {userRole === 'CDR' && (
           <>
             <li>
               <Link to="/cdr-dashboard">Dashboard</Link>
@@ -93,7 +96,7 @@ const Sidebar = () => {
             <li><Link to="/cdr-team">CDR</Link></li>
           </>
         )}
-        {userRole === 'bank_login' && (
+        {userRole === 'Bank login' && (
           <>
             <li>
               <Link to="/banklogin-dashboard">Dashboard</Link>

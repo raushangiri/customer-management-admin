@@ -24,6 +24,8 @@ import ChangePassword from './Component/Auth/changePassword';
 // import { OverviewProvider } from './Component/ContentHook/OverviewContext';
 import { OverviewProvider } from './Component/ContentHook/OverviewContext';
 import EditUser from './Component/Create-user/EditUser';
+import History from './Component/History/Historylist';
+import ViewFileDetails from './Component/History/Viewfiledetails';
 function App() {
   return (
     <Router>
@@ -72,7 +74,8 @@ function Main() {
         <Route path="/edit/:id" element={<EditTeamMember />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/editUser/:userId" element={<EditUser />} />
-
+        <Route path="/file-history" element={<History />} />
+        <Route path="/view-filedetails/:id" element={<ViewFileDetails />} />
         
 
         </Routes>

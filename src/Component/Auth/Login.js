@@ -61,17 +61,17 @@ function Login() {
 
                 // Navigate based on role
                 setTimeout(() => {
-                    if (userRole === "sales_team") {
+                    if (userRole === "sales") {
                         navigate('/sales-dashboard');
-                    } else if (userRole === "tvr_team") {
+                    } else if (userRole === "TVR") {
                         navigate('/tvr-dashboard');
-                    } else if (userRole === "bank_login") {
+                    } else if (userRole === "Bank login") {
                         navigate('/banklogin-dashboard');
-                    } else if (userRole === "cdr_team") {
+                    } else if (userRole === "CDR") {
                         navigate('/CDRdashboard');
                     } else if (userRole === "admin") {
                         navigate('/dashboard');
-                    } else if (userRole === "team_leader") {
+                    } else if (userRole === "Team leader") {
                         navigate('/dashboard');
                     }
                 }, 2000); // Delay navigation to show the toast message

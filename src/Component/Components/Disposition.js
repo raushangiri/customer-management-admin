@@ -9,7 +9,6 @@ const Disposition = () => {
   const [documentList, setDocumentList] = useState([]);
   const [expectedDocumentDate, setExpectedDocumentDate] = useState('');
   const [remark, setRemark] = useState('');
-  const [fileNumber, setFileNumber] = useState(''); // Make sure to set this appropriately
   const { formData, setFormData } = useOverview();
   const baseurl = process.env.REACT_APP_API_BASE_URL;
 
@@ -95,7 +94,6 @@ const userId = localStorage.getItem('userId');
     setSelectedDocuments([]);
     setExpectedDocumentDate('');
     setRemark('');
-    setFileNumber('');
   };
 
   return (
@@ -180,9 +178,17 @@ const userId = localStorage.getItem('userId');
             <label htmlFor="fileStatus" className="form-label fw-bold">File Status</label>
             <select className="form-select" id="fileStatus">
               <option value="">Select</option>
-              <option value="process_to_tvr">Process to TVR</option>
+              <option value="details_not_completed">Details not completed</option>
+              <option value="ready_to_tvr">Ready to TVR</option>
+              <option value="tvr_rejected">TVR Rejected</option>
+              <option value="reassigned_to_salesagent">Reassign to Sales Team</option>
+
               <option value="process_to_cdr">Process to CDR</option>
+              <option value="cdr_rejected">CDR Rejected</option>
+
               <option value="process_to_login_team">Process to Login Team</option>
+              <option value="bank_login_rejected">Bank Login Rejected</option>
+
             </select>
           </div>
         </div>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 import './CreateUser.css'; // Import your CSS file
-import Sidebar from '../Navbar/Sidebar';
 const baseurl = process.env.REACT_APP_API_BASE_URL;
 
 const CreateUser = () => {
@@ -27,7 +26,7 @@ const CreateUser = () => {
   
     const payload = { name, role };
   
-    if (role !== 'admin' && role !== 'team_leader') {
+    if (role !== 'admin' && role !== 'Team leader') {
       if (!reportingTo) {
         setToastMessage("Error");
         setToastBody("Reporting To is required for this role.");
@@ -37,7 +36,7 @@ const CreateUser = () => {
       payload.reportingTo = reportingTo;
     }
   
-    if (role === 'team_leader' || (role !== 'admin' && role !== 'team_leader')) {
+    if (role === 'Team leader' || (role !== 'admin' && role !== 'Team leader')) {
       if (department.length === 0) {
         setToastMessage("Error");
         setToastBody("Department is required.");
@@ -122,17 +121,17 @@ const CreateUser = () => {
           >
             <option value="">Select Role</option>
             <option value="admin">Admin</option>
-            <option value="team_leader">Team Leader</option>
+            <option value="Team leader">Team Leader</option>
             <option value="sales">Sales Agent</option>
             <option value="TVR">TVR Team</option>
             <option value="CDR">CDR Team</option>
-            <option value="Bank login Team">Bank Login Team</option>
+            <option value="Bank login">Bank Login Team</option>
           </select>
         </div>
 
-        {(role === 'admin' || role === 'team_leader' || role === 'sales' || role === 'TVR' || role === 'CDR' || role === 'Bank login Team') && (
+        {(role === 'admin' || role === 'Team leader' || role === 'sales' || role === 'TVR' || role === 'CDR' || role === 'Bank login') && (
           <>
-            {role !== 'admin' && role !== 'team_leader' && (
+            {role !== 'admin' && role !== 'Team leader' && (
               <div className="mb-3">
                 <label htmlFor="reportingTo" className="form-label text-light">Select Reporting To</label>
                 <Select
@@ -146,7 +145,7 @@ const CreateUser = () => {
               </div>
             )}
 
-            {role === 'team_leader' && (
+            {role === 'Team leader' && (
               <div className="mb-3">
                 <label htmlFor="selectdepartment" className="form-label text-light">Select Department</label>
                 <Select
@@ -162,7 +161,7 @@ const CreateUser = () => {
               </div>
             )}
 
-            {role !== 'admin' && role !== 'team_leader' && (
+            {role !== 'admin' && role !== 'Team leader' && (
               <div className="mb-3">
                 <label htmlFor="selectdepartment" className="form-label text-light">Select Department</label>
                 <Select

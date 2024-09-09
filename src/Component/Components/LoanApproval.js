@@ -104,6 +104,10 @@ const LoanApproval = () => {
               <label>Remark</label>
               <textarea className="form-control"></textarea>
             </div>
+            <div className='text-center'>
+            <button type="button" class="btn btn-primary mx-2">Submit</button>
+            <button type="button" class="btn btn-secondary">Cancel</button>
+            </div>
           </>
         );
       case 'Business Loan':
@@ -135,7 +139,10 @@ const LoanApproval = () => {
             <div className="mb-3">
               <textarea className="form-control" placeholder="Remark"></textarea>
             </div>
-          </>
+            <div className='text-center'>
+            <button type="button" class="btn btn-primary mx-2">Submit</button>
+            <button type="button" class="btn btn-secondary">Cancel</button>
+            </div>          </>
         );
       default:
         return null;
