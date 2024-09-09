@@ -4,30 +4,59 @@ import { useOverview } from '../ContentHook/OverviewContext';
 
 const Disposition = () => {
   const [callStatus, setCallStatus] = useState('');
+  const [isInterested, setIsInterested] = useState('');
   const [disposition, setDisposition] = useState('');
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [documentList, setDocumentList] = useState([]);
   const [expectedDocumentDate, setExpectedDocumentDate] = useState('');
   const [remark, setRemark] = useState('');
   const { formData, setFormData } = useOverview();
+  const [showModal, setShowModal] = useState(false);
+  const [notInterestedReason, setNotInterestedReason] = useState('');
+  const [remarks, setRemarks] = useState('');
   const baseurl = process.env.REACT_APP_API_BASE_URL;
 
   const fetchDocumentList = async () => {
     try {
       const response = await axios.post(`${baseurl}/getdocuments`, {
         type_of_loan: formData.type_of_loan,
-        loan_category: formData.loan_category
+        loan_category: formData.loan_category,
       });
       setDocumentList(Array.isArray(response.data.documents) ? response.data.documents : [response.data.documents]);
     } catch (error) {
-      console.error("Error fetching document list", error);
+      console.error('Error fetching document list', error);
     }
   };
- // Retrieve the accessToken from localStorage
-const userId = localStorage.getItem('userId');
 
+  const userId = localStorage.getItem('userId');
 
+  const NotInterestedOptions = {
+    notInterested: [
+      'No need Loan',
+      'Need after 1 Month',
+      'Abuse on Call',
+      'Do not want to provide details',
+      'Threat to complain',
+      'Asked not to call again',
+    ],
+  };
 
+  const handleInterestChange = (e) => {
+    const value = e.target.value;
+    setIsInterested(value);
+    setFormData({ ...formData, is_interested: value });
+
+    if (value === 'NotInterested') {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  };
+
+  const handleModalSubmit = (e) => {
+    e.preventDefault();
+    setShowModal(false);
+  };
 
   useEffect(() => {
     if (formData) {
@@ -37,14 +66,12 @@ const userId = localStorage.getItem('userId');
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-    setSelectedDocuments((prev) =>
-      checked ? [...prev, value] : prev.filter((doc) => doc !== value)
-    );
+    setSelectedDocuments((prev) => (checked ? [...prev, value] : prev.filter((doc) => doc !== value)));
   };
 
   const handleCallStatusChange = (e) => {
     setCallStatus(e.target.value);
-    setDisposition(''); // Reset disposition when call status changes
+    setDisposition('');
   };
 
   const handleDispositionChange = (e) => {
@@ -62,32 +89,29 @@ const userId = localStorage.getItem('userId');
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const documentListFormatted = selectedDocuments.map(doc => ({
+    const documentListFormatted = selectedDocuments.map((doc) => ({
       document_name: doc,
-      document_url: '' // Placeholder, adjust if necessary to include actual URLs
+      document_url: '', // Placeholder
     }));
 
     const payload = {
       call_status: callStatus,
-      disposition: disposition,
-      user_id: userId, // Assuming user_id is in formData
+      disposition,
+      user_id: userId,
       expected_to_send_document_by: expectedDocumentDate,
       document_list: documentListFormatted,
-      remark: remark,
-      file_number: formData.file_number
+      remark,
+      file_number: formData.file_number,
     };
 
     try {
       await axios.post(`${baseurl}/createdesposition/${formData.file_number}`, payload);
-      // Handle success (e.g., show a message or redirect)
-      resetForm(); // Reset the form after successful submission
+      resetForm();
     } catch (error) {
-      console.error("Error creating disposition", error);
-      // Handle error (e.g., show an error message)
+      console.error('Error creating disposition', error);
     }
   };
 
-  // Function to reset the form fields
   const resetForm = () => {
     setCallStatus('');
     setDisposition('');
@@ -108,91 +132,163 @@ const userId = localStorage.getItem('userId');
               <option value="not_connected">Not Connected</option>
             </select>
           </div>
-          <div className="col-md-6">
-            <label htmlFor="disposition" className="form-label fw-bold">Disposition</label>
-            <select className="form-select" id="disposition" value={disposition} onChange={handleDispositionChange}>
-              <option value="">Select</option>
-              {callStatus === 'not_connected' ? (
-                <>
-                  <option value="busy">Busy</option>
-                  <option value="rnr">RNR</option>
-                  <option value="call_drop">Call Drop</option>
-                  <option value="switched_off">Switched Off</option>
-                </>
-              ) : (
-                <>
+
+          {callStatus === 'connected' && (
+            <div className="col-md-6">
+              <label htmlFor="isInterested" className="form-label fw-bold">Is Interested?</label>
+              <select
+                className="form-select"
+                id="isInterested"
+                value={isInterested}
+                onChange={handleInterestChange}
+              >
+                <option value="">Select</option>
+                <option value="Interested">Interested</option>
+                <option value="NotInterested">Not Interested</option>
+              </select>
+
+              {showModal && (
+                <div className="modal fade show" style={{ display: 'block' }}>
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title">Reason for Not Interested</h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          onClick={() => setShowModal(false)}
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <form onSubmit={handleModalSubmit}>
+                          <div className="mb-3">
+                            <label htmlFor="notInterestedReason" className="form-label">Select Reason</label>
+                            <select
+                              className="form-select"
+                              id="notInterestedReason"
+                              value={notInterestedReason}
+                              onChange={(e) => setNotInterestedReason(e.target.value)}
+                            >
+                              <option value="">Select Reason</option>
+                              {NotInterestedOptions.notInterested.map((reason, index) => (
+                                <option key={index} value={reason}>
+                                  {reason}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="remarks" className="form-label">Remarks</label>
+                            <textarea
+                              className="form-control"
+                              id="remarks"
+                              value={remarks}
+                              onChange={(e) => setRemarks(e.target.value)}
+                              placeholder="Enter remarks"
+                              required
+                            />
+                          </div>
+                          <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                              Close
+                            </button>
+                            <button type="submit" className="btn btn-primary">
+                              Submit
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {isInterested === 'Interested' && (
+            <>
+              <div className="col-md-6">
+                <label htmlFor="disposition" className="form-label fw-bold">Disposition</label>
+                <select
+                  className="form-select"
+                  id="disposition"
+                  value={disposition}
+                  onChange={handleDispositionChange}
+                >
+                  <option value="">Select</option>
                   <option value="Asked to share documents">Asked to share documents</option>
                   <option value="Asked to share additional documents">Asked to share additional documents</option>
                   <option value="Follow-up">Follow-up</option>
                   <option value="Document shared">Document shared</option>
                   <option value="Do not want to share">Do not want to share</option>
                   <option value="Don’t have document">Don’t have document/will share later</option>
-                </>
-              )}
-            </select>
-          </div>
-          {(disposition === 'Asked to share documents' || disposition === 'Asked to share additional documents' || disposition === 'follow-up' || disposition === 'Don’t have document') && (
-            <div className="col-md-6">
-              <label htmlFor="expectedDocumentDate" className="form-label fw-bold">Expected to send document by</label>
-              <input type="date" className="form-control" id="expectedDocumentDate" value={expectedDocumentDate} onChange={handleExpectedDocumentDateChange} />
-            </div>
-          )}
-          {(disposition === 'Asked to share additional documents' || disposition === 'Document shared' || disposition === 'Asked to share documents') && (
-            <div className="col-md-6">
-              <label htmlFor="documentList" className="form-label fw-bold">Document List</label>
-              <div
-                id="documentList"
-                style={{
-                  maxHeight: '200px',
-                  overflowY: 'scroll',
-                  border: '1px solid #ccc',
-                  padding: '10px',
-                  borderRadius: '5px',
-                }}
-              >
-                {documentList.map((doc, index) => (
-                  <div key={index} className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id={`doc-${index}`}
-                      value={doc}
-                      checked={selectedDocuments.includes(doc)}
-                      onChange={handleCheckboxChange}
-                    />
-                    <label className="form-check-label" htmlFor={`doc-${index}`}>
-                      {doc}
-                    </label>
-                  </div>
-                ))}
+                </select>
               </div>
-            </div>
+
+              {(disposition === 'Asked to share documents' || disposition === 'Asked to share additional documents') && (
+                <div className="col-md-6">
+                  <label htmlFor="expectedDocumentDate" className="form-label fw-bold">Expected to send document by</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="expectedDocumentDate"
+                    value={expectedDocumentDate}
+                    onChange={handleExpectedDocumentDateChange}
+                  />
+                </div>
+              )}
+
+              {(disposition === 'Asked to share additional documents' || disposition === 'Document shared') && (
+                <div className="col-md-6">
+                  <label htmlFor="documentList" className="form-label fw-bold">Document List</label>
+                  <div
+                    id="documentList"
+                    style={{
+                      maxHeight: '200px',
+                      overflowY: 'scroll',
+                      border: '1px solid #ccc',
+                      padding: '10px',
+                      borderRadius: '5px',
+                    }}
+                  >
+                    {documentList.map((doc, index) => (
+                      <div key={index} className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value={doc.document_name}
+                          id={`document_${index}`}
+                          onChange={handleCheckboxChange}
+                        />
+                        <label className="form-check-label" htmlFor={`document_${index}`}>
+                          {doc.document_name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="col-md-12">
+                <label htmlFor="remark" className="form-label fw-bold">Remark</label>
+                <textarea
+                  className="form-control"
+                  id="remark"
+                  value={remark}
+                  onChange={handleRemarkChange}
+                  placeholder="Enter remark"
+                  required
+                />
+              </div>
+            </>
           )}
-          {(disposition !== 'Asked to share additional documents' && disposition !== 'Document shared') && disposition && (
-            <div className="col-md-6">
-              <label htmlFor="remark" className="form-label fw-bold">Reason</label>
-              <textarea type="text" className="form-control" id="remark" placeholder="Enter remark" value={remark} onChange={handleRemarkChange} />
-            </div>
-          )}
-          <div className="col-md-6">
-            <label htmlFor="fileStatus" className="form-label fw-bold">File Status</label>
-            <select className="form-select" id="fileStatus">
-              <option value="">Select</option>
-              <option value="details_not_completed">Details not completed</option>
-              <option value="ready_to_tvr">Ready to TVR</option>
-              <option value="tvr_rejected">TVR Rejected</option>
-              <option value="reassigned_to_salesagent">Reassign to Sales Team</option>
+        </div>
 
-              <option value="process_to_cdr">Process to CDR</option>
-              <option value="cdr_rejected">CDR Rejected</option>
-
-              <option value="process_to_login_team">Process to Login Team</option>
-              <option value="bank_login_rejected">Bank Login Rejected</option>
-
-            </select>
+        <div className="mb-3 row">
+          <div className="col-md-12">
+            <button type="submit" className="btn btn-primary">Submit</button>
           </div>
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
       </form>
     </div>
   );

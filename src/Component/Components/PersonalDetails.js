@@ -69,7 +69,10 @@ const PersonalDetails = () => {
         }
       }, [mobileNumber]);
     
-    
+      // Log formData whenever it updates
+      useEffect(() => {
+        console.log(formData.is_interested, 'formData');
+      }, [formData]);
 
       const onSubmit = (event) => {
         event.preventDefault();
@@ -82,71 +85,7 @@ const PersonalDetails = () => {
                 <form onSubmit={onSubmit}>
                     <h4 className='text-end'><Link to="https://emicalculator.net/" target="_blank"> Loan EMI calculator</Link></h4>
                     <div className="mb-3 row">
-                        <div className="col-md-6">
-                            <label htmlFor="is_interested" className="form-label fw-bold">Is Interested?</label>
-                            <select
-                                className="form-select"
-                                id="is_interested"
-                                value={formData.is_interested || ''} // Set the value from formData
-                                onChange={handleInterestChange} // Update formData when the selection changes
-                            >
-                                <option value="">Select</option>
-                                <option value="Interested">Interested</option>
-                                <option value="NotInterested">Not Interested</option>
-                            </select>
-
-                            {/* Bootstrap Modal */}
-                            {showModal && (
-                                <div className="modal fade show" style={{ display: 'block' }}>
-                                    <div className="modal-dialog">
-                                        <div className="modal-content">
-                                            <div className="modal-header">
-                                                <h5 className="modal-title">Reason for Not Interested</h5>
-                                                <button
-                                                    type="button"
-                                                    className="btn-close"
-                                                    onClick={() => setShowModal(false)}
-                                                ></button>
-                                            </div>
-                                            <div className="modal-body">
-                                                <form onSubmit={handleModalSubmit}>
-                                                    <div className="mb-3">
-                                                        <label htmlFor="notInterestedReason" className="form-label">Select Reason</label>
-                                                        <select
-                                                            className="form-select"
-                                                            id="notInterestedReason"
-                                                            value={notInterestedReason}
-                                                            onChange={(e) => setNotInterestedReason(e.target.value)}
-                                                        >
-                                                            <option value="">Select Reason</option>
-                                                            {NotInterestedOptions.notInterested.map((reason, index) => (
-                                                                <option key={index} value={reason}>{reason}</option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <label htmlFor="remarks" className="form-label">Remarks</label>
-                                                        <textarea
-                                                            type="textarea"
-                                                            className="form-control"
-                                                            id="remarks"
-                                                            value={remarks}
-                                                            onChange={(e) => setRemarks(e.target.value)}
-                                                            placeholder="Enter remarks"
-                                                        />
-                                                    </div>
-                                                    <div className="modal-footer">
-                                                        <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                                                        <button type="submit" className="btn btn-primary">Submit</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* <div className="modal-backdrop fade show"></div> */}
-                                </div>
-                            )}
-                        </div>
+                       
                         {/* <div className="col-md-6">
                             <label htmlFor="type_of_loan" className="form-label fw-bold">Type of Loan</label>
                             <select
