@@ -399,7 +399,7 @@ const OverviewDetails = () => {
                 <td>{item.username}</td> {/* Update this with the actual username from your data */}
                 <td>{item.call_status}</td>
                 <td>{item.disposition}</td>
-                <td>{item.remark || "No Remark"}</td>
+                <td>{item.remarks || "No Remark"}</td>
               </tr>
             ))
           ) : (

@@ -54,34 +54,44 @@
 // };
 
 // export default History;
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const History = () => {
-  // Sample loan file data
-  const loanFiles = [
-    {
-      _id: '1',
-      customer_name: 'John Doe',
-      customer_mobile_number: '9876543210',
-      loan_type: 'Auto Loan',
-      file_status: 'Approved'
-    },
-    {
-      _id: '2',
-      customer_name: 'Jane Smith',
-      customer_mobile_number: '9123456780',
-      loan_type: 'Home Loan',
-      file_status: 'Pending'
-    },
-    {
-      _id: '3',
-      customer_name: 'Alex Johnson',
-      customer_mobile_number: '9987654321',
-      loan_type: 'Personal Loan',
-      file_status: 'Rejected'
-    }
-  ];
+  const [loanFiles, setLoanFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const baseurl = process.env.REACT_APP_API_BASE_URL;
+  const userId = localStorage.getItem('userId');
+
+  // Fetch loan files when the component mounts
+  useEffect(() => {
+    const fetchLoanFiles = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getLoanFilesByUserId/${userId}`);
+        if (response.data.success) {
+          setLoanFiles(response.data.loanFiles); // Update state with loan files
+        } else {
+          setError('No loan files found.');
+        }
+      } catch (err) {
+        setError('Failed to fetch loan files.');
+      } finally {
+        setLoading(false); // Stop loading after the request is complete
+      }
+    };
+
+    fetchLoanFiles();
+  }, [userId]);
+
+  if (loading) {
+    return <div className="container mt-4">Loading loan files...</div>;
+  }
+
+  if (error) {
+    return <div className="container mt-4 alert alert-danger">{error}</div>;
+  }
 
   return (
     <div className="container mt-4">
@@ -106,7 +116,9 @@ const History = () => {
                 <td>{loanFile.customer_mobile_number}</td>
                 <td>{loanFile.loan_type}</td>
                 <td>{loanFile.file_status}</td>
-                <td><Link to={`/view-filedetails/${loanFile._id}`}>View Details</Link></td>
+                <td>View Details</td>
+
+                {/* <td><Link to={`/view-filedetails/${loanFile._id}`}>View Details</Link></td> */}
               </tr>
             ))}
           </tbody>
@@ -121,3 +133,4 @@ const History = () => {
 };
 
 export default History;
+

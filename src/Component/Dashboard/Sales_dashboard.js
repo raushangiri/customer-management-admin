@@ -45,7 +45,7 @@ const Sales_dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">MTD- Total Interested</h5>
-              <p className='fs-4'>{dashboardData.documentCount}</p>
+              <p className='fs-4'>{dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@ const Sales_dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">MTD- Total Not-Interested</h5>
-              <p className='fs-4'>{dashboardData.totalNotInterested}</p>
+              <p className='fs-4'>{dashboardData.notInterestedCount}</p>
             </div>
           </div>
         </div>
