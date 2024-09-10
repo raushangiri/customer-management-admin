@@ -395,8 +395,8 @@ const OverviewDetails = () => {
           {dispositionData.length > 0 ? (
             dispositionData.map((item, index) => (
               <tr key={item._id}>
-                <td>{new Date(item.createdAt).toLocaleDateString()}</td>
-                <td>{item.user_name}</td> {/* Update this with the actual username from your data */}
+                <td>{item.createdat}</td>
+                <td>{item.username}</td> {/* Update this with the actual username from your data */}
                 <td>{item.call_status}</td>
                 <td>{item.disposition}</td>
                 <td>{item.remark || "No Remark"}</td>
