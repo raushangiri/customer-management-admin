@@ -211,7 +211,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useOverview } from '../ContentHook/OverviewContext';
-
+import {Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 const OverviewDetails = () => {
   const { mobileNumber, setMobileNumber, formData, setFormData, fetchFileData  } = useOverview();
 
@@ -386,9 +388,11 @@ const OverviewDetails = () => {
           <tr>
             <th scope="col">Date</th>
             <th scope="col">User Name</th>
-            <th scope="col">Call Status</th>
+            <th scope="col">Status</th>
             <th scope="col">Disposition</th>
+            <th scope="col">Sub Disposition</th>
             <th scope="col">Remark</th>
+            <th scope="col" className='text-center'>View Deatils</th>
           </tr>
         </thead>
         <tbody>
@@ -396,10 +400,17 @@ const OverviewDetails = () => {
             dispositionData.map((item, index) => (
               <tr key={item._id}>
                 <td>{item.createdat}</td>
-                <td>{item.username}</td> {/* Update this with the actual username from your data */}
+                <td>{item.username}</td>
                 <td>{item.call_status}</td>
+                <td>{item.is_interested}</td>
                 <td>{item.disposition}</td>
                 <td>{item.remarks || "No Remark"}</td>
+                <td className="text-center">
+                  <Link to="/view-disposition">
+                    {/* Font Awesome Eye Icon */}
+                    <FontAwesomeIcon icon={faEye} />
+                  </Link>
+                </td>
               </tr>
             ))
           ) : (

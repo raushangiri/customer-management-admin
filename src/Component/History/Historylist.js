@@ -57,7 +57,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 const History = () => {
   const [loanFiles, setLoanFiles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -105,7 +106,7 @@ const History = () => {
               <th scope="col">Mobile Number</th>
               <th scope="col">Loan Type</th>
               <th scope="col">File Status</th>
-              <th scope="col">Action</th>
+              <th scope="col"className="text-center">View Deatils</th>
             </tr>
           </thead>
           <tbody>
@@ -116,7 +117,11 @@ const History = () => {
                 <td>{loanFile.customer_mobile_number}</td>
                 <td>{loanFile.loan_type}</td>
                 <td>{loanFile.file_status}</td>
-                <td>View Details</td>
+                <td className="text-center">
+                  <Link to={`/view-filedetails/${loanFile.file_number}`}>
+                    <FontAwesomeIcon icon={faEye} />
+                  </Link>
+                </td>
 
                 {/* <td><Link to={`/view-filedetails/${loanFile._id}`}>View Details</Link></td> */}
               </tr>

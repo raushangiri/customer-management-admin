@@ -1,17 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect, useId } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleChevronDown } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
+import { faCircleChevronDown,faUser } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 import './Sidebar.css'; // Optional: For styling
 import logo from "../Auth/jbj-fintech-logo.webp";
+import axios from 'axios';
 
 const Sidebar = () => {
   const [showSubMenu, setShowSubMenu] = useState(false);
-  const userRole = localStorage.getItem('userRole'); // Get the user's role
-  // const userRole = "Admin" 
-  //const userRole = "sales" 
-  // const userRole = "tvr-team" 
-  // const userRole = "cdr-team" 
+  const [userdata, setUserdata]=useState({});
+  const userRole = localStorage.getItem('userRole'); 
+  const userId = localStorage.getItem('userId'); 
+  const [error, setError] = useState(null);
+  const baseurl = process.env.REACT_APP_API_BASE_URL;
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getUserById/${userId}`);
+        if (response.data) {
+          setUserdata(response.data); // Update state with full user data
+        } else {
+          setError('No user data found.');
+        }
+      } catch (err) {
+        setError('Failed to fetch user data.');
+      } finally {
+        setLoading(false); // Stop loading after the request is complete
+      }
+    };
+
+    fetchUser();
+  }, [userId, baseurl]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
 
   const toggleSubMenu = () => {
@@ -21,8 +51,13 @@ const Sidebar = () => {
   return (
     <div className="sidebar border border-primary">
       <img src={logo} alt='logo' style={{ width: '90%' }} className='img1' />
+
       <ul>
 
+      <p>
+  <FontAwesomeIcon icon={faUser} className='mx-2'/>
+  <strong> Hi {userdata.data.name}</strong>
+</p><hr></hr>
         {userRole === 'admin' && (
           <>
             <li>
@@ -104,6 +139,7 @@ const Sidebar = () => {
             <li><Link to="/bank-login-team">Bank Login Team</Link></li>
           </>
         )}
+
         <li><Link to="/">Logout</Link></li>
 
       </ul>

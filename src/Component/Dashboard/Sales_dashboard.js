@@ -39,13 +39,16 @@ const Sales_dashboard = () => {
   return (
     <>
       {/* <Navbar/> */}
-      <p>Welcome back Admin</p>
+      <p>Welcome {dashboardData.username}</p>
       <div className="row">
         <div className="col-sm-4 mb-3 mb-3">
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">MTD- Total Interested</h5>
-              <p className='fs-4'>{dashboardData.interestedCount}</p>
+              <p>Total Count: {dashboardData.loanFileCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
+              
+
             </div>
           </div>
         </div>
@@ -53,7 +56,8 @@ const Sales_dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">MTD- Total Not-Interested</h5>
-              <p className='fs-4'>{dashboardData.notInterestedCount}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>
@@ -61,7 +65,9 @@ const Sales_dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">MTD- Total Pending TVR</h5>
-              <p className='fs-4'>{dashboardData.totalPendingTVR}</p>
+              {/* <p className='fs-4'>{dashboardData.totalPendingTVR}</p> */}
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>
@@ -70,6 +76,8 @@ const Sales_dashboard = () => {
             <div className="card-body">
               <h5 className="card-title">MTD- Total Completed TVR</h5>
               <p className='fs-4'>{dashboardData.totalCompletedTVR}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>
@@ -78,6 +86,8 @@ const Sales_dashboard = () => {
             <div className="card-body">
               <h5 className="card-title">MTD- Total Rejected TVR</h5>
               <p className='fs-4'>{dashboardData.totalRejectedTVR}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>
@@ -86,6 +96,8 @@ const Sales_dashboard = () => {
             <div className="card-body">
               <h5 className="card-title">MTD- Total Pending CDR</h5>
               <p className='fs-4'>{dashboardData.totalPendingCDR}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>
@@ -94,6 +106,8 @@ const Sales_dashboard = () => {
             <div className="card-body">
               <h5 className="card-title">MTD- Total Completed CDR</h5>
               <p className='fs-4'>{dashboardData.totalCompletedCDR}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>
@@ -102,6 +116,8 @@ const Sales_dashboard = () => {
             <div className="card-body">
               <h5 className="card-title">MTD- Total Rejected CDR</h5>
               <p className='fs-4'>{dashboardData.totalRejectedCDR}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>
@@ -110,22 +126,39 @@ const Sales_dashboard = () => {
             <div className="card-body">
               <h5 className="card-title">MTD- Total Bank Logged-in</h5>
               <p className='fs-4'>{dashboardData.totalBankLoggedIn}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>
-        <div className="col-sm-4 mb-3">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">MTD- Total Approved Bank Logged-in</h5>
-              <p className='fs-4'>{dashboardData.totalApprovedBankLoggedIn}</p>
-            </div>
-          </div>
-        </div>
+        
         <div className="col-sm-4 mb-3">
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">MTD- Total Rejected Bank Logged-in</h5>
               <p className='fs-4'>{dashboardData.totalRejectedBankLoggedIn}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-sm-4 mb-3">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">MTD- Total Approval</h5>
+              <p className='fs-4'>{dashboardData.totalRejectedBankLoggedIn}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-sm-4 mb-3">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">MTD- Total Disbursed</h5>
+              <p className='fs-4'>{dashboardData.totalRejectedBankLoggedIn}</p>
+              <p>Total Count: {dashboardData.notInterestedCount}</p>
+             <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
         </div>

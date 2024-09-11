@@ -8,9 +8,10 @@ import Attachments from '../Components/Attachments';
 import BankLogin from '../Components/BankLogin';
 import OverviewDetails from '../Components/OverviewDetails';
 import Disposition from '../Components/Disposition';
+import Attachmentview from '../Components/Attachmentview';
 
 const SalesForm = () => {
-  const [activeTab, setActiveTab] = useState('details');
+  const [activeTab, setActiveTab] = useState('Previous Loan Details');
   
 
   return (
@@ -71,7 +72,7 @@ const SalesForm = () => {
         )}
 
 {activeTab === 'attachments' && (
-  <Attachments/>
+  <Attachmentview/>
 )}
 
 {activeTab === 'disposition' && (

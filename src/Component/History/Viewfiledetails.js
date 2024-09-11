@@ -69,76 +69,41 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const ViewFileDetails = () => {
-  const { id } = useParams(); // Get the loan file ID from the URL
-  const [loanFile, setLoanFile] = useState(null);
+  const { file_number } = useParams(); // Get the loan file ID from the URL
+  const [loanFile, setLoanFiles] = useState([]);
+  const baseurl = process.env.REACT_APP_API_BASE_URL;
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Sample static data for loan files
-  const sampleLoanFiles = [
-    {
-      _id: '1',
-      customer_name: 'John Doe',
-      customer_mobile_number: '9876543210',
-      loan_type: 'Auto Loan',
-      file_status: 'Approved',
-      tvr_agent_id: 'TVR001',
-      tvr_agent_name: 'Agent A',
-      tvr_status: 'Verified',
-      cdr_agent_id: 'CDR001',
-      cdr_agent_name: 'Agent B',
-      cdr_status: 'Cleared',
-      bank_login_agent_id: 'BL001',
-      bank_login_agent_name: 'Agent C',
-      bank_name: 'IDFC FIRST BANK',
-      bank_login_status: 'Approved'
-    },
-    {
-      _id: '2',
-      customer_name: 'Jane Smith',
-      customer_mobile_number: '9123456780',
-      loan_type: 'Home Loan',
-      file_status: 'Pending',
-      tvr_agent_id: 'TVR002',
-      tvr_agent_name: 'Agent D',
-      tvr_status: 'Pending',
-      cdr_agent_id: 'CDR002',
-      cdr_agent_name: 'Agent E',
-      cdr_status: 'Pending',
-      bank_login_agent_id: 'BL002',
-      bank_login_agent_name: 'Agent F',
-      bank_name: 'HDFC Bank',
-      bank_login_status: 'Pending'
-    },
-    {
-      _id: '3',
-      customer_name: 'Alex Johnson',
-      customer_mobile_number: '9987654321',
-      loan_type: 'Personal Loan',
-      file_status: 'Rejected',
-      tvr_agent_id: 'TVR003',
-      tvr_agent_name: 'Agent G',
-      tvr_status: 'Rejected',
-      cdr_agent_id: 'CDR003',
-      cdr_agent_name: 'Agent H',
-      cdr_status: 'Rejected',
-      bank_login_agent_id: 'BL003',
-      bank_login_agent_name: 'Agent I',
-      bank_name: 'SBI',
-      bank_login_status: 'Rejected'
-    }
-  ];
 
   useEffect(() => {
-    // Fetch loan file details from static data instead of API
-    const loanFileData = sampleLoanFiles.find(file => file._id === id);
-    setLoanFile(loanFileData);
-  }, [id]);
+    const fetchLoanFiles = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getLoandetails/${file_number}`);
+        if (response.data && response.data.data.length > 0) {
+          setLoanFiles(response.data.data[0]); // Access the first element in the array
+          // console.log(response.data.data[0].customer_name, "loanFiles");
+        } else {
+          setError('No loan files found.');
+        }
+      } catch (err) {
+        setError('Failed to fetch loan files.');
+      } finally {
+        setLoading(false); // Stop loading after the request is complete
+      }
+    };
+
+    fetchLoanFiles();
+  }, [file_number]);
+
+ 
 
   if (!loanFile) {
     return <div>Loading...</div>;
   }
-
   return (
     <div className="container mt-4">
       <h2>Loan File Details</h2>

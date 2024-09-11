@@ -92,7 +92,7 @@ function Login() {
                     <div className="d-flex justify-content-center mt-3">
                         <img src={logo} alt='logo' style={{ width: '15%' }} className='img1' />
                     </div>
-                    <h4 className='mt-3 text-center'>Welcome to JBJ Fintech CS Dashboard Admin</h4>
+                    <h4 className='mt-3 text-center'>Welcome to JBJ Fintech CS Dashboard</h4>
                     <div className='row'>
                         {/* Select Role Field */}
                         <div className="mb-3">
