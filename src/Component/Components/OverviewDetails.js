@@ -242,6 +242,10 @@ const OverviewDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
+
+    
+
+    
     // Function to fetch data from the API
     const fetchDispositionData = async () => {
       try {
@@ -259,13 +263,14 @@ const OverviewDetails = () => {
         setLoading(false);
       }
     };
-
+    if(formData.file_number){
     fetchDispositionData();
+  }
   }, [formData.file_number]);
 
-  if (loading) return <div className="spinner-grow text-light" role="status">
-  <span className="visually-hidden">Loading...</span>
-</div>;
+//   if (loading) return <div className="spinner-grow text-light" role="status">
+//   <span className="visually-hidden">Loading...</span>
+// </div>;
   // if (error) return <div>{error}</div>;
   return (
     <>
