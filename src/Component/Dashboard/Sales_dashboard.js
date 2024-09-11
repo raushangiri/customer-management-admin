@@ -46,7 +46,7 @@ const Sales_dashboard = () => {
             <div className="card-body">
               <h5 className="card-title">MTD- Total Interested</h5>
               <p>Total Count: {dashboardData.loanFileCount}</p>
-             <p> Total Amount: {dashboardData.interestedCount}</p>
+              <p> Total Amount: {dashboardData.interestedCount}</p>
               
 
             </div>
