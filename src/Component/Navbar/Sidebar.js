@@ -127,7 +127,7 @@ const Sidebar = () => {
         {userRole === 'CDR' && (
           <>
             <li>
-              <Link to="/cdr-dashboard">Dashboard</Link>
+              <Link to="/CDRdashboard">Dashboard</Link>
             </li>
             <li><Link to="/cdr-team">CDR</Link></li>
             <li><Link to="/file-history">File History</Link></li>

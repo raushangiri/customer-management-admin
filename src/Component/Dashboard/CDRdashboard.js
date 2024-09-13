@@ -1,10 +1,10 @@
 import React from 'react'
-import Navbar from "../Navbar/Navbar"
+
 const CDRdashboard = () => {
   return (
     <>
     {/* <Navbar/> */}
-    <p>Welcome back Admin</p>
+    {/* <p>Welcome back Admin</p> */}
     <div className="row">
   <div className="col-sm-4 mb-3 mb-3">
     <div className="card">
