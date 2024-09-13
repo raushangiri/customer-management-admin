@@ -93,8 +93,8 @@ const CreateUser = () => {
         const response = await axios.get(`${baseurl}/findteamleader`);
         if (response.data.status === 200) {
           const options = response.data.Teamleaderslist.map(leader => ({
-            value: leader,
-            label: leader
+            value: leader.userId,  // Set userId as the value
+            label: leader.name     // Set name as the label
           }));
           setTeamLeaders(options);
         }
@@ -102,6 +102,7 @@ const CreateUser = () => {
         console.error('Error fetching team leaders:', error);
       }
     };
+    
 
     fetchTeamLeaders();
   }, []);
@@ -133,16 +134,16 @@ const CreateUser = () => {
           <>
             {role !== 'admin' && role !== 'Team leader' && (
               <div className="mb-3">
-                <label htmlFor="reportingTo" className="form-label text-light">Select Reporting To</label>
-                <Select
-                  id="reportingTo"
-                  options={teamLeaders}
-                  placeholder="Select Team Leader"
-                  className="text-dark"
-                  value={teamLeaders.find(option => option.value === reportingTo)}
-                  onChange={(selectedOption) => setReportingTo(selectedOption?.value)}
-                />
-              </div>
+              <label htmlFor="reportingTo" className="form-label text-light">Select Reporting To</label>
+              <Select
+                id="reportingTo"
+                options={teamLeaders}  // Use the options from the API response
+                placeholder="Select Team Leader"
+                className="text-dark"
+                value={teamLeaders.find(option => option.value === reportingTo)}  // Find the selected option by value
+                onChange={(selectedOption) => setReportingTo(selectedOption?.value)}  // Set the selected userId
+              />
+            </div>
             )}
 
             {role === 'Team leader' && (
@@ -157,10 +158,8 @@ const CreateUser = () => {
   value={department}
   onChange={(selectedOptions) => setDepartment(selectedOptions)}
 />
-
               </div>
             )}
-
             {role !== 'admin' && role !== 'Team leader' && (
               <div className="mb-3">
                 <label htmlFor="selectdepartment" className="form-label text-light">Select Department</label>
@@ -173,7 +172,6 @@ const CreateUser = () => {
   value={department}
   onChange={(selectedOptions) => setDepartment(selectedOptions)}
 />
-
               </div>
             )}
 

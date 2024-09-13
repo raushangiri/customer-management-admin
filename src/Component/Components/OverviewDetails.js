@@ -211,13 +211,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { useOverview } from '../ContentHook/OverviewContext';
-import {Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 const OverviewDetails = () => {
-  const { mobileNumber, setMobileNumber, formData, setFormData, fetchFileData  } = useOverview();
+  const { mobileNumber, setMobileNumber, formData, setFormData, fetchFileData } = useOverview();
 
- 
+
   const baseurl = process.env.REACT_APP_API_BASE_URL;
 
 
@@ -243,15 +243,15 @@ const OverviewDetails = () => {
   const [error, setError] = useState(null);
   useEffect(() => {
 
-    
 
-    
+
+
     // Function to fetch data from the API
     const fetchDispositionData = async () => {
       try {
         const response = await fetch(`${baseurl}/getdesposition/${formData.file_number}`);
         const result = await response.json();
-        
+
         if (response.ok) {
           setDispositionData(result.data);  // Assuming the data is in the 'data' field
         } else {
@@ -263,14 +263,16 @@ const OverviewDetails = () => {
         setLoading(false);
       }
     };
-    if(formData.file_number){
-    fetchDispositionData();
-  }
+    if (formData.file_number) {
+      fetchDispositionData();
+    }
   }, [formData.file_number]);
 
-//   if (loading) return <div className="spinner-grow text-light" role="status">
-//   <span className="visually-hidden">Loading...</span>
-// </div>;
+
+  console.log(dispositionData.createdAt,"dispositionData")
+  //   if (loading) return <div className="spinner-grow text-light" role="status">
+  //   <span className="visually-hidden">Loading...</span>
+  // </div>;
   // if (error) return <div>{error}</div>;
   return (
     <>
@@ -291,7 +293,7 @@ const OverviewDetails = () => {
                 onKeyDown={handleMobileNumberEnter} // Trigger fetch on "Enter" key
               />
             </div>
-           
+
             {/* Name */}
             <div className="col-md-6">
               <label htmlFor="name" className="form-label fw-bold">Name</label>
@@ -387,45 +389,50 @@ const OverviewDetails = () => {
 
         {/* File Disposition History */}
         <div>
-      <h3>File Disposition History</h3>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Date</th>
-            <th scope="col">User Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">Disposition</th>
-            <th scope="col">Sub Disposition</th>
-            <th scope="col">Remark</th>
-            <th scope="col" className='text-center'>View Deatils</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dispositionData.length > 0 ? (
-            dispositionData.map((item, index) => (
-              <tr key={item._id}>
-                <td>{item.createdat}</td>
-                <td>{item.username}</td>
-                <td>{item.call_status}</td>
-                <td>{item.is_interested}</td>
-                <td>{item.disposition}</td>
-                <td>{item.remarks || "No Remark"}</td>
-                <td className="text-center">
-                  <Link to="/view-disposition">
-                    {/* Font Awesome Eye Icon */}
-                    <FontAwesomeIcon icon={faEye} />
-                  </Link>
-                </td>
+          <h3>File Disposition History</h3>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">User Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Disposition</th>
+                <th scope="col">Sub Disposition</th>
+                <th scope="col">Remark</th>
+                <th scope="col" className='text-center'>View Deatils</th>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="5">No data available</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+            </thead>
+            <tbody>
+            {dispositionData.length > 0 ? (
+  dispositionData
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by date in descending order
+    .map((item, index) => (
+      <tr key={item._id}>
+        <td>
+          {new Date(item.createdAt).toLocaleDateString('en-GB')}<br />
+          {new Date(item.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+        </td>
+        <td>{item.username}</td>
+        <td>{item.call_status}</td>
+        <td>{item.is_interested}</td>
+        <td>{item.disposition}</td>
+        <td>{item.remarks || "No Remark"}</td>
+        <td className="text-center">
+          <Link to="/view-disposition">
+            <FontAwesomeIcon icon={faEye} />
+          </Link>
+        </td>
+      </tr>
+    ))
+) : (
+  <tr>
+    <td colSpan="5">No data available</td>
+  </tr>
+)}
+
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

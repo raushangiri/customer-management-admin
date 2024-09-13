@@ -73,7 +73,7 @@ const Disposition = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     const documentListFormatted = selectedDocuments.map((doc) => ({
       document_name: doc,
@@ -95,6 +95,7 @@ const Disposition = () => {
       remarks,
       file_status: fileStatus,
       file_number: fileNumber,
+      type_of_loan:formData.type_of_loan
     };
 
     try {
@@ -266,7 +267,7 @@ const Disposition = () => {
             <select className="form-select" id="fileStatus" value={fileStatus} onChange={handleFileStatusChange}>
               <option value="">Select</option>
               <option value="details_not_completed">Details not completed</option>
-              <option value="ready_to_tvr">Ready to TVR</option>
+              <option value="process_to_tvr">Process to TVR</option>
               <option value="tvr_rejected">TVR Rejected</option>
               <option value="reassigned_to_salesagent">Reassign to Sales Team</option>
               <option value="process_to_cdr">Process to CDR</option>
