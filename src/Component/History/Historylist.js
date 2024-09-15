@@ -72,7 +72,7 @@ const History = () => {
       try {
         const response = await axios.get(`${baseurl}/getLoanFilesByUserId/${userId}`);
         if (response.data.success) {
-          setLoanFiles(response.data.loanFiles); // Update state with loan files
+          setLoanFiles(response.data.data); // Update state with loan files
         } else {
           setError('No loan files found.');
         }
@@ -115,7 +115,7 @@ const History = () => {
                 <th scope="row">{index + 1}</th>
                 <td>{loanFile.customer_name}</td>
                 <td>{loanFile.customer_mobile_number}</td>
-                <td>{loanFile.loan_type}</td>
+                <td>{loanFile.type_of_loan}</td>
                 <td>{loanFile.file_status}</td>
                 <td className="text-center">
                   <Link to={`/view-filedetails/${loanFile.file_number}`}>

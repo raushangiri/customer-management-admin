@@ -120,6 +120,9 @@ const Sidebar = () => {
               <Link to="/tvr-dashboard">Dashboard</Link>
             </li>
             <li><Link to="/tvr-team">TVR</Link></li>
+            <li>
+              <Link to="/search">Search File Details</Link>
+            </li>
             <li><Link to="/file-history">File History</Link></li>
           </>
         )}
@@ -130,6 +133,9 @@ const Sidebar = () => {
               <Link to="/CDRdashboard">Dashboard</Link>
             </li>
             <li><Link to="/cdr-team">CDR</Link></li>
+            <li>
+              <Link to="/search">Search File Details</Link>
+            </li>
             <li><Link to="/file-history">File History</Link></li>
           </>
         )}
@@ -138,7 +144,12 @@ const Sidebar = () => {
             <li>
               <Link to="/banklogin-dashboard">Dashboard</Link>
             </li>
+            <li>
+              <Link to="/search">Search File Details</Link>
+            </li>
             <li><Link to="/bank-login-team">Bank Login Team</Link></li>
+            <li><Link to="/file-history">File History</Link></li>
+
           </>
         )}
 

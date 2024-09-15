@@ -106,11 +106,11 @@ function Login() {
                             >
                                 <option value="">Select Role</option>
                                 <option value="admin">Admin</option>
-                                <option value="team_leader">Team Leader</option>
-                                <option value="sales_team">Sales Team</option>
-                                <option value="tvr_team">TVR Team</option>
-                                <option value="cdr_team">CDR Team</option>
-                                <option value="bank_login">Bank Login Team</option>
+                                <option value="Team leader">Team Leader</option>
+                                <option value="sales">Sales Team</option>
+                                <option value="TVR">TVR Team</option>
+                                <option value="CDR">CDR Team</option>
+                                <option value="Bank login">Bank Login Team</option>
                             </select>
                         </div>
 

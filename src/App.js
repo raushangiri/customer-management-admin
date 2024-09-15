@@ -27,6 +27,7 @@ import EditUser from './Component/Create-user/EditUser';
 import History from './Component/History/Historylist';
 import ViewFileDetails from './Component/History/Viewfiledetails';
 import Viewdisposition from './Component/Components/Viewdisposition';
+import Banklogindetails from './Component/Components/Banklogindetails';
 function App() {
   return (
     <Router>
@@ -78,7 +79,8 @@ function Main() {
         <Route path="/file-history" element={<History />} />
         <Route path="/view-filedetails/:file_number" element={<ViewFileDetails />} />
         <Route path="/view-disposition" element={<Viewdisposition />} />
-        {/* <Route path=" /view-filehistory/:file_name" element={<ViewFileDetails />} /> */}
+        <Route path="/Banklogindetails/:_id" element={<Banklogindetails />} />
+
 
 
        

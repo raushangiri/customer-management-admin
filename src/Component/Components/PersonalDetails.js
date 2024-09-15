@@ -374,12 +374,12 @@ const PersonalDetails = () => {
                                 className="form-control" id="years_at_current_residence" placeholder="Enter number of years" />
                         </div>
                         <div className="col-md-6">
-                            <label htmlFor="total_time_in_delhi" className="form-label fw-bold">Total Time in Delhi</label>
+                            <label htmlFor="total_time_in_delhi" className="form-label fw-bold">Total Time at Current Address</label>
                             <input type="text"
                                 name='total_time_in_delhi'
                                 value={formData.total_time_in_delhi}
                                 onChange={(e) => setFormData({ ...formData, total_time_in_delhi: e.target.value })}
-                                className="form-control" id="total_time_in_delhi" placeholder="Enter total time in Delhi" />
+                                className="form-control" id="total_time_in_delhi" placeholder="Enter Total Time at Current Address" />
                         </div>
 
 

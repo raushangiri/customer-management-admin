@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import axios from 'axios';
+import { useOverview } from '../ContentHook/OverviewContext';
 
 const Attachments = () => {
   const [selectedDocumentType, setSelectedDocumentType] = useState('');
   const [documentName, setDocumentName] = useState(''); // For custom document name if "Other" is selected
+  const [selectedFile, setSelectedFile] = useState(null);
   const [uploadedDocuments, setUploadedDocuments] = useState([]);
   const [showModal1, setShowModal1] = useState(false);
   const [selectedDocumentFile, setSelectedDocumentFile] = useState(null);
+  const baseurl = process.env.REACT_APP_API_BASE_URL;
+  const  formData1=useOverview().formData;
+  const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  console.log(formData1.file_number,"formData1")
+  const allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+  const maxFileSize = 5 * 1024 * 1024; // 5 MB
 
   const handleDocumentTypeChange = (event) => {
     setSelectedDocumentType(event.target.value);
-    // Reset document name if the document type is not "Other"
     if (event.target.value !== 'other') {
       setDocumentName('');
     }
@@ -18,17 +29,70 @@ const Attachments = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const docType = selectedDocumentType === 'other' ? documentName : selectedDocumentType;
-      if (docType) {
-        setUploadedDocuments([...uploadedDocuments, { type: docType, file }]);
+      if (file.size > maxFileSize) {
+        alert('File size exceeds the 5MB limit.');
+        return;
       }
+
+      if (!allowedFileTypes.includes(file.type)) {
+        alert('Unsupported file format. Please upload JPG, PNG, or PDF files.');
+        return;
+      }
+
+      setSelectedFile(file);
     }
   };
-
-  const handleDocumentUpload = (event) => {
+console.log(selectedFile,"selectedFile")
+  const handleDocumentUpload = async (event) => {
     event.preventDefault();
-    setSelectedDocumentType('');
-    setDocumentName(''); // Reset document name after upload
+
+    if (!selectedFile || !selectedDocumentType ) {
+      alert('Please select a file to upload.');
+      return;
+    }
+    else if (selectedFile && !formData1.file_number) {
+      alert('Please search file first');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('documentType', selectedDocumentType === 'other' ? documentName : selectedDocumentType);
+
+    try {
+      // Upload the file to the server (API endpoint: http://localhost:3007/api/v1/upload)
+      const response = await axios.post(`${baseurl}/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Extract the file URLs from the response
+      const { downloadUrl, readUrl } = response.data;
+
+      // After successful upload, update the document details using another API
+      const updateDocumentData = {
+        file_number: formData1.file_number, // Example: using timestamp as a unique file number
+        document_type: selectedDocumentType,
+        document_name: selectedDocumentType === 'other' ? documentName : selectedDocumentType,
+        downloadUrl,
+        readUrl,
+      };
+
+      // Call the update document API (replace '/api/update-document' with actual endpoint)
+      await axios.post(`${baseurl}/updatedocumentdata`, updateDocumentData);
+
+      // Add the uploaded document to the state
+      setUploadedDocuments([...uploadedDocuments, { ...updateDocumentData, file: selectedFile }]);
+
+      // Reset form fields
+      setSelectedFile(null);
+      setSelectedDocumentType('');
+      setDocumentName('');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Failed to upload the document. Please try again.');
+    }
   };
 
   const handleViewDocument = (doc) => {
@@ -41,6 +105,29 @@ const Attachments = () => {
     const updatedDocuments = uploadedDocuments.filter((_, i) => i !== index);
     setUploadedDocuments(updatedDocuments);
   };
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getdocumentdata/${formData1.file_number}`);
+        setDocuments(response.data.attachments);
+        setLoading(false);
+      } catch (err) {
+        setError('Error fetching document data');
+        setLoading(false);
+      }
+    };
+
+    fetchDocuments();
+  }, [formData1.file_number]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <>
@@ -76,7 +163,6 @@ const Attachments = () => {
               </select>
             </div>
 
-            {/* Show document name field if "Other" is selected */}
             {selectedDocumentType === 'other' && (
               <div className="col-md-6">
                 <label htmlFor="documentName" className="form-label fw-bold">
@@ -106,12 +192,12 @@ const Attachments = () => {
           </button>
         </form>
 
-        <div className="mt-4">
+        {/* <div className="mt-4">
           <h5 className="fw-bold">Uploaded Documents</h5>
           <ul className="list-group">
             {uploadedDocuments.map((doc, index) => (
               <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                {doc.type}
+                {doc.document_name}
                 <div>
                   <button className="btn btn-outline-primary btn-sm me-2" onClick={() => handleViewDocument(doc)}>
                     <i className="bi bi-eye"></i> View
@@ -123,7 +209,7 @@ const Attachments = () => {
               </li>
             ))}
           </ul>
-        </div>
+        </div> */}
 
         {showModal1 && (
           <div className="modal fade show" style={{ display: 'block' }}>
@@ -141,6 +227,42 @@ const Attachments = () => {
           </div>
         )}
       </div>
+
+
+      <h4 className='mt-4'>Document List for File Number: {formData1.file_number}</h4>
+      <table className="table table-striped table-bordered">
+        <thead className="thead-dark">
+          <tr>
+            <th>File Number</th>
+            <th>Document Type</th>
+            <th>Document Name</th>
+            <th>Download URL</th>
+            <th>Read URL</th>
+            <th>Uploaded At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {documents.map((doc) => (
+            <tr key={doc._id}>
+              <td>{doc.file_number}</td>
+              <td>{doc.document_type}</td>
+              <td>{doc.document_name}</td>
+              <td>
+                <a href={doc.downloadUrl} target="_blank" rel="noopener noreferrer">
+                  Download
+                </a>
+              </td>
+              <td>
+                <a href={doc.readUrl} target="_blank" rel="noopener noreferrer">
+                  Read
+                </a>
+              </td>
+              <td>{new Date(doc.createdAt).toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
     </>
   );
 };
