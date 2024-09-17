@@ -365,10 +365,10 @@ const BankLogin = () => {
           try {
             const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
             setBankLoginDetails(response.data);
-            setLoading(false);
+            // setLoading(false);
           } catch (error) {
             setError('Error fetching data');
-            setLoading(false);
+            // setLoading(false);
           }
         };
     
@@ -393,19 +393,19 @@ const BankLogin = () => {
 
 
 
-    if (loading) {
-        return (
-          <div className="d-flex justify-content-center">
-            <div className="spinner-border" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          </div>
-        );
-      }
+    // if (loading) {
+    //     return (
+    //       <div className="d-flex justify-content-center">
+    //         <div className="spinner-border" role="status">
+    //           <span className="sr-only">Loading...</span>
+    //         </div>
+    //       </div>
+    //     );
+    //   }
     
-      if (error) {
-        return <div className="alert alert-danger">{error}</div>;
-      }
+    //   if (error) {
+    //     return <div className="alert alert-danger">{error}</div>;
+    //   }
   
     const handleLoginStatusChange = (event) => {
         setLoginStatus(event.target.value);

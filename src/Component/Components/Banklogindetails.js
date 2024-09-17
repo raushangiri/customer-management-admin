@@ -60,10 +60,10 @@ const Banklogindetails = () => {
             setBankDetail(data);
             setEmail2(data.email2 || '');
             setRemarks(data.remarks || '');
-            setLoading(false);
+            // setLoading(false);
           } catch (err) {
             // setError1('Error fetching bank details'); // Set error1
-            setLoading(false);
+            // setLoading(false);
           }
         };
     
@@ -93,23 +93,23 @@ const Banklogindetails = () => {
           try {
             const response = await axios.get(`${baseurl}/getdocumentdata/${formData.file_number}`);
             setDocuments(response.data.attachments);
-            setLoading(false);
+            // setLoading(false);
           } catch (err) {
             setError('Error fetching document data');
-            setLoading(false);
+            // setLoading(false);
           }
         };
     
         fetchDocuments();
       }, [formData.file_number]);
     
-      if (loading) {
-        return <p>Loading...</p>;
-      }
+      // if (loading) {
+      //   return <p>Loading...</p>;
+      // }
     
-      if (error) {
-        return <p>{error}</p>;
-      }
+      // if (error) {
+      //   return <p>{error}</p>;
+      // }
     return (
         <div className="container mt-4">
             {/* Personal Details Section */}

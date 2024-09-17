@@ -111,23 +111,22 @@ console.log(selectedFile,"selectedFile")
       try {
         const response = await axios.get(`${baseurl}/getdocumentdata/${formData1.file_number}`);
         setDocuments(response.data.attachments);
-        setLoading(false);
       } catch (err) {
         setError('Error fetching document data');
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
     fetchDocuments();
   }, [formData1.file_number]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+  // if (error) {
+  //   return <p>{error}</p>;
+  // }
 
   return (
     <>
