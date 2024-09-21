@@ -131,7 +131,7 @@ import Tvr_files from '../Components/Tvr_files';
 import FileOverviewdetails from '../Components/FileOverviewdetails';
 
 const Tvr = () => {
-  const [activeTab, setActiveTab] = useState('details');
+  const [activeTab, setActiveTab] = useState('tvr_file');
   const [selectedMobileNumber, setSelectedMobileNumber] = useState(null); // State for selected mobile number
 
   const handleViewClick = (mobileNumber) => {

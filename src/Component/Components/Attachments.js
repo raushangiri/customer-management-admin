@@ -247,13 +247,13 @@ console.log(selectedFile,"selectedFile")
               <td>{doc.document_type}</td>
               <td>{doc.document_name}</td>
               <td>
-                <a href={doc.downloadUrl} target="_blank" rel="noopener noreferrer">
+                <a href={doc.downloadUrl} target="_blank" rel="noopener noreferrer"type="button" class="btn btn-outline-secondary">
                   Download
                 </a>
               </td>
               <td>
-                <a href={doc.readUrl} target="_blank" rel="noopener noreferrer">
-                  Read
+                <a href={doc.readUrl} target="_blank" rel="noopener noreferrer" type="button" class="btn btn-outline-secondary">
+                  View
                 </a>
               </td>
               <td>{new Date(doc.createdAt).toLocaleString()}</td>

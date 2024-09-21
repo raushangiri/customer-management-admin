@@ -95,6 +95,8 @@ const Sidebar = () => {
             <li>
               <Link to="/Team-Member"> Team Members</Link>
             </li>
+            <li><Link to="/team-filehistory">Team File History</Link></li>
+
             <li>
               <Link to="/search">Search File Details</Link>
             </li>
@@ -121,7 +123,7 @@ const Sidebar = () => {
             </li>
             <li><Link to="/tvr-team">TVR</Link></li>
             <li>
-              <Link to="/search">Search File Details</Link>
+              <Link to="/Tvrsearch">Search File Details</Link>
             </li>
             <li><Link to="/file-history">File History</Link></li>
           </>
@@ -134,7 +136,7 @@ const Sidebar = () => {
             </li>
             <li><Link to="/cdr-team">CDR</Link></li>
             <li>
-              <Link to="/search">Search File Details</Link>
+              <Link to="/Cdrsearch">Search File Details</Link>
             </li>
             <li><Link to="/file-history">File History</Link></li>
           </>

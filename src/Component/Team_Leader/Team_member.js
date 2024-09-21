@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const TeamMember = () => {
   const navigate = useNavigate();
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const userId = localStorage.getItem('userId');
+  const baseurl = process.env.REACT_APP_API_BASE_URL;
 
-  const teamMembers = [
-    { id: 1, name: 'John Doe', role: 'CDR Team', department: 'Auto Loan' },
-    { id: 2, name: 'Jane Smith', role: 'Sales Agent', department: 'Business Loan' },
-    { id: 3, name: 'Mike Johnson', role: 'TVR Team', department: 'Auto Loan' },
-    // Add more team members as needed
-  ];
+  // Function to fetch team members reporting to a specific user (e.g., team leader ID 3325)
+  const fetchTeamMembers = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/getUserbyteamleader/${userId}`);
+      setTeamMembers(response.data.data); // Assuming response.data.data contains the array of users
+      setLoading(false); // Set loading to false after data is fetched
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTeamMembers();
+  }, []);
+
+  if (loading) {
+    return <div className="text-center mt-5">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center mt-5 text-danger">Error: {error}</div>;
+  }
 
   return (
     <div className="container mt-5">
@@ -25,20 +48,20 @@ const TeamMember = () => {
         </thead>
         <tbody>
           {teamMembers.map((member) => (
-            <tr key={member.id}>
+            <tr key={member._id}>
               <td>{member.name}</td>
               <td>{member.role}</td>
-              <td>{member.department}</td>
+              <td>{member.department.join(', ')}</td>
               <td>
                 <button
                   className="btn btn-primary btn-sm me-2"
-                  onClick={() => navigate(`/view/${member.id}`)}
+                  onClick={() => navigate(`/view/${member.userId}`)}
                 >
                   <i className="fas fa-eye"></i> View
                 </button>
                 <button
                   className="btn btn-warning btn-sm"
-                  onClick={() => navigate(`/edit/${member.id}`)}
+                  onClick={() => navigate(`/edit/${member.userId}`)}
                 >
                   <i className="fas fa-edit"></i> Edit
                 </button>

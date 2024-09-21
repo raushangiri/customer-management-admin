@@ -28,6 +28,9 @@ import History from './Component/History/Historylist';
 import ViewFileDetails from './Component/History/Viewfiledetails';
 import Viewdisposition from './Component/Components/Viewdisposition';
 import Banklogindetails from './Component/Components/Banklogindetails';
+import Tvrsearch from './Component/Search/Tvrsearch';
+import Teamleaderfilehistory from './Component/History/Teamleaderfilehistory';
+import Cdrsearch from './Component/Search/Cdrsearch';
 function App() {
   return (
     <Router>
@@ -80,10 +83,13 @@ function Main() {
         <Route path="/view-filedetails/:file_number" element={<ViewFileDetails />} />
         <Route path="/view-disposition" element={<Viewdisposition />} />
         <Route path="/Banklogindetails/:_id" element={<Banklogindetails />} />
+        <Route path="/Tvrsearch" element={<Tvrsearch />} />
+        <Route path="/team-filehistory" element={<Teamleaderfilehistory />} />
+        <Route path="/Cdrsearch" element={<Cdrsearch />} />
 
 
-
-       
+        
+        
        
         </Routes>
       </div>
