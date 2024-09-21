@@ -13,7 +13,7 @@ import FileOverviewdetails from '../Components/FileOverviewdetails';
 
 const Cdr = () => {
 
-  const [activeTab, setActiveTab] = useState('details');
+  const [activeTab, setActiveTab] = useState('cdr_file');
  
   const [selectedMobileNumber, setSelectedMobileNumber] = useState(null); // State for selected mobile number
   const handleViewClick = (mobileNumber) => {

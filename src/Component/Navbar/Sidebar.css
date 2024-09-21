@@ -117,4 +117,10 @@
   .submenu-title .fa {
     margin-right: 8px; 
   }
-  
+
+  .active-link {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #e6634f; /* Optional: You can customize the color */
+    font-size: "2rem";
+  }

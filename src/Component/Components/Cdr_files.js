@@ -33,9 +33,11 @@ const Cdr_files = ({onViewClick}) => {
         <thead className="thead-dark">
           <tr>
             <th scope="col">S.No</th>
+            <th scope="col">Date</th>
+            <th scope="col">Sales Agent Name</th>
             <th scope="col">Customer Name</th>
             <th scope="col">Loan Type</th>
-            <th scope="col">Date</th>
+            <th scope="col">Loan Category</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -44,9 +46,13 @@ const Cdr_files = ({onViewClick}) => {
             loanFiles.map((file, index) => (
               <tr key={file.id}>
                 <td>{index + 1}</td>
+                <td>{new Date(file.createdAt).toLocaleDateString()}<br />
+                {new Date(file.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                </td>
+                <td>{file.sales_agent_name}</td>
                 <td>{file.customer_name}</td>
                 <td>{file.type_of_loan}</td>
-                <td>{new Date(file.createdAt).toLocaleDateString()}</td>
+                <td>{file.loan_category}</td>
                 <td>
                   <button className="btn btn-primary"
                   onClick={() => {
@@ -54,7 +60,7 @@ const Cdr_files = ({onViewClick}) => {
                     handleViewClick(file.customer_mobile_number);
                   }} 
                   >
-                    <FontAwesomeIcon icon={faEye} /> View
+                    <FontAwesomeIcon icon={faEye} /> View Deatils
                   </button>
                 </td>
               </tr>

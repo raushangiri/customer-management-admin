@@ -47,8 +47,6 @@ const Sales_dashboard = () => {
               <h5 className="card-title">MTD- Total Interested</h5>
               <p>Total Count: {dashboardData.loanFileCount}</p>
               <p> Total Amount: {dashboardData.interestedCount}</p>
-              
-
             </div>
           </div>
         </div>
@@ -66,7 +64,7 @@ const Sales_dashboard = () => {
             <div className="card-body">
               <h5 className="card-title">MTD- Total Pending TVR</h5>
               {/* <p className='fs-4'>{dashboardData.totalPendingTVR}</p> */}
-              <p>Total Count: {dashboardData.notInterestedCount}</p>
+              <p>Total Count: {dashboardData.pendingTvrCount}</p>
              <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
@@ -75,8 +73,7 @@ const Sales_dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">MTD- Total Completed TVR</h5>
-              <p className='fs-4'>{dashboardData.totalCompletedTVR}</p>
-              <p>Total Count: {dashboardData.notInterestedCount}</p>
+              <p>Total Count: {dashboardData.completedtvrcount}</p>
              <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>
@@ -95,8 +92,8 @@ const Sales_dashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">MTD- Total Pending CDR</h5>
-              <p className='fs-4'>{dashboardData.totalPendingCDR}</p>
-              <p>Total Count: {dashboardData.notInterestedCount}</p>
+              {/* <p className='fs-4'>{dashboardData.totalPendingCDR}</p> */}
+              <p>Total Count: {dashboardData.pendingCdrCount}</p>
              <p> Total Amount: {dashboardData.interestedCount}</p>
             </div>
           </div>

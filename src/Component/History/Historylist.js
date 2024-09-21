@@ -189,6 +189,7 @@ const History = () => {
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Date</th>
               <th scope="col">Customer Name</th>
               <th scope="col">Mobile Number</th>
               <th scope="col">Loan Type</th>
@@ -200,6 +201,10 @@ const History = () => {
             {loanFiles.map((loanFile, index) => (
               <tr key={loanFile._id}>
                 <th scope="row">{index + 1}</th>
+                <td>
+                   {new Date(loanFile.createdAt).toLocaleDateString('en-GB')}<br />
+                   {new Date(loanFile.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                </td>
                 <td>{loanFile.customer_name}</td>
                 <td>{loanFile.customer_mobile_number}</td>
                 <td>{loanFile.type_of_loan}</td>

@@ -1,5 +1,5 @@
 import React, { useState,useEffect, useId } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link  } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleChevronDown,faUser } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 import './Sidebar.css'; // Optional: For styling
@@ -43,17 +43,13 @@ const Sidebar = () => {
     return <p>{error}</p>;
   }
 
-
   const toggleSubMenu = () => {
     setShowSubMenu(!showSubMenu);
   };
-
   return (
     <div className="sidebar border border-primary">
       <img src={logo} alt='logo' style={{ width: '90%' }} className='img1' />
-
       <ul>
-
       <p>
   <FontAwesomeIcon icon={faUser} className='mx-2'/>
   <strong> Hi {userdata.data.name}</strong>
@@ -61,12 +57,12 @@ const Sidebar = () => {
         {userRole === 'admin' && (
           <>
             <li>
-              <Link to="/dashboard">Dashboard</Link>
+              <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
             </li>
             <li>
-              <Link to="/search">Search File Details</Link>
+              <NavLink to="/Adminsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
-            <li><Link to="/file-history">File History</Link></li>
+            <li><NavLink to="/file-history" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li>
 
             <li>
               <div onClick={toggleSubMenu} className="submenu-title">
@@ -75,87 +71,88 @@ const Sidebar = () => {
               </div>
               {showSubMenu && (
                 <ul className="submenu">
-                  <li><Link to="/create-user">Create User</Link></li>
-                  <li><Link to="/user-list">User List</Link></li>
-                  <li><Link to="/unlock-user">Unlock User</Link></li>
+                  <li><NavLink to="/create-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Create User</NavLink></li>
+                  <li><NavLink to="/user-list" className={({ isActive }) => isActive ? 'active-link' : ''}>User List</NavLink></li>
+                  <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Unlock User</NavLink></li>
                 </ul>
               )}
             </li>
             <li>
-              <Link to="/upload-csv">Upload File</Link>
+              <NavLink to="/upload-csv" className={({ isActive }) => isActive ? 'active-link' : ''}>Upload File</NavLink>
             </li>
-            <li><Link to="/reports">Reports</Link></li>
+            <li><NavLink to="/reports" className={({ isActive }) => isActive ? 'active-link' : ''}>Reports</NavLink></li>
           </>
         )}
         {userRole === 'Team leader' && (
           <>
             <li>
-              <Link to="/dashboard">Dashboard</Link>
+              <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
             </li>
             <li>
-              <Link to="/Team-Member"> Team Members</Link>
+              <NavLink to="/Team-Member" className={({ isActive }) => isActive ? 'active-link' : ''}> Team Members</NavLink>
             </li>
-            <li><Link to="/team-filehistory">Team File History</Link></li>
+            <li><NavLink to="/team-filehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Team File History</NavLink></li>
 
             <li>
-              <Link to="/search">Search File Details</Link>
+              <NavLink to="/Adminsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
             <li>
-              <Link to="/upload-csv">Upload File</Link>
+              <NavLink to="/upload-csv" className={({ isActive }) => isActive ? 'active-link' : ''}>Upload File</NavLink>
             </li>
-            <li><Link to="/reports">Reports</Link></li>
+            <li><NavLink to="/reports" className={({ isActive }) => isActive ? 'active-link' : ''}>Reports</NavLink></li>
           </>
         )}
 
         {userRole === 'sales' && (
           <>
             <li>
-              <Link to="/sales-dashboard">Dashboard</Link>
+              <NavLink to="/sales-dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
             </li>
-            <li><Link to="/sales-team">Search File</Link></li>
-            <li><Link to="/file-history">File History</Link></li>
+            <li><NavLink to="/sales-team" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File</NavLink></li>
+            <li><NavLink to="/file-history" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li>
           </>
         )}
         {userRole === 'TVR' && (
           <>
             <li>
-              <Link to="/tvr-dashboard">Dashboard</Link>
+              <NavLink to="/tvr-dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
             </li>
-            <li><Link to="/tvr-team">TVR</Link></li>
+            <li><NavLink to="/tvr-team" className={({ isActive }) => isActive ? 'active-link' : ''}>TVR</NavLink></li>
             <li>
-              <Link to="/Tvrsearch">Search File Details</Link>
+              <NavLink to="/Tvrsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
-            <li><Link to="/file-history">File History</Link></li>
+            <li><NavLink to="/file-history" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li>
           </>
         )}
 
         {userRole === 'CDR' && (
           <>
             <li>
-              <Link to="/CDRdashboard">Dashboard</Link>
+              <NavLink to="/CDRdashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
             </li>
-            <li><Link to="/cdr-team">CDR</Link></li>
+            <li><NavLink to="/cdr-team" className={({ isActive }) => isActive ? 'active-link' : ''}>CDR</NavLink></li>
             <li>
-              <Link to="/Cdrsearch">Search File Details</Link>
+              <NavLink to="/Cdrsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
-            <li><Link to="/file-history">File History</Link></li>
+            <li><NavLink to="/file-history" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li>
           </>
         )}
         {userRole === 'Bank login' && (
           <>
             <li>
-              <Link to="/banklogin-dashboard">Dashboard</Link>
+              <NavLink  to="/banklogin-dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
+            </li>
+            <li><NavLink  to="/bank-login-team" className={({ isActive }) => isActive ? 'active-link' : ''}>Bank Login Team</NavLink></li>
+            <li>
+              <NavLink to="/Adminsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
             <li>
-              <Link to="/search">Search File Details</Link>
-            </li>
-            <li><Link to="/bank-login-team">Bank Login Team</Link></li>
-            <li><Link to="/file-history">File History</Link></li>
+              <NavLink to="/file-history" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li>
 
           </>
         )}
 
-        <li><Link to="/">Logout</Link></li>
+        <li><NavLink to="/">Logout</NavLink></li>
 
       </ul>
     </div>

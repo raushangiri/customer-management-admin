@@ -9,28 +9,14 @@ import BankLogin from '../Components/BankLogin';
 import OverviewDetails from '../Components/OverviewDetails';
 import Disposition from '../Components/Disposition';
 import LoanApproval from '../Components/LoanApproval';
-import Bank_Login from '../Components/BankLogin';
-import FileOverviewdetails from '../Components/FileOverviewdetails';
 
-const Bank_login = () => {
-    const [activeTab, setActiveTab] = useState('bank_login_file');
-    const [selectedMobileNumber, setSelectedMobileNumber] = useState(null); // State for selected mobile number
+const Adminsearch = () => {
+    const [activeTab, setActiveTab] = useState('Previous Loan Details');
 
-    const handleViewClick = (mobileNumber) => {
-        setSelectedMobileNumber(mobileNumber); // Set the selected mobile number
-        setActiveTab('Previous Loan Details'); // Automatically switch to 'Overview' tab when View is clicked
-      };
+
     return (
         <div className="container mt-4">
             <ul className="nav nav-tabs">
-            <li className="nav-item">
-                    <button
-                        className={`nav-link ${activeTab === 'bank_login_file' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('bank_login_file')}
-                    >
-                        Bank Login File
-                    </button>
-                </li>
                 <li className="nav-item">
                     <button
                         className={`nav-link ${activeTab === 'Previous Loan Details' ? 'active' : ''}`}
@@ -115,11 +101,8 @@ const Bank_login = () => {
             </ul>
 
             <div className="tab-content mt-4">
-            {activeTab === 'bank_login_file' && (
-                <Bank_Login onViewClick={handleViewClick}/>
-            )}
                 {activeTab === 'Previous Loan Details' && (
-                    <FileOverviewdetails/>
+                    <OverviewDetails />
                 )}
                 {activeTab === 'Personal details' && (
                     <PersonalDetails />
@@ -159,4 +142,5 @@ const Bank_login = () => {
 
 
 }
-export default Bank_login
+export default Adminsearch
+

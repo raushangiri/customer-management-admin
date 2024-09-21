@@ -31,6 +31,7 @@ import Banklogindetails from './Component/Components/Banklogindetails';
 import Tvrsearch from './Component/Search/Tvrsearch';
 import Teamleaderfilehistory from './Component/History/Teamleaderfilehistory';
 import Cdrsearch from './Component/Search/Cdrsearch';
+import Adminsearch from './Component/Components/Adminsearch';
 function App() {
   return (
     <Router>
@@ -86,6 +87,7 @@ function Main() {
         <Route path="/Tvrsearch" element={<Tvrsearch />} />
         <Route path="/team-filehistory" element={<Teamleaderfilehistory />} />
         <Route path="/Cdrsearch" element={<Cdrsearch />} />
+        <Route path="/Adminsearch" element={<Adminsearch />} />
 
 
         
