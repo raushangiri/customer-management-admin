@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import { useOverview } from '../ContentHook/OverviewContext';
+import axios from 'axios';
 
 const Attachmentview = () => {
   // Sample document data
-  const documents = [
-    { id: 1, name: 'Document 1', url: '/path/to/document1.pdf' },
-    { id: 2, name: 'Document 2', url: '/path/to/document2.pdf' },
-    { id: 3, name: 'Document 3', url: '/path/to/document3.pdf' },
-  ];
+  // const documents = [
+  //   { id: 1, name: 'Document 1', url: '/path/to/document1.pdf' },
+  //   { id: 2, name: 'Document 2', url: '/path/to/document2.pdf' },
+  //   { id: 3, name: 'Document 3', url: '/path/to/document3.pdf' },
+  // ];
 
   // State to manage modal visibility and selected document
   const [showModal, setShowModal] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
-
+  const [documents, setDocuments] = useState([]);
+  const { mobileNumber, setMobileNumber, formData, setFormData, fetchFileData } = useOverview();
+  const baseurl = process.env.REACT_APP_API_BASE_URL;
+  const [error, setError] = useState(null);
   // Function to handle opening the modal and setting the selected document
   const handleViewAttachment = (document) => {
     setSelectedDocument(document);
@@ -24,30 +29,53 @@ const Attachmentview = () => {
     setSelectedDocument(null);
   };
 
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getdocumentdata/${formData.file_number}`);
+        setDocuments(response.data.attachments);
+      } catch (err) {
+        setError('Error fetching document data');
+        // setLoading(false);
+      }
+    };
+
+    fetchDocuments();
+  }, [formData.file_number]);
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Attachment View</h2>
-      <table className="table table-bordered">
-        <thead>
+      <table className="table table-striped table-bordered">
+        <thead className="thead-dark">
           <tr>
-            <th scope="col">S No</th>
-            <th scope="col">Document Name</th>
-            <th scope="col">View Attachment</th>
+          <th scope="col">#</th>
+          <th>Document Type</th>
+            <th>Document Name</th>
+           
+            <th>View Document</th>
+            <th>Uploaded At</th>
           </tr>
         </thead>
         <tbody>
-          {documents.map((document, index) => (
-            <tr key={document.id}>
-              <td>{index + 1}</td>
-              <td>{document.name}</td>
+          {documents.map((doc,index) => (
+            <tr key={doc._id}>
+              <th scope="row">{index + 1}</th>
+              {/* <td>{doc.file_number}</td> */}
+              <td>{doc.document_type}</td>
+              <td>{doc.document_name}</td>
+              {/* <td>
+                <a href={doc.downloadUrl} target="_blank" rel="noopener noreferrer"type="button" class="btn btn-outline-secondary">
+                  Download
+                </a>
+              </td> */}
               <td>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleViewAttachment(document)}
-                >
-                  View Attachment
-                </button>
+                <a href={doc.readUrl} target="_blank" rel="noopener noreferrer" type="button" class="btn btn-outline-secondary">
+                  View
+                </a>
               </td>
+              <td>{new Date(doc.createdAt).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>

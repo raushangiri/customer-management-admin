@@ -47,8 +47,9 @@ const Teamleaderfilehistory = () => {
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Date</th>
               <th scope="col">Sales Agent Name</th>
-              <th scope="col">File Number</th>
+             
               <th scope="col">Customer Name</th>
               <th scope="col">Mobile Number</th>
               <th scope="col">Sales Status</th>
@@ -56,12 +57,16 @@ const Teamleaderfilehistory = () => {
               <th scope="col" className="text-center">View Details</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody> 
             {loanFiles.map((loanFile, index) => (
               <tr key={loanFile._id}>
                 <th scope="row">{index + 1}</th>
+                <td>
+                {new Date(loanFile.createdAt).toLocaleDateString('en-GB')}<br />
+          {new Date(loanFile.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+          </td>
                 <td>{loanFile.sales_agent_name}</td>
-                <td>{loanFile.file_number}</td>
+               
                 <td>{loanFile.customer_name}</td>
                 <td>{loanFile.customer_mobile_number}</td>
                 <td>{loanFile.sales_status}</td>

@@ -15,7 +15,7 @@ const Attachments = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log(formData1.file_number,"formData1")
+  // console.log(formData1.file_number,"formData1")
   const allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
   const maxFileSize = 5 * 1024 * 1024; // 5 MB
 
@@ -42,7 +42,7 @@ const Attachments = () => {
       setSelectedFile(file);
     }
   };
-console.log(selectedFile,"selectedFile")
+// console.log(selectedFile,"selectedFile")
   const handleDocumentUpload = async (event) => {
     event.preventDefault();
 
@@ -235,7 +235,7 @@ console.log(selectedFile,"selectedFile")
             <th>File Number</th>
             <th>Document Type</th>
             <th>Document Name</th>
-            <th>Download URL</th>
+            
             <th>Read URL</th>
             <th>Uploaded At</th>
           </tr>

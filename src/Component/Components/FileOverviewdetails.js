@@ -6,7 +6,7 @@ import { faEye } from '@fortawesome/free-solid-svg-icons'; // Import the correct
 
 const FileOverviewdetails = () => {
   const { mobileNumber, setMobileNumber, formData, setFormData, fetchFileData } = useOverview();
-
+  
 
   const baseurl = process.env.REACT_APP_API_BASE_URL;
 
@@ -32,10 +32,6 @@ const FileOverviewdetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-
-
-
-
     // Function to fetch data from the API
     const fetchDispositionData = async () => {
       try {
@@ -59,7 +55,9 @@ const FileOverviewdetails = () => {
   }, [formData.file_number]);
 
 
-  console.log(dispositionData.createdAt,"dispositionData")
+
+
+  // console.log(dispositionData.createdAt,"dispositionData")
   //   if (loading) return <div className="spinner-grow text-light" role="status">
   //   <span className="visually-hidden">Loading...</span>
   // </div>;
