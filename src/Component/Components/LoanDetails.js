@@ -249,7 +249,7 @@ const handleAddReference = async (e) => {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary">Add Reference</button>
+          <button type="submit" className="btn btn-primary">Add Loan Deatils</button>
         </form>
 
         <div className="mb-4">
