@@ -9,6 +9,7 @@ import BankLogin from '../Components/BankLogin';
 import OverviewDetails from '../Components/OverviewDetails';
 import Disposition from '../Components/Disposition';
 import LoanApproval from '../Components/LoanApproval';
+import BankLogincomponent from './BankLogincomponent';
 
 const Adminsearch = () => {
     const [activeTab, setActiveTab] = useState('Previous Loan Details');
@@ -122,7 +123,7 @@ const Adminsearch = () => {
                 )}
                 {activeTab === 'bank_login_details' && (
                     <>
-                    <BankLogin />
+                    <BankLogincomponent />
                     
                     </>
                 )}
