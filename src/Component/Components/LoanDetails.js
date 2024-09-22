@@ -17,12 +17,16 @@ const LoanDetails = () => {
     no_of_emi_bounces: '',
     bounces_reason: '',
     car_details: '',
+    other_bank_name: '' 
   });
+
   const [bankOptions, setBankOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedLoanType, setSelectedLoanType] = useState('');
   const [fileNumber, setFileNumber] = useState(''); // Update this with the actual file number you need
   const { mobileNumber, fetchFileData, formData, setFormData, handleSubmit } = useOverview();
+  const [isOtherSelected, setIsOtherSelected] = useState(false); // Track if "Other" is selected
+  const [otherBankName, setOtherBankName] = useState(''); // Store the entered bank name
 
   // Fetch bank list from API
   useEffect(() => {
@@ -33,6 +37,10 @@ const LoanDetails = () => {
           value: bank,  // Use the bank name as the value
           label: bank   // Use the bank name as the label
         }));
+        
+        // Add "Other" option to the bank list
+        banks.push({ value: 'other', label: 'Other' });
+
         setBankOptions(banks);
         setLoading(false);
       } catch (error) {
@@ -43,33 +51,16 @@ const LoanDetails = () => {
     fetchBankList();
   }, []);
 
-  const handleAddReference = async (e) => {
-    e.preventDefault();
-    try {
-      // Post loan details to the API
-      const response = await axios.post(`${baseurl}/createLoandetails/${formData.file_number}`, loandetail);
-      if (response.status ===200) {
-        alert('Loan details added successfully!');
-        fetchLoanDetails(formData.file_number, setLoandetails);
-      } else {
-        alert('Failed to save loan details');
-      }
-    } catch (error) {
-      console.error('Error saving loan details:', error);
-      alert('Error saving loan details');
-    }
-  };
-
   // Handle selection of bank from dropdown
   const handleBankSelect = (selectedOption) => {
-    setloandetail({ ...loandetail, bank_name: selectedOption.value });
-  };
-
-  useEffect(() => {
-    if (formData.file_number) {
-      fetchLoanDetails(formData.file_number, setLoandetails);
+    if (selectedOption.value === 'other') {
+      setIsOtherSelected(true); // Show input field for custom bank name
+      setloandetail({ ...loandetail, bank_name: '' }); // Clear bank_name field
+    } else {
+      setIsOtherSelected(false); // Hide input field for custom bank name
+      setloandetail({ ...loandetail, bank_name: selectedOption.value });
     }
-  }, [formData.file_number]);
+  };
 
   const fetchLoanDetails = async (fileNumber, setLoandetails) => {
     try {
@@ -85,16 +76,42 @@ const LoanDetails = () => {
     }
 };
 
+useEffect(() => {
+  if (formData.file_number) {
+    fetchLoanDetails(formData.file_number, setLoandetails);
+  }
+}, [formData.file_number]);
 
+const handleAddReference = async (e) => {
+  e.preventDefault();
 
+  // If 'Other' is selected, use the other_bank_name field value as bank_name
+  const updatedLoanDetail = {
+    ...loandetail,
+    bank_name: isOtherSelected ? loandetail.other_bank_name : loandetail.bank_name,
+  };
 
- 
+  try {
+    // Post loan details to the API
+    const response = await axios.post(`${baseurl}/createLoandetails/${formData.file_number}`, updatedLoanDetail);
+    if (response.status === 200) {
+      alert('Loan details added successfully!');
+      fetchLoanDetails(formData.file_number, setLoandetails);
+    } else {
+      alert('Failed to save loan details');
+    }
+  } catch (error) {
+    console.error('Error saving loan details:', error);
+    alert('Error saving loan details');
+  }
+};
+
   return (
     <>
       <div className="tab-pane active">
         <form onSubmit={handleAddReference} className="mb-4">
           <div className="mb-3 row">
-            <div className="col-md-4">
+          <div className="col-md-4">
               <label htmlFor="bank_name" className="form-label fw-bold">Bank Name</label>
               {loading ? (
                 <p>Loading banks...</p>
@@ -102,7 +119,7 @@ const LoanDetails = () => {
                 <Select
                   id="bank_name"
                   options={bankOptions}
-                  value={bankOptions.find(option => option.value === loandetail.bank_name)}
+                  value={bankOptions.find(option => option.value === loandetail.bank_name || option.value === 'other')}
                   onChange={handleBankSelect}
                   placeholder="Select a bank"
                   isSearchable={true}
@@ -110,6 +127,23 @@ const LoanDetails = () => {
                 />
               )}
             </div>
+
+            {isOtherSelected && (
+              <div className="col-md-4">
+                <label htmlFor="other_bank_name" className="form-label fw-bold">Enter Bank Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="other_bank_name"
+                  value={loandetail.other_bank_name}
+                  onChange={(e) => setloandetail({ ...loandetail, other_bank_name: e.target.value })}
+                  placeholder="Enter custom bank name"
+                  required
+                />
+              </div>
+            )}
+            
+            
 
             <div className="col-md-4">
               <label htmlFor="emi_amount" className="form-label fw-bold">EMI Amount</label>
@@ -120,7 +154,7 @@ const LoanDetails = () => {
                 value={loandetail.emi_amount}
                 onChange={(e) => setloandetail({ ...loandetail, emi_amount: e.target.value })}
                 placeholder="Enter EMI Amount"
-                required
+                
               />
             </div>
 
@@ -133,7 +167,7 @@ const LoanDetails = () => {
                 value={loandetail.loan_term}
                 onChange={(e) => setloandetail({ ...loandetail, loan_term: e.target.value })}
                 placeholder="Enter Loan Term"
-                required
+                
               />
             </div>
 
@@ -145,7 +179,7 @@ const LoanDetails = () => {
                 id="loan_start_date"
                 value={loandetail.loan_start_date}
                 onChange={(e) => setloandetail({ ...loandetail, loan_start_date: e.target.value })}
-                required
+                
               />
             </div>
 
@@ -157,7 +191,7 @@ const LoanDetails = () => {
                 id="loan_end_date"
                 value={loandetail.loan_end_date}
                 onChange={(e) => setloandetail({ ...loandetail, loan_end_date: e.target.value })}
-                required
+                
               />
             </div>
 
@@ -169,7 +203,7 @@ const LoanDetails = () => {
                 id="emi_amount"
                 value={loandetail.emi_date}
                 onChange={(e) => setloandetail({ ...loandetail, emi_date: e.target.value })}
-                required
+                
               />
             </div>
 
@@ -182,7 +216,7 @@ const LoanDetails = () => {
                 value={loandetail.no_of_emi_bounces}
                 onChange={(e) => setloandetail({ ...loandetail, no_of_emi_bounces: e.target.value })}
                 placeholder="Enter No of EMI Bounces"
-                required
+                
               />
             </div>
 
@@ -193,7 +227,7 @@ const LoanDetails = () => {
                 id="bounces_reason"
                 value={loandetail.bounces_reason}
                 onChange={(e) => setloandetail({ ...loandetail, bounces_reason: e.target.value })}
-                required
+                
               >
                 <option value="">Select Reason</option>
                 <option value="insufficient_funds">Insufficient Funds</option>
@@ -210,7 +244,7 @@ const LoanDetails = () => {
                 value={loandetail.car_details}
                 onChange={(e) => setloandetail({ ...loandetail, car_details: e.target.value })}
                 placeholder="Enter Car Details"
-                required
+                
               />
             </div>
           </div>
