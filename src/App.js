@@ -83,7 +83,8 @@ function Main() {
         <Route path="/file-history" element={<History />} />
         <Route path="/view-filedetails/:file_number" element={<ViewFileDetails />} />
         <Route path="/view-disposition" element={<Viewdisposition />} />
-        <Route path="/Banklogindetails/:_id" element={<Banklogindetails />} />
+        <Route path="/Banklogindetails" element={<Banklogindetails />} />
+        
         <Route path="/Tvrsearch" element={<Tvrsearch />} />
         <Route path="/team-filehistory" element={<Teamleaderfilehistory />} />
         <Route path="/Cdrsearch" element={<Cdrsearch />} />

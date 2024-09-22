@@ -313,7 +313,7 @@ const BankLogincomponent = () => {
               <td>{detail.email_1}</td>
               <td>
   {detail.document_status === "Ready to share" ? (
-    <Link className="btn btn-primary"  onClick={() => handleShareWithRM(detail)}>
+    <Link className="btn btn-primary"  to={`/Banklogindetails`}>
       Share with RM
     </Link>
   ) : (
@@ -324,7 +324,7 @@ const BankLogincomponent = () => {
               <td>{detail.remarks}</td>
               <td className="text-center">
                   {/* <Link to={`/view-filedetails/${detail._id}`}> */}
-                  <Link to={`/Banklogindetails/${detail._id}`}>
+                  <Link to={`/Banklogindetails`}>
 
                     <FontAwesomeIcon icon={faEye} />
                   </Link>

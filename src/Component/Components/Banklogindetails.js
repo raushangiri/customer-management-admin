@@ -1,136 +1,134 @@
-import React, { useState,useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useOverview } from '../ContentHook/OverviewContext';
 import axios from 'axios';
 
 const Banklogindetails = () => {
-    const [activeIndex, setActiveIndex] = useState(null);
-    const [loginStatus, setLoginStatus] = useState('');
-    const [selectedStatus, setSelectedStatus] = useState('');
-    const [selectedReason, setSelectedReason] = useState('');
-    const [selectedBank, setSelectedBank] = useState('');
-    const [bankNames, setBankNames] = useState([]);
-    const [remarks, setRemarks] = useState('');
-    const [email1, setEmail1] = useState('');
-    const [email2, setEmail2] = useState('');
-    const [documentStatus, setDocumentStatus] = useState('');
-    const baseurl = process.env.REACT_APP_API_BASE_URL;
-    const { formData, handleSubmit } = useOverview();
-    const userId = localStorage.getItem('userId');
-    const [bankLoginDetails, setBankLoginDetails] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [personalDetails, setPersonalDetails] = useState(null);
-    const [documents, setDocuments] = useState(null);
-    const [bankDetail, setBankDetail] = useState({});
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [email2, setEmail2] = useState('');
+  const [remarks, setRemarks] = useState('');
+  const [bankDetail, setBankDetail] = useState({});
+  const baseurl = process.env.REACT_APP_API_BASE_URL;
+  const { formData } = useOverview();
+  const [personalDetails, setPersonalDetails] = useState(null);
+  const [documents, setDocuments] = useState([]);
+  const [error, setError] = useState(null);
+  const [bankDetails, setBankDetails] = useState([]);
+  const [selectedBankDetails, setSelectedBankDetails] = useState([]);
 
-    const [error1, setError1] = useState(null);
-    
-    
+  const toggleSection = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
 
-    const toggleSection = (index) => {
-        // Toggle the current section
-        setActiveIndex(activeIndex === index ? null : index);
+  // Fetch personal details
+  useEffect(() => {
+    const fetchPersonalDetails = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getpersonadetails/${formData.file_number}`);
+        setPersonalDetails(response.data.data);
+      } catch (error) {
+        console.error('Error fetching personal details:', error);
+      }
     };
+    if (formData.file_number) {
+      fetchPersonalDetails();
+    }
+  }, [formData.file_number]);
 
+  // Fetch bank login details
+  useEffect(() => {
+    const fetchBankDetails = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
+        setBankDetail(response.data);
+        setEmail2(response.data.email2 || '');
+        setRemarks(response.data.remarks || '');
+      } catch (error) {
+        console.error('Error fetching bank details:', error);
+      }
+    };
+    if (formData.file_number) {
+      fetchBankDetails();
+    }
+  }, [formData.file_number]);
 
-    useEffect(() => {
-        const fetchPersonalDetails = async () => {
-          try {
-            const response = await axios.get(`${baseurl}/getpersonadetails/${formData.file_number}`);
-            setPersonalDetails(response.data.data); // Assuming the API returns the data in response.data.data
-          } catch (error) {
-            console.error('Error fetching personal details:', error);
-          }
-        };
-    
-        if (formData.file_number) {
-          fetchPersonalDetails();
-        }
-      }, [formData.file_number]
-    );
+  // Fetch document data
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getdocumentdata/${formData.file_number}`);
+        setDocuments(response.data.attachments || []);
+      } catch (error) {
+        setError('Error fetching documents');
+      }
+    };
+    fetchDocuments();
+  }, [formData.file_number]);
 
+  // Fetch RM details (Bank Login details)
+  useEffect(() => {
+    const fetchRMDetails = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
+        setBankDetails(response.data || []);
+      } catch (error) {
+        console.error('Error fetching RM details:', error);
+      }
+    };
+    if (formData.file_number) {
+      fetchRMDetails();
+    }
+  }, [formData.file_number]);
 
-    useEffect(() => {
-        const fetchBankDetails = async () => {
-          try {
-            const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
-            const { data } = response;
-    
-            // Populate form fields with the fetched data
-            setBankDetail(data);
-            setEmail2(data.email2 || '');
-            setRemarks(data.remarks || '');
-            // setLoading(false);
-          } catch (err) {
-            // setError1('Error fetching bank details'); // Set error1
-            // setLoading(false);
-          }
-        };
-    
-        fetchBankDetails();
-      }, [formData.file_number]);
-    
-      // Handle form submission (edit/save)
-      const handleSave = async () => {
-        // try {
-        //   const updatedDetails = {
-        //     ...bankDetail,
-        //     email2,
-        //     remarks,
-        //   };
-    
-        //   // Send a PUT request to update the bank details
-        //   await axios.post(`http://localhost:3007/api/v1/getbanklogindetails/${formData.file_number}`, updatedDetails);
-        //   alert('Bank details updated successfully!');
-        // } catch (err) {
-        //   setError1('Error updating bank details'); // Set error1
-        // }
+  // Handle selection change for RM details
+  const handleSelectChange = (index) => {
+    const updatedSelection = [...selectedBankDetails];
+    if (updatedSelection.includes(index)) {
+      updatedSelection.splice(updatedSelection.indexOf(index), 1);
+    } else {
+      updatedSelection.push(index);
+    }
+    setSelectedBankDetails(updatedSelection);
+  };
+
+  // Handle save operation
+  const handleSave = async () => {
+    try {
+      const updatedDetails = {
+        ...bankDetail,
+        email2,
+        remarks,
       };
-   
+      await axios.post(`${baseurl}/updatebanklogindetails/${formData.file_number}`, updatedDetails);
+      alert('Bank details updated successfully!');
+    } catch (error) {
+      console.error('Error updating bank details:', error);
+    }
+  };
 
-    useEffect(() => {
-        const fetchDocuments = async () => {
-          try {
-            const response = await axios.get(`${baseurl}/getdocumentdata/${formData.file_number}`);
-            setDocuments(response.data.attachments);
-            // setLoading(false);
-          } catch (err) {
-            setError('Error fetching document data');
-            // setLoading(false);
-          }
-        };
-    
-        fetchDocuments();
-      }, [formData.file_number]);
-    
-      // if (loading) {
-      //   return <p>Loading...</p>;
-      // }
-    
-      // if (error) {
-      //   return <p>{error}</p>;
-      // }
-    return (
-        <div className="container mt-4">
-            {/* Personal Details Section */}
-            <div className="card">
+  const handleEdit = (index) => {
+    // Here you can implement functionality to edit specific bank details
+    console.log('Editing RM detail at index:', index);
+    const selectedDetail = bankDetails[index];
+    // Now, you can either populate the form with this data to allow editing
+  };
+
+  return (
+    <div className="container mt-4">
+      {/* Personal Details Section */}
+      <div className="card">
         <div className="card-header">
           <h5 className="mb-0">
-            <button
-              className="btn btn-link"
-              onClick={() => toggleSection(0)}
-              aria-expanded={activeIndex === 0 ? "true" : "false"}
-            >
+            <button className="btn btn-link" onClick={() => toggleSection(0)}>
               Personal Details
             </button>
           </h5>
         </div>
-        <div className={`collapse ${activeIndex === 0 ? "show" : ""}`}>
+        <div className={`collapse ${activeIndex === 0 ? 'show' : ''}`}>
           <div className="card-body">
-            {personalDetails ? (
+                       {personalDetails ? (
               <div>
                 <p><strong>File Number:</strong> {personalDetails.file_number}</p>
-                <p><strong>Name:</strong> {personalDetails.name || 'N/A'}</p>
+                <p><strong>Name:</strong> {personalDetails.customerName || 'N/A'}</p>
                 <p><strong>Mobile Number:</strong> {personalDetails.mobile_number || 'N/A'}</p>
                 <p><strong>Alternate Number:</strong> {personalDetails.alternate_number || 'N/A'}</p>
                 <p><strong>Date of Birth:</strong> {personalDetails.date_of_birth || 'N/A'}</p>
@@ -171,37 +169,25 @@ const Banklogindetails = () => {
         </div>
       </div>
 
-            {/* Document Section */}
-            <div className="card mt-2">
+      {/* Document Section */}
+      <div className="card mt-2">
         <div className="card-header">
           <h5 className="mb-0">
-            <button
-              className="btn btn-link"
-              onClick={() => toggleSection(1)}
-              aria-expanded={activeIndex === 1 ? "true" : "false"}
-            >
+            <button className="btn btn-link" onClick={() => toggleSection(1)}>
               Document
             </button>
           </h5>
         </div>
-        <div className={`collapse ${activeIndex === 1 ? "show" : ""}`}>
+        <div className={`collapse ${activeIndex === 1 ? 'show' : ''}`}>
           <div className="card-body">
             {documents.length > 0 ? (
               <ul className="list-group">
-                {documents.map((document) => (
-                  <li key={document._id} className="list-group-item d-flex justify-content-between align-items-center">
-                    <span>{document.document_name}</span> {/* Displaying document name */}
-                    <div>
-                      <a href={document.readUrl} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-primary mr-2">
-                        View
-                      </a>
-                      {/* <button
-                        onClick={() => handleDelete(document._id)}
-                        className="btn btn-sm btn-danger"
-                      >
-                        Delete
-                      </button> */}
-                    </div>
+                {documents.map((doc) => (
+                  <li key={doc._id} className="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{doc.document_name}</span>
+                    <a href={doc.readUrl} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-primary mr-2">
+                      View
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -212,90 +198,67 @@ const Banklogindetails = () => {
         </div>
       </div>
 
-            {/* RM Details Section */}
-            <div className="card mt-2">
-      <div className="card-header">
-        <h5 className="mb-0">
-          <button
-            className="btn btn-link"
-            onClick={() => toggleSection(2)}
-            aria-expanded={activeIndex === 2 ? "true" : "false"}
-          >
-            RM Details
-          </button>
-        </h5>
-      </div>
-      <div className={`collapse ${activeIndex === 2 ? "show" : ""}`}>
-        <div className="card-body">
-          {/* RM Name */}
-          <div className="col-md-6 form-group mt-3">
-            <label htmlFor="rm1_name">RM Name:</label>
-            <input
-              id="rm1_name"
-              type="text"
-              className="form-control"
-              value={bankDetail.rm1_name || ''}
-              onChange={(e) => setBankDetail((prev) => ({ ...prev, rm1_name: e.target.value }))}
-            />
-          </div>
-
-          {/* RM Contact Number */}
-          <div className="col-md-6 form-group mt-3">
-            <label htmlFor="rm1_contact_number">RM Contact No:</label>
-            <input
-              id="rm1_contact_number"
-              type="text"
-              className="form-control"
-              value={bankDetail.rm1_contact_number || ''}
-              onChange={(e) => setBankDetail((prev) => ({ ...prev, rm1_contact_number: e.target.value }))}
-            />
-          </div>
-
-          {/* Email 1 */}
-          <div className="col-md-6 form-group mt-3">
-            <label htmlFor="email_1">Email 1:</label>
-            <input
-              id="email_1"
-              type="email"
-              className="form-control"
-              value={bankDetail.email_1}
-              onChange={(e) => setBankDetail((prev) => ({ ...prev, email_1: e.target.value }))}
-            />
-          </div>
-
-          {/* Email 2 */}
-          <div className="col-md-6 form-group mt-3">
-            <label htmlFor="email2">Email 2:</label>
-            <input
-              id="email2"
-              type="email"
-              className="form-control"
-              value={email2}
-              onChange={(e) => setEmail2(e.target.value)}
-            />
-          </div>
-
-          {/* Remarks */}
-          <div className="col-md-6 form-group">
-            <label htmlFor="remark">Message</label>
-            <textarea
-              className="form-control"
-              id="remarks"
-              placeholder="Enter Messages"
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
-            />
-          </div>
-
-          {/* Save Button */}
-          <button className="btn btn-primary mt-3" onClick={handleSave}>
-            Save Changes
-          </button>
+      {/* RM Details Section */}
+      <div className="card mt-2">
+        <div className="card-header">
+          <h5 className="mb-0">
+            <button className="btn btn-link" onClick={() => toggleSection(2)}>
+              RM Details
+            </button>
+          </h5>
         </div>
+        <div className={`collapse ${activeIndex === 2 ? 'show' : ''}`}>
+          <div className="table-responsive">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Select</th>
+                  <th>RM Name</th>
+                  <th>RM Contact No</th>
+                  <th>Email 1</th>
+                  <th>Email 2</th>
+                  <th>Remarks</th>
+                  <th>Document Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bankDetails.map((detail, index) => (
+                  <tr key={detail._id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedBankDetails.includes(index)}
+                        onChange={() => handleSelectChange(index)}
+                      />
+                    </td>
+                    <td>{detail.rm1_name}</td>
+                    <td>{detail.rm1_contact_number}</td>
+                    <td>{detail.email_1}</td>
+                    <td>{detail.email_2 || 'N/A'}</td>
+                    <td>{detail.remarks}</td>
+                    <td>{detail.document_status}</td>
+                    <td>
+                      <button className="btn btn-primary btn-sm" onClick={() => handleEdit(index)}>
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className='text-center'>
+      <button className="btn btn-primary mt-3" onClick={handleSave}>
+        Share with RM
+      </button>
       </div>
     </div>
-        </div>
-    );
+  );
 };
 
 export default Banklogindetails;

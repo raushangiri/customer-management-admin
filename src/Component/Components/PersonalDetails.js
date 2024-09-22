@@ -176,7 +176,7 @@ const PersonalDetails = () => {
                             <input type="text"
                                 className="form-control"
                                 value={formData.customerName}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
                                 id="name"
                                 placeholder="Enter name" />
                         </div>
