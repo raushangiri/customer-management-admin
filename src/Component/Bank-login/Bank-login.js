@@ -11,6 +11,7 @@ import Disposition from '../Components/Disposition';
 import LoanApproval from '../Components/LoanApproval';
 import Bank_Login from '../Components/BankLogin';
 import FileOverviewdetails from '../Components/FileOverviewdetails';
+import BankLogincomponent from '../Components/BankLogincomponent';
 
 const Bank_login = () => {
     const [activeTab, setActiveTab] = useState('bank_login_file');
@@ -139,7 +140,7 @@ const Bank_login = () => {
                 )}
                 {activeTab === 'bank_login_details' && (
                     <>
-                    <BankLogin />
+                    <BankLogincomponent />
                     
                     </>
                 )}
