@@ -82,7 +82,7 @@ function Main() {
         <Route path="/editUser/:userId" element={<EditUser />} />
         <Route path="/file-history" element={<History />} />
         <Route path="/view-filedetails/:file_number" element={<ViewFileDetails />} />
-        <Route path="/view-disposition" element={<Viewdisposition />} />
+        <Route path="/view-disposition/:_id" element={<Viewdisposition />} />
         <Route path="/Banklogindetails" element={<Banklogindetails />} />
         
         <Route path="/Tvrsearch" element={<Tvrsearch />} />

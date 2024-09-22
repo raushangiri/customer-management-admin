@@ -23,23 +23,23 @@ const BankLogincomponent = () => {
     const [bankLoginDetails, setBankLoginDetails] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-  
+
     useEffect(() => {
         const fetchBankLoginDetails = async () => {
-          try {
-            const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
-            setBankLoginDetails(response.data);
-            setLoading(false);
-          } catch (error) {
-            setError('Error fetching data');
-            setLoading(false);
-          }
+            try {
+                const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
+                setBankLoginDetails(response.data);
+                setLoading(false);
+            } catch (error) {
+                setError('Error fetching data');
+                setLoading(false);
+            }
         };
-    
+
         fetchBankLoginDetails();
-      }, [userId]);
-  
- 
+    }, [userId]);
+
+
 
     // Fetch bank names from the API
     useEffect(() => {
@@ -66,17 +66,17 @@ const BankLogincomponent = () => {
     //       </div>
     //     );
     //   }
-    
+
     //   if (error) {
     //     return <div className="alert alert-danger">{error}</div>;
     //   }
-  
+
     const handleLoginStatusChange = (event) => {
         setLoginStatus(event.target.value);
         setSelectedStatus('');
         setSelectedReason('');
         setSelectedBank('');
-        setBankDetail({ "rm1_name": '', "rm1_contact_number": '',"email_1":"" });
+        setBankDetail({ "rm1_name": '', "rm1_contact_number": '', "email_1": "" });
     };
 
     const handleStatusChange = (event) => {
@@ -105,7 +105,7 @@ const BankLogincomponent = () => {
     };
     const handleSubmitForm = async () => {
         const payload = {
-            userId:userId,
+            userId: userId,
             file_number: formData.file_number,
             bank_login_status: loginStatus,
             call_status: selectedStatus,
@@ -137,12 +137,12 @@ const BankLogincomponent = () => {
         // Logic to share the document with RM
         alert(`Document shared with RM for ${detail.file_name}`);
         // You can add your API call here to share the document
-      };
-      
+    };
+
     return (
         <div className="container mt-4">
             <div className="row-md-6">
-                <div className="col-md-6"> 
+                <div className="col-md-6">
                     <div className="form-group">
                         <label htmlFor="loginStatus">Check Login Status:</label>
                         <select id="loginStatus" className="form-control" value={loginStatus} onChange={handleLoginStatusChange}>
@@ -195,7 +195,7 @@ const BankLogincomponent = () => {
             {loginStatus === 'Yes' && (
                 <>
                     <div className="row">
-                        <div className="col-md-6">                            
+                        <div className="col-md-6">
                             <div className="form-group mt-3">
                                 <label htmlFor="bankName">Bank Name:</label>
                                 <select id="bankName" className="form-control" value={selectedBank} onChange={handleBankChange}>
@@ -208,7 +208,7 @@ const BankLogincomponent = () => {
                                 </select>
                             </div>
                         </div>
-                        
+
                         {selectedBank && (
                             <>
                                 <div className="col-md-6 form-group mt-3">
@@ -254,7 +254,7 @@ const BankLogincomponent = () => {
                                         onChange={(e) => setEmail2(e.target.value)}
                                     />
                                 </div>
-                                
+
                                 <div className="col-md-6 form-group mt-3">
                                     <label htmlFor="documentStatus">Select Document Status</label>
                                     <select id="documentStatus" className="form-control mb-3" value={documentStatus} onChange={(e) => setDocumentStatus(e.target.value)}>
@@ -263,7 +263,7 @@ const BankLogincomponent = () => {
                                         <option value="Not Ready">File is not ready</option>
                                     </select>
                                 </div>
-                                
+
                                 <div className="col-md-6 form-group">
                                     <label htmlFor="remark">Remark:</label>
                                     <textarea
@@ -284,55 +284,55 @@ const BankLogincomponent = () => {
                 Submit
             </button>
 
-<hr className='mt-4'></hr>
+            <hr className='mt-4'></hr>
             <h3 className='mb-5'>Bank login disposition history</h3>
             <table className="table table-striped table-bordered table-hover">
-        <thead className="thead-dark">
-          <tr>
-            <th>User ID</th>
-            <th>Bank Login Status</th>
-            <th>Loan Type</th>
-            <th>Bank Name</th>
-            <th>RM Name</th>
-            <th>RM Contact Number</th>
-            <th>RM Email</th>
-            <th>Document Status</th>
-            <th>Remarks</th>
-            <th scope="col"className="text-center">View Deatils</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bankLoginDetails.map((detail) => (
-            <tr key={detail._id}>
-              <td>{detail.userId}</td>
-              <td>{detail.bank_login_status}</td>
-              <td>{detail.loan_type}</td>
-              <td>{detail.bank_name}</td>
-              <td>{detail.rm1_name}</td>
-              <td>{detail.rm1_contact_number}</td>
-              <td>{detail.email_1}</td>
-              <td>
-  {detail.document_status === "Ready to share" ? (
-    <Link className="btn btn-primary"  to={`/Banklogindetails`}>
-      Share with RM
-    </Link>
-  ) : (
-    detail.document_status
-  )}
-</td>
+                <thead className="thead-dark">
+                    <tr>
+                        <th>User ID</th>
+                        <th>Bank Login Status</th>
+                        <th>Loan Type</th>
+                        <th>Bank Name</th>
+                        <th>RM Name</th>
+                        <th>RM Contact Number</th>
+                        <th>RM Email</th>
+                        <th>Document Status</th>
+                        <th>Remarks</th>
+                        <th scope="col" className="text-center">View Deatils</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {bankLoginDetails.map((detail) => (
+                        <tr key={detail._id}>
+                            <td>{detail.userId}</td>
+                            <td>{detail.bank_login_status}</td>
+                            <td>{detail.loan_type}</td>
+                            <td>{detail.bank_name}</td>
+                            <td>{detail.rm1_name}</td>
+                            <td>{detail.rm1_contact_number}</td>
+                            <td>{detail.email_1}</td>
+                            <td>
+                                {detail.document_status === "Ready to share" ? (
+                                    <Link className="btn btn-primary" to={`/Banklogindetails`}>
+                                        Share with RM
+                                    </Link>
+                                ) : (
+                                    detail.document_status
+                                )}
+                            </td>
 
-              <td>{detail.remarks}</td>
-              <td className="text-center">
-                  {/* <Link to={`/view-filedetails/${detail._id}`}> */}
-                  <Link to={`/Banklogindetails`}>
+                            <td>{detail.remarks}</td>
+                            <td className="text-center">
+                                {/* <Link to={`/view-filedetails/${detail._id}`}> */}
+                                <Link to={`/Banklogindetails`}>
 
-                    <FontAwesomeIcon icon={faEye} />
-                  </Link>
-                </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                                    <FontAwesomeIcon icon={faEye} />
+                                </Link>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
 
         </div>
     );

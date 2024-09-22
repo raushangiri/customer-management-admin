@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOverview } from '../ContentHook/OverviewContext';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Banklogindetails = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -17,6 +18,12 @@ const Banklogindetails = () => {
 
   const toggleSection = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1); // This will take the user to the previous page
   };
 
   // Fetch personal details
@@ -213,6 +220,7 @@ const Banklogindetails = () => {
               <thead>
                 <tr>
                   <th>Select</th>
+                  <th>Bank Name</th>
                   <th>RM Name</th>
                   <th>RM Contact No</th>
                   <th>Email 1</th>
@@ -232,6 +240,7 @@ const Banklogindetails = () => {
                         onChange={() => handleSelectChange(index)}
                       />
                     </td>
+                    <td>{detail.bank_name}</td>
                     <td>{detail.rm1_name}</td>
                     <td>{detail.rm1_contact_number}</td>
                     <td>{detail.email_1}</td>
@@ -253,6 +262,9 @@ const Banklogindetails = () => {
 
       {/* Save Button */}
       <div className='text-center'>
+      <button className="btn btn-secondary mt-3 me-2" onClick={handleBack}>
+        Back
+      </button>
       <button className="btn btn-primary mt-3" onClick={handleSave}>
         Share with RM
       </button>

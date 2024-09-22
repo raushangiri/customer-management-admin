@@ -418,7 +418,7 @@ const OverviewDetails = () => {
         <td>{item.disposition}</td>
         <td>{item.remarks || "No Remark"}</td>
         <td className="text-center">
-          <Link to="/view-disposition">
+          <Link to={`/view-disposition/${item._id}`}>
             <FontAwesomeIcon icon={faEye} />
           </Link>
         </td>
