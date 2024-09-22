@@ -248,7 +248,10 @@ const Disposition = () => {
               <option value="Switched Off">Switched Off</option>
             </select>
           </div>
-            <div className="col-md-6">
+           
+            </>
+          )}
+          <div className="col-md-6">
               <label htmlFor="remark" className="form-label fw-bold">Remarks</label>
               <textarea
                 className="form-control"
@@ -258,10 +261,7 @@ const Disposition = () => {
                 placeholder="Enter remarks"
                 required
               />
-            </div>
-            </>
-          )}
-
+          </div>
           <div className="col-md-6">
             <label htmlFor="fileStatus" className="form-label fw-bold">File Status</label>
             <select className="form-select" id="fileStatus" value={fileStatus} onChange={handleFileStatusChange}>
