@@ -5,7 +5,7 @@ const Banklogindashboard = () => {
   return (
     <>
     {/* <Navbar/> */}
-    <p>Welcome back Admin</p>
+    <p>Welcome Back login Team</p>
     <div className="row">
   
   <div className="col-sm-4 mb-3">
@@ -30,6 +30,42 @@ const Banklogindashboard = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">MTD-Total Rejected Bank logged-in</h5>
+        <p className='fs-4'>10</p>
+
+      </div>
+    </div>
+  </div>
+  <div className="col-sm-4 mb-3">
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">MTD-Total Loan Approved</h5>
+        <p className='fs-4'>10</p>
+
+      </div>
+    </div>
+  </div>
+  <div className="col-sm-4 mb-3">
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">MTD-Total Loan Rejected</h5>
+        <p className='fs-4'>10</p>
+
+      </div>
+    </div>
+  </div>
+  <div className="col-sm-4 mb-3">
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">MTD-Total Disbursal Approved</h5>
+        <p className='fs-4'>10</p>
+
+      </div>
+    </div>
+  </div>
+  <div className="col-sm-4 mb-3">
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">MTD-Total Disbursal Rejected</h5>
         <p className='fs-4'>10</p>
 
       </div>

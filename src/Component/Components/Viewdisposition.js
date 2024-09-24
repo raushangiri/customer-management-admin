@@ -66,9 +66,9 @@ const ViewDisposition = () => {
               <table className="table table-bordered">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">Serial No</th>
                     <th scope="col">Document Name</th>
-                    <th scope="col">Document URL</th>
+                   
                   </tr>
                 </thead>
                 <tbody>
@@ -76,7 +76,7 @@ const ViewDisposition = () => {
                     <tr key={doc._id}>
                       <td>{index + 1}</td>
                       <td>{doc.document_name}</td>
-                      <td>{doc.document_url ? <a href={doc.document_url} target="_blank" rel="noopener noreferrer">Download</a> : 'Not available'}</td>
+                     
                     </tr>
                   ))}
                 </tbody>

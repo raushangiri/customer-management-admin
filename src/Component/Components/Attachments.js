@@ -1,6 +1,9 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { useOverview } from '../ContentHook/OverviewContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
+import { Link } from 'react-router-dom'
 
 const Attachments = () => {
   const [selectedDocumentType, setSelectedDocumentType] = useState('');
@@ -106,6 +109,24 @@ const Attachments = () => {
     setUploadedDocuments(updatedDocuments);
   };
 
+  const deleteFile = async (fileId) => {
+    try {
+      const response = await axios.delete(`${baseurl}/delete`, {
+        data: { documentUrl: fileId }, // If deleting from FTP
+      });
+      console.log(response.data.message);
+      alert('File deleted successfully');
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      alert('Failed to delete file');
+    }
+  };
+
+  // const handleDelete = (e) => {
+  //   e.preventDefault(); // Prevent default navigation behavior
+  //   deleteFile(fileId);  // Call the delete function with fileId or file path
+  // };
+
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
@@ -113,20 +134,13 @@ const Attachments = () => {
         setDocuments(response.data.attachments);
       } catch (err) {
         setError('Error fetching document data');
-        // setLoading(false);
       }
     };
 
     fetchDocuments();
   }, [formData1.file_number]);
 
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
-
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
+ 
 
   return (
     <>
@@ -191,25 +205,6 @@ const Attachments = () => {
           </button>
         </form>
 
-        {/* <div className="mt-4">
-          <h5 className="fw-bold">Uploaded Documents</h5>
-          <ul className="list-group">
-            {uploadedDocuments.map((doc, index) => (
-              <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                {doc.document_name}
-                <div>
-                  <button className="btn btn-outline-primary btn-sm me-2" onClick={() => handleViewDocument(doc)}>
-                    <i className="bi bi-eye"></i> View
-                  </button>
-                  <button className="btn btn-outline-danger btn-sm" onClick={() => handleDeleteDocument(index)}>
-                    <i className="bi bi-trash"></i> Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div> */}
-
         {showModal1 && (
           <div className="modal fade show" style={{ display: 'block' }}>
             <div className="modal-dialog modal-lg">
@@ -232,18 +227,23 @@ const Attachments = () => {
       <table className="table table-striped table-bordered">
         <thead className="thead-dark">
           <tr>
-            <th>File Number</th>
+          <th>Serial No</th>
+            <th>Date</th>
             <th>Document Type</th>
             <th>Document Name</th>
-            
-            <th>Read URL</th>
-            <th>Uploaded At</th>
+            <th>Download Document</th>
+            <th>View Document</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {documents.map((doc) => (
+          {documents.map((doc, index) => (
             <tr key={doc._id}>
-              <td>{doc.file_number}</td>
+              <td>{index + 1}</td>
+              <td>
+               {new Date(doc.createdAt).toLocaleDateString('en-GB')}<br />
+               {new Date(doc.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+              </td>
               <td>{doc.document_type}</td>
               <td>{doc.document_name}</td>
               <td>
@@ -256,7 +256,11 @@ const Attachments = () => {
                   View
                 </a>
               </td>
-              <td>{new Date(doc.createdAt).toLocaleString()}</td>
+              <td>
+              <Link to={ ``} onClick={(e) => { e.preventDefault(); deleteFile(doc.downloadUrl); }}>
+                <FontAwesomeIcon icon={faTrash}  />
+              </Link>
+              </td>
             </tr>
           ))}
         </tbody>
