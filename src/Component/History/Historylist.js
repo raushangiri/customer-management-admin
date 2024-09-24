@@ -202,8 +202,13 @@ const History = () => {
               <tr key={loanFile._id}>
                 <th scope="row">{index + 1}</th>
                 <td>
-                   {new Date(loanFile.createdAt).toLocaleDateString('en-GB')}<br />
-                   {new Date(loanFile.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                  {loanFile.sales_assign_date && (
+                    <>
+                   {new Date(loanFile.sales_assign_date).toLocaleDateString('en-GB')}<br />
+                   {new Date(loanFile.sales_assign_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                   </>
+                )
+                  }
                 </td>
                 <td>{loanFile.customer_name}</td>
                 <td>{loanFile.customer_mobile_number}</td>

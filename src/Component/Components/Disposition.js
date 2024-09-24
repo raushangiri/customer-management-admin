@@ -5,6 +5,7 @@ import { useOverview } from '../ContentHook/OverviewContext';
 const Disposition = () => {
   const [callStatus, setCallStatus] = useState('');
   const [isInterested, setIsInterested] = useState('');
+  const [isFileEligible, setIsFileEligible] = useState(false);
   const [disposition, setDisposition] = useState('');
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [documentList, setDocumentList] = useState([]);
@@ -18,6 +19,26 @@ const Disposition = () => {
   const { formData, setFormData } = useOverview();
 
   const fileNumber = formData.file_number;
+
+  useEffect(() => {
+    const checkFileReassignStatus = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/checkFileReassignStatus/${fileNumber}`);
+        if (response.data.success) {
+          setIsFileEligible(true); // Set to true if the API call is successful and the file can be reassigned
+        } else {
+          setIsFileEligible(false); // Set to false if the file is locked
+        }
+      } catch (error) {
+        console.error('Error fetching file reassign status:', error);
+        setIsFileEligible(false); // Handle the error case as well
+      }
+    };
+
+    checkFileReassignStatus();
+  }, []); // Empty dependency array means this will run once when the component is mounted
+
+
 
   const fetchDocumentList = async () => {
     try {
@@ -95,7 +116,7 @@ const Disposition = () => {
       remarks,
       file_status: fileStatus,
       file_number: fileNumber,
-      type_of_loan:formData.type_of_loan
+      type_of_loan: formData.type_of_loan
     };
 
     try {
@@ -142,19 +163,20 @@ const Disposition = () => {
                   onChange={handleInterestChange}
                 >
                   <option value="">Select</option>
-                  <option value="Interested">Interested</option>
+                  {isFileEligible && <option value="Interested">Interested</option>} {/* Conditionally render Interested option */}
                   <option value="NotInterested">Not Interested</option>
+                  <option value="FollowUp">Follow Up</option>
                 </select>
               </div>
 
               {isInterested === 'NotInterested' && (
-                <div className="col-md-12">
-                  <label htmlFor="notInterestedReason" className="form-label fw-bold">Reason for Not Interested</label>
+                <div className="col-md-6">
+                  <label htmlFor="disposition" className="form-label fw-bold">Reason for Not Interested</label>
                   <select
                     className="form-select"
-                    id="notInterestedReason"
+                    id="disposition"
                     value={notInterestedReason}
-                    onChange={(e) => setNotInterestedReason(e.target.value)}
+                    onChange={handleDispositionChange}
                   >
                     <option value="">Select Reason</option>
                     {NotInterestedOptions.map((reason, index) => (
@@ -162,19 +184,11 @@ const Disposition = () => {
                     ))}
                   </select>
 
-                  <label htmlFor="remarks" className="form-label fw-bold mt-3">Remarks</label>
-                  <textarea
-                    className="form-control"
-                    id="remarks"
-                    value={remarks}
-                    onChange={(e) => setRemarks(e.target.value)}
-                    placeholder="Enter remarks"
-                    required
-                  />
+
                 </div>
               )}
 
-              {isInterested === 'Interested' && (
+              {(isInterested === 'Interested' || isInterested === 'FollowUp') && (
                 <>
                   <div className="col-md-6">
                     <label htmlFor="disposition" className="form-label fw-bold">Disposition</label>
@@ -197,7 +211,7 @@ const Disposition = () => {
                     </select>
                   </div>
 
-                  {disposition && (
+                  {(disposition !== "Call Back" && disposition !== "Do not want to share") && (
                     <div className="col-md-6">
                       <label className="form-label fw-bold">Documents</label>
                       <div className="form-check">
@@ -220,6 +234,7 @@ const Disposition = () => {
                     </div>
                   )}
 
+{(disposition !== "Call Back" && disposition !== "Do not want to share") && (
                   <div className="col-md-6">
                     <label htmlFor="expectedDocumentDate" className="form-label fw-bold">Expected Document Date</label>
                     <input
@@ -231,55 +246,62 @@ const Disposition = () => {
                       required
                     />
                   </div>
+)}
+                  
+                  <div className="col-md-6">
+                    <label htmlFor="fileStatus" className="form-label fw-bold">File Status</label>
+                    <select className="form-select" id="fileStatus" value={fileStatus} onChange={handleFileStatusChange}>
+                      <option value="">Select</option>
+                      <option value="details_not_completed">Details not completed</option>
+                      <option value="process_to_tvr">Process to TVR</option>
+                      <option value="tvr_rejected">TVR Rejected</option>
+                      <option value="reassigned_to_salesagent">Reassign to Sales Team</option>
+                      <option value="process_to_cdr">Process to CDR</option>
+                      <option value="cdr_rejected">CDR Rejected</option>
+                      <option value="process_to_login_team">Process to Login Team</option>
+                      <option value="bank_login_rejected">Bank Login Rejected</option>
+                      <option value="bank_login_approved">Bank Login Approved</option>
+                      <option value="disbursal_rejected">Rejected Disbursal</option>
+                      <option value="loan_disbursed">Loan Disbursed</option>
+
+                    </select>
+                  </div>
+
                 </>
-              )}
+              )
+              }
+              
             </>
           )}
+          
 
           {callStatus === 'Not Connected' && (
             <>
-            <div className="col-md-6">
-            <label htmlFor="disposition" className="form-label fw-bold">Disposition</label>
-            <select className="form-select" id="disposition" value={disposition} onChange={handleDispositionChange}>
-              <option value="">Select</option>
-              <option value="Busy">Busy</option>
-              <option value="RNR">RNR</option>
-              <option value="Call Drop">Call Drop</option>
-              <option value="Switched Off">Switched Off</option>
-            </select>
-          </div>
-           
+              <div className="col-md-6">
+                <label htmlFor="disposition" className="form-label fw-bold">Disposition</label>
+                <select className="form-select" id="disposition" value={disposition} onChange={handleDispositionChange}>
+                  <option value="">Select</option>
+                  <option value="Busy">Busy</option>
+                  <option value="RNR">RNR</option>
+                  <option value="Call Drop">Call Drop</option>
+                  <option value="Switched Off">Switched Off</option>
+                </select>
+              </div>
+
             </>
           )}
           <div className="col-md-6">
-              <label htmlFor="remark" className="form-label fw-bold">Remarks</label>
-              <textarea
-                className="form-control"
-                id="remark"
-                value={remarks}
-                onChange={(e) => setRemarks(e.target.value)}
-                placeholder="Enter remarks"
-                required
-              />
+            <label htmlFor="remark" className="form-label fw-bold">Remarks</label>
+            <textarea
+              className="form-control"
+              id="remark"
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              placeholder="Enter remarks"
+              required
+            />
           </div>
-          <div className="col-md-6">
-            <label htmlFor="fileStatus" className="form-label fw-bold">File Status</label>
-            <select className="form-select" id="fileStatus" value={fileStatus} onChange={handleFileStatusChange}>
-              <option value="">Select</option>
-              <option value="details_not_completed">Details not completed</option>
-              <option value="process_to_tvr">Process to TVR</option>
-              <option value="tvr_rejected">TVR Rejected</option>
-              <option value="reassigned_to_salesagent">Reassign to Sales Team</option>
-              <option value="process_to_cdr">Process to CDR</option>
-              <option value="cdr_rejected">CDR Rejected</option>
-              <option value="process_to_login_team">Process to Login Team</option>
-              <option value="bank_login_rejected">Bank Login Rejected</option>
-              <option value="bank_login_approved">Bank Login Approved</option>
-              <option value="disbursal_rejected">Rejected Disbursal</option>
-              <option value="loan_disbursed">Loan Disbursed</option>
 
-            </select>
-          </div>
         </div>
 
         <button type="submit" className="btn btn-primary">Submit</button>

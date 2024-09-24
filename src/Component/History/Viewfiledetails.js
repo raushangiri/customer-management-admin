@@ -87,20 +87,20 @@ const ViewFileDetails = () => {
 
   useEffect(() => {
     const fetchBankLoginDetails = async () => {
-        try {
-            const response = await axios.get(`${baseurl}/getbanklogindetails/${file_number}`);
-            setBankLoginDetails(response.data);
-            
-        } catch (error) {
-            console.error('Error fetching data');
-            
-        }
+      try {
+        const response = await axios.get(`${baseurl}/getbanklogindetails/${file_number}`);
+        setBankLoginDetails(response.data);
+
+      } catch (error) {
+        console.error('Error fetching data');
+
+      }
     };
 
     fetchBankLoginDetails();
-}, [userId]);
+  }, [userId]);
 
-console.log(bankLoginDetails,"bankLoginDetails")
+  console.log(bankLoginDetails, "bankLoginDetails")
 
 
   useEffect(() => {
@@ -167,13 +167,28 @@ console.log(bankLoginDetails,"bankLoginDetails")
             <p><strong>Sales Agent ID:</strong> {loanFile.loanDetails.sales_agent_id}</p>
           </div>
           <div className='col-md-6'>
-            <p><strong>Sales Agent Name:</strong> {loanFile.sales_agent_name}</p>
+            <p><strong>Sales Agent Name:</strong> {loanFile.loanDetails.sales_agent_name}</p>
           </div>
           <div className='col-md-6'>
             <p><strong>Sales Team Status:</strong> {loanFile.loanDetails.sales_status}</p>
           </div>
           <div className='col-md-6'>
-            <p><strong>Date:</strong> {loanFile.sales_date}</p>
+            
+            {
+                loanFile.loanDetails.sales_assign_date && (
+                  <p><strong>Date: </strong>
+              {new Date(loanFile.loanDetails.sales_assign_date).toLocaleDateString('en-GB')}
+              </p>
+                )
+              }
+            
+            {
+                loanFile.loanDetails.sales_assign_date && (
+            <p><strong>Time: </strong>
+              {new Date(loanFile.loanDetails.sales_assign_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+            </p>
+              )
+            }
           </div>
         </div>
       </section>
@@ -190,10 +205,28 @@ console.log(bankLoginDetails,"bankLoginDetails")
             <p><strong>Agent Name:</strong> {loanFile.tvr_agent_name}</p>
           </div>
           <div className='col-md-6'>
-            <p><strong>TVR Status:</strong> {loanFile.tvr_status}</p>
+            <p><strong>TVR Status:</strong> {loanFile.loanDetails.tvr_status}</p>
           </div>
           <div className='col-md-6'>
-            <p><strong>Date:</strong> {loanFile.tvr_date}</p>
+            
+              {
+                loanFile.loanDetails.tvr_assign_date && (
+                  <p><strong>Date: </strong>
+                    {new Date(loanFile.loanDetails.tvr_assign_date).toLocaleDateString('en-GB')}
+                  </p>
+                )
+              }
+
+            
+            
+              {
+                loanFile.loanDetails.tvr_assign_date && (
+                  <p><strong>Time:</strong>
+                    {new Date(loanFile.loanDetails.tvr_assign_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                )
+              }
+           
           </div>
         </div>
       </section>
@@ -204,16 +237,30 @@ console.log(bankLoginDetails,"bankLoginDetails")
         <hr />
         <div className='row md-4'>
           <div className='col-md-6'>
+            
             <p><strong>CDR Agent ID:</strong> {loanFile.loanDetails.cdr_agent_id}</p>
           </div>
           <div className='col-md-6'>
             <p><strong>CDR Agent Name:</strong> {loanFile.cdr_agent_name}</p>
           </div>
           <div className='col-md-6'>
-            <p><strong>CDR Team Status:</strong> {loanFile.cdr_status}</p>
+            <p><strong>CDR Team Status:</strong> {loanFile.loanDetails.cdr_status}</p>
           </div>
           <div className='col-md-6'>
-            <p><strong>Date:</strong> {loanFile.cdr_date}</p>
+          {
+                loanFile.loanDetails.cdr_assign_date && (
+                  <p><strong>Date: </strong>
+                    {new Date(loanFile.loanDetails.cdr_assign_date).toLocaleDateString('en-GB')}
+                  </p>
+                )
+              }            
+              {
+                loanFile.loanDetails.cdr_assign_date && (
+                  <p><strong>Time:</strong>
+                    {new Date(loanFile.loanDetails.cdr_assign_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                )
+              }
           </div>
         </div>
       </section>
@@ -229,39 +276,60 @@ console.log(bankLoginDetails,"bankLoginDetails")
           <div className='col-md-6'>
             <p><strong>Bank Login Agent Name:</strong> {loanFile.banklogin_agent_name}</p>
           </div>
-          <table className="table table-striped table-bordered table-hover">
-                <thead className="thead-dark">
-                    <tr>
-                        <th>User ID</th>
-                        <th>Bank Login Status</th>
-                        <th>Loan Type</th>
-                        <th>Bank Name</th>
-                        <th>RM Name</th>
-                        <th>RM Contact Number</th>
-                        <th>RM Email</th>
-                        <th>Document Status</th>
-                        <th>Remarks</th>
-                        <th scope="col" className="text-center">View Deatils</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {bankLoginDetails.map((detail) => (
-                        <tr key={detail._id}>
-                            <td>{detail.userId}</td>
-                            <td>{detail.bank_login_status}</td>
-                            <td>{detail.loan_type}</td>
-                            <td>{detail.bank_name}</td>
-                            <td>{detail.rm1_name}</td>
-                            <td>{detail.rm1_contact_number}</td>
-                            <td>{detail.email_1}</td>
-                            
+          <div className='col-md-6'>
+            <p><strong>Bank Login Status:</strong> {loanFile.loanDetails.banklogin_status}</p>
+          </div>
+          <div className='col-md-6'>
+          {
+                loanFile.loanDetails.banklogin_assign_date && (
+                  <p><strong>Date: </strong>
+                    {new Date(loanFile.loanDetails.banklogin_assign_date).toLocaleDateString('en-GB')}
+                  </p>
+                )
+              }            
+              {
+                loanFile.loanDetails.banklogin_assign_date && (
+                  <p><strong>Time:</strong>
+                    {new Date(loanFile.loanDetails.banklogin_assign_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                )
+              }
+          </div>
 
-                            <td>{detail.remarks}</td>
-                            
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+
+          <table className="table table-striped table-bordered table-hover">
+            <thead className="thead-dark">
+              <tr>
+                <th>User ID</th>
+                <th>Bank Login Status</th>
+                <th>Loan Type</th>
+                <th>Bank Name</th>
+                <th>RM Name</th>
+                <th>RM Contact Number</th>
+                <th>RM Email</th>
+                <th>Document Status</th>
+                <th>Remarks</th>
+                <th scope="col" className="text-center">View Deatils</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bankLoginDetails.map((detail) => (
+                <tr key={detail._id}>
+                  <td>{detail.userId}</td>
+                  <td>{detail.bank_login_status}</td>
+                  <td>{detail.loan_type}</td>
+                  <td>{detail.bank_name}</td>
+                  <td>{detail.rm1_name}</td>
+                  <td>{detail.rm1_contact_number}</td>
+                  <td>{detail.email_1}</td>
+
+
+                  <td>{detail.remarks}</td>
+
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
     </div>

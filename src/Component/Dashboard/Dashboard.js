@@ -79,7 +79,7 @@ const Dashboard = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">MTD-Total Pending TVR</h5>
-        <p>Total Count: </p>
+        <p>Total Count: {dashboardData.tvrPending}</p>
         <p> Total Amount: </p>
 
       </div>
@@ -89,7 +89,7 @@ const Dashboard = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">MTD-Total Completed TVR</h5>
-        <p>Total Count: </p>
+        <p>Total Count: {dashboardData.tvrCompleted}</p>
         <p> Total Amount: </p>
 
       </div>
@@ -99,7 +99,7 @@ const Dashboard = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">MTD-Total Rejected TVR</h5>
-        <p>Total Count: </p>
+        <p>Total Count: {dashboardData.tvrRejected}</p>
         <p> Total Amount: </p>
 
       </div>
@@ -109,7 +109,7 @@ const Dashboard = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">MTD-Total Pending CDR</h5>
-        <p>Total Count: </p>
+        <p>Total Count: {dashboardData.cdrPending}</p>
         <p> Total Amount: </p>
 
       </div>
@@ -119,7 +119,7 @@ const Dashboard = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">MTD-Total Completed CDR</h5>
-        <p>Total Count: </p>
+        <p>Total Count: {dashboardData.cdrCompleted}</p>
         <p> Total Amount: </p>
 
       </div>
@@ -129,7 +129,7 @@ const Dashboard = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">MTD-Total Rejected CDR</h5>
-        <p>Total Count: </p>
+        <p>Total Count: {dashboardData.cdrRejected}</p>
         <p> Total Amount: </p>
 
       </div>
@@ -139,7 +139,7 @@ const Dashboard = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">MTD-Total Bank logged-in</h5>
-        <p>Total Count: </p>
+        <p>Total Count: {dashboardData.bankloginCompleted}</p>
         <p> Total Amount: </p>
 
       </div>
@@ -159,7 +159,7 @@ const Dashboard = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">MTD-Total Rejected Bank logged-in</h5>
-        <p>Total Count: </p>
+        <p>Total Count: {dashboardData.bankloginRejected}</p>
         <p> Total Amount: </p>
 
       </div>
