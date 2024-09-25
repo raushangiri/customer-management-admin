@@ -112,7 +112,7 @@ const Attachments = () => {
   const deleteFile = async (fileId) => {
     try {
       const response = await axios.delete(`${baseurl}/delete`, {
-        data: { documentUrl: fileId }, // If deleting from FTP
+        data: { documentUrl: fileId}, // If deleting from FTP
       });
       console.log(response.data.message);
       alert('File deleted successfully');
@@ -257,7 +257,10 @@ const Attachments = () => {
                 </a>
               </td>
               <td>
-              <Link to={ ``} onClick={(e) => { e.preventDefault(); deleteFile(doc.downloadUrl); }}>
+              <Link to={ ``} onClick={(e) => { 
+  e.preventDefault(); 
+  deleteFile(doc.downloadUrl); 
+}}>
                 <FontAwesomeIcon icon={faTrash}  />
               </Link>
               </td>

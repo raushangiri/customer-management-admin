@@ -274,6 +274,15 @@ const PersonalDetails = () => {
                                 className="form-control" id="permanent_address_landmark" placeholder="Enter landmark" />
                         </div>
                         <div className="col-md-6">
+                            <label htmlFor="personal_email_id" className="form-label fw-bold">Personal Email ID</label>
+                            <input type="email" className="form-control"
+                                value={formData.personal_email_id}
+                                onChange={(e) => setFormData({ ...formData, personal_email_id: e.target.value })}
+
+                                id="personal_email_id" name='personal_email_id' placeholder="Enter personal email ID" />
+                        </div>
+
+                        <div className="col-md-6">
                             <label htmlFor="officialEmailId" className="form-label fw-bold">Official Email ID</label>
                             <input type="email" className="form-control"
                                 value={formData.official_email_id}
@@ -282,14 +291,7 @@ const PersonalDetails = () => {
 
                                 id="official_email_id" placeholder="Enter official email ID" />
                         </div>
-                        <div className="col-md-6">
-                            <label htmlFor="personal_email_id" className="form-label fw-bold">Personal Email ID</label>
-                            <input type="email" className="form-control"
-                                value={formData.personal_email_id}
-                                onChange={(e) => setFormData({ ...formData, personal_email_id: e.target.value })}
-
-                                id="personal_email_id" name='personal_email_id' placeholder="Enter personal email ID" />
-                        </div>
+                        
                         <div className="col-md-6">
                             <label htmlFor="office_name" className="form-label fw-bold">Office Name</label>
                             <input type="text"
@@ -297,6 +299,24 @@ const PersonalDetails = () => {
                                 onChange={(e) => setFormData({ ...formData, office_name: e.target.value })}
                                 className="form-control" id="office_name" name='office_name' placeholder="Enter office name" />
                         </div>
+
+                        <div className="col-md-6">
+                            <label htmlFor="office_address" className="form-label fw-bold">Office Address</label>
+                            <input type="text"
+                                name='office_address'
+                                value={formData.office_address}
+                                onChange={(e) => setFormData({ ...formData, office_address: e.target.value })}
+                                className="form-control" id="office_address" placeholder="Enter office address" />
+                        </div>
+                        <div className="col-md-6">
+                            <label htmlFor="office_address_landmark" className="form-label fw-bold">Office Address Landmark</label>
+                            <input type="text"
+                                name='office_address_landmark'
+                                value={formData.office_address_landmark}
+                                onChange={(e) => setFormData({ ...formData, office_address_landmark: e.target.value })}
+                                className="form-control" id="office_address_landmark" placeholder="Enter landmark" />
+                        </div>
+
 
 
                         <div className="col-md-6">
@@ -384,22 +404,7 @@ const PersonalDetails = () => {
 
 
 
-                        <div className="col-md-6">
-                            <label htmlFor="office_address" className="form-label fw-bold">Office Address</label>
-                            <input type="text"
-                                name='office_address'
-                                value={formData.office_address}
-                                onChange={(e) => setFormData({ ...formData, office_address: e.target.value })}
-                                className="form-control" id="office_address" placeholder="Enter office address" />
-                        </div>
-                        <div className="col-md-6">
-                            <label htmlFor="office_address_landmark" className="form-label fw-bold">Office Address Landmark</label>
-                            <input type="text"
-                                name='office_address_landmark'
-                                value={formData.office_address_landmark}
-                                onChange={(e) => setFormData({ ...formData, office_address_landmark: e.target.value })}
-                                className="form-control" id="office_address_landmark" placeholder="Enter landmark" />
-                        </div>
+                        
                         <div className="col-md-6">
                             <label htmlFor="years_at_current_organization" className="form-label fw-bold">Years at Current Organization</label>
                             <input type="text"
