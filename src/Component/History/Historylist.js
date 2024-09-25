@@ -152,6 +152,7 @@ const History = () => {
   const [error, setError] = useState(null);
   const baseurl = process.env.REACT_APP_API_BASE_URL;
   const userId = localStorage.getItem('userId');
+  const userRole = localStorage.getItem('userRole');
 
   // Fetch loan files when the component mounts
   useEffect(() => {
@@ -190,6 +191,14 @@ const History = () => {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Date</th>
+              {userRole==="admin"
+              &&(
+                <>
+                {/* <th scope="col">Team Leader</th> */}
+                <th scope="col">Sales Agent Name</th>
+                </>
+              )
+              }
               <th scope="col">Customer Name</th>
               <th scope="col">Mobile Number</th>
               <th scope="col">Loan Type</th>
@@ -210,6 +219,14 @@ const History = () => {
                 )
                   }
                 </td>
+                {userRole==="admin"
+              &&(
+                <>
+                {/* <td >Team Leader</td> */}
+                <td >{loanFile.sales_agent_name}</td>
+                </>
+              )
+              }
                 <td>{loanFile.customer_name}</td>
                 <td>{loanFile.customer_mobile_number}</td>
                 <td>{loanFile.type_of_loan}</td>
