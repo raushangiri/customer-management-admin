@@ -257,10 +257,7 @@ const Attachments = () => {
                 </a>
               </td>
               <td>
-              <Link to={ ``} onClick={(e) => { 
-  e.preventDefault(); 
-  deleteFile(doc.downloadUrl); 
-}}>
+              <Link to={ ``} onClick={(e) => { e.preventDefault(); deleteFile(doc.downloadUrl); }}>
                 <FontAwesomeIcon icon={faTrash}  />
               </Link>
               </td>

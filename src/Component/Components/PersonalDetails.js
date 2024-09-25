@@ -255,6 +255,7 @@ const PersonalDetails = () => {
                                 <option value="">Select type</option>
                                 <option value="rented">Rented</option>
                                 <option value="owned">Owned</option>
+                                <option value="government issued">Government Issued</option>
                                 {/* Add more options as needed */}
                             </select>
                         </div>
@@ -406,7 +407,7 @@ const PersonalDetails = () => {
 
                         
                         <div className="col-md-6">
-                            <label htmlFor="years_at_current_organization" className="form-label fw-bold">Years at Current Organization</label>
+                            <label htmlFor="years_at_current_organization" className="form-label fw-bold">Total working experience in Organization</label>
                             <input type="text"
                                 name='years_at_current_organization'
                                 value={formData.years_at_current_organization}
@@ -435,7 +436,7 @@ const PersonalDetails = () => {
                         </div>
 
                         <div className="col-md-6">
-                            <label htmlFor="inhand_salary" className="form-label fw-bold">In-Hand Salary</label>
+                            <label htmlFor="inhand_salary" className="form-label fw-bold">Salary</label>
                             <input type="text"
                                 name='inhand_salary'
                                 value={formData.inhand_salary}
