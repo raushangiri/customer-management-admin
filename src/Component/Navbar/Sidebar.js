@@ -63,7 +63,7 @@ const Sidebar = () => {
               <NavLink to="/Adminsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
             <li><NavLink to="/file-history" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li>
-
+            <li><NavLink to="/Adminfilehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Team Performance</NavLink></li>
             <li>
               <div onClick={toggleSubMenu} className="submenu-title">
                 Manage User

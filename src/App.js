@@ -33,6 +33,7 @@ import Teamleaderfilehistory from './Component/History/Teamleaderfilehistory';
 import Cdrsearch from './Component/Search/Cdrsearch';
 import Adminsearch from './Component/Components/Adminsearch';
 import Teamleader_dashboard from './Component/Dashboard/Teamleader_dashboard';
+import Adminfilehistory from './Component/History/adminfilehistory';
 function App() {
   return (
     <Router>
@@ -92,8 +93,10 @@ function Main() {
         <Route path="/team-filehistory" element={<Teamleaderfilehistory />} />
         <Route path="/Cdrsearch" element={<Cdrsearch />} />
         <Route path="/Adminsearch" element={<Adminsearch />} />
+        <Route path="/Adminfilehistory" element={<Adminfilehistory />} />
 
 
+        
         
         
        
