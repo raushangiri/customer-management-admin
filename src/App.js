@@ -32,6 +32,7 @@ import Tvrsearch from './Component/Search/Tvrsearch';
 import Teamleaderfilehistory from './Component/History/Teamleaderfilehistory';
 import Cdrsearch from './Component/Search/Cdrsearch';
 import Adminsearch from './Component/Components/Adminsearch';
+import Teamleader_dashboard from './Component/Dashboard/Teamleader_dashboard';
 function App() {
   return (
     <Router>
@@ -59,6 +60,8 @@ function Main() {
         <Routes>
           <Route path="/" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/teamLeader-dashboard" element={<Teamleader_dashboard />} />
+
           <Route path="/sales-dashboard" element={<Sales_dashboard />} />
           <Route path="/tvr-dashboard" element={<Tvr_dashboard />} />
           <Route path="/CDRdashboard" element={<CDRdashboard />} />

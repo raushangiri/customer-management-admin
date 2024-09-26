@@ -86,7 +86,7 @@ const Sidebar = () => {
         {userRole === 'Team leader' && (
           <>
             <li>
-              <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
+              <NavLink to="/teamLeader-dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
             </li>
             <li>
               <NavLink to="/Team-Member" className={({ isActive }) => isActive ? 'active-link' : ''}> Team Members</NavLink>

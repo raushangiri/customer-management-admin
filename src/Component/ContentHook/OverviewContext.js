@@ -21,6 +21,7 @@ export const OverviewProvider = ({ children }) => {
     loan_amount: '',
     previousLoanSanctionDate: '',
     previousLoanInsuranceValue: '',
+    
     is_interested: '',
     type_of_loan: '',
     loan_category: '',

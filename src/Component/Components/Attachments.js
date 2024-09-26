@@ -47,7 +47,7 @@ const Attachments = () => {
   };
 // console.log(selectedFile,"selectedFile")
   const handleDocumentUpload = async (event) => {
-    event.preventDefault();
+     event.preventDefault();
 
     if (!selectedFile || !selectedDocumentType ) {
       alert('Please select a file to upload.');
@@ -69,7 +69,9 @@ const Attachments = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-
+if(response.status=200){
+  alert('Document uploaded successfully');
+} 
       // Extract the file URLs from the response
       const { downloadUrl, readUrl } = response.data;
 
@@ -89,24 +91,13 @@ const Attachments = () => {
       setUploadedDocuments([...uploadedDocuments, { ...updateDocumentData, file: selectedFile }]);
 
       // Reset form fields
-      setSelectedFile(null);
+      setSelectedFile('');
       setSelectedDocumentType('');
       setDocumentName('');
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Failed to upload the document. Please try again.');
     }
-  };
-
-  const handleViewDocument = (doc) => {
-    const fileURL = URL.createObjectURL(doc.file);
-    setSelectedDocumentFile(fileURL);
-    setShowModal1(true);
-  };
-
-  const handleDeleteDocument = (index) => {
-    const updatedDocuments = uploadedDocuments.filter((_, i) => i !== index);
-    setUploadedDocuments(updatedDocuments);
   };
 
   const deleteFile = async (fileId) => {
@@ -122,10 +113,6 @@ const Attachments = () => {
     }
   };
 
-  // const handleDelete = (e) => {
-  //   e.preventDefault(); // Prevent default navigation behavior
-  //   deleteFile(fileId);  // Call the delete function with fileId or file path
-  // };
 
   useEffect(() => {
     const fetchDocuments = async () => {
