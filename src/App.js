@@ -94,6 +94,7 @@ function Main() {
         <Route path="/Cdrsearch" element={<Cdrsearch />} />
         <Route path="/Adminsearch" element={<Adminsearch />} />
         <Route path="/Adminfilehistory" element={<Adminfilehistory />} />
+        <Route path="/Adminsearch/:customer_mobilenumber" element={<Adminsearch />} />
 
 
         

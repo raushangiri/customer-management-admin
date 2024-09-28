@@ -211,11 +211,30 @@
 
 import React, { useEffect, useState } from 'react';
 import { useOverview } from '../ContentHook/OverviewContext';
-import { Link } from 'react-router-dom'
+import { Link,useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 const OverviewDetails = () => {
+  const { customer_mobilenumber } = useParams(); // Get the loan file ID from the URL
+
   const { mobileNumber, setMobileNumber, formData, setFormData, fetchFileData } = useOverview();
+
+  // if(customer_mobilenumber){
+  //  setMobileNumber(customer_mobilenumber);
+  //   // fetchFileData(customer_mobilenumber);
+  // }
+
+  useEffect(() => {
+  
+    if(customer_mobilenumber){
+      fetchFileData(customer_mobilenumber);
+      setMobileNumber(customer_mobilenumber);
+    }
+  }, [customer_mobilenumber])
+  
+
+  
+
 
 
   const baseurl = process.env.REACT_APP_API_BASE_URL;
@@ -245,7 +264,6 @@ const OverviewDetails = () => {
 
 
 
-
     // Function to fetch data from the API
     const fetchDispositionData = async () => {
       try {
@@ -266,7 +284,7 @@ const OverviewDetails = () => {
     if (formData.file_number) {
       fetchDispositionData();
     }
-  }, [formData.file_number]);
+  }, [formData.file_number,customer_mobilenumber]);
 
 
   // console.log(dispositionData.createdAt,"dispositionData")
