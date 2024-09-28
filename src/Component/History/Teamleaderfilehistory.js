@@ -147,7 +147,7 @@ const Teamleaderfilehistory = () => {
   const filterLoanFiles = (agent, date) => {
     const filtered = loanFiles.filter((loanFile) => {
       const isAgentMatch = loanFile.sales_agent_name.toLowerCase().includes(agent.toLowerCase());
-      const isDateMatch = date ? new Date(loanFile.createdAt).toLocaleDateString('en-GB') === new Date(date).toLocaleDateString('en-GB') : true;
+      const isDateMatch = date ? new Date(loanFile.sales_assign_date).toLocaleDateString('en-GB') === new Date(date).toLocaleDateString('en-GB') : true;
       return isAgentMatch && isDateMatch;
     });
     setFilteredLoanFiles(filtered);
@@ -206,13 +206,13 @@ const Teamleaderfilehistory = () => {
           </thead>
           <tbody>
           {filteredLoanFiles
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort in descending order
+            .sort((a, b) => new Date(b.sales_assign_date) - new Date(a.sales_assign_date)) // Sort in descending order
             .map((loanFile, index) => (
               <tr key={loanFile._id}>
                 <th scope="row">{index + 1}</th>
                 <td>
-                  {new Date(loanFile.createdAt).toLocaleDateString('en-GB')}<br />
-                  {new Date(loanFile.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                  {new Date(loanFile.sales_assign_date).toLocaleDateString('en-GB')}<br />
+                  {new Date(loanFile.sales_assign_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                 </td>
                 <td>{loanFile.sales_agent_name}</td>
                 <td>{loanFile.customer_name}</td>
