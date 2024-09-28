@@ -83,6 +83,7 @@ const Disposition = () => {
 
   const handleDispositionChange = (e) => {
     setDisposition(e.target.value);
+    setNotInterestedReason(e.target.value);
   };
 
   const handleRemarkChange = (e) => {
@@ -170,24 +171,23 @@ const Disposition = () => {
               </div>
 
               {isInterested === 'NotInterested' && (
-                <div className="col-md-6">
-                  <label htmlFor="disposition" className="form-label fw-bold">Reason for Not Interested</label>
-                  <select
-                    className="form-select"
-                    id="disposition"
-                    value={notInterestedReason}
-                    onChange={handleDispositionChange}
-                  >
-                    <option value="">Select Reason</option>
-                    {NotInterestedOptions.map((reason, index) => (
-                      <option key={index} value={reason}>{reason}</option>
-                    ))}
-                  </select>
-
-
-                </div>
-              )}
-
+          <div className="col-md-6">
+            <label htmlFor="disposition" className="form-label fw-bold">Reason for Not Interested</label>
+            <select
+              className="form-select"
+              id="disposition"
+              value={notInterestedReason}
+              onChange={handleDispositionChange} // Update notInterestedReason
+            >
+              <option value="">Select Reason</option>
+              {NotInterestedOptions.map((reason, index) => (
+                <option key={index} value={reason}>
+                  {reason}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
               {(isInterested === 'Interested' || isInterested === 'FollowUp') && (
                 <>
                   <div className="col-md-6">
