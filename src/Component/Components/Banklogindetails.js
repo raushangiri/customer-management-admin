@@ -71,6 +71,7 @@ const Banklogindetails = () => {
     fetchDocuments();
   }, [formData.file_number]);
 
+  console.log(documents)
   // Fetch RM details (Bank Login details)
   useEffect(() => {
     const fetchRMDetails = async () => {
@@ -119,6 +120,72 @@ const Banklogindetails = () => {
     // Now, you can either populate the form with this data to allow editing
   };
 
+
+
+
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
+
+  // Toggle accordion section
+ 
+
+  // Handle individual checkbox selection
+  const handleDocumentSelection = (docId) => {
+    setSelectedDocuments((prevSelected) => {
+      if (prevSelected.includes(docId)) {
+        return prevSelected.filter((id) => id !== docId);
+      } else {
+        return [...prevSelected, docId];
+      }
+    });
+  };
+
+  // Handle select all/deselect all
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      // Select all document IDs
+      const allDocumentIds = documents.map((doc) => doc._id);
+      setSelectedDocuments(allDocumentIds);
+    } else {
+      setSelectedDocuments([]);
+    }
+  };
+
+
+  const sendEmail = async () => {
+    if (!personalDetails ) {
+      alert('Personal details or recipient email not available.');
+      return;
+    }
+    const documentUrls = documents.map((doc) => doc.downloadUrl);
+    const emailData = {
+      email: ["rohitkumargiri11@gmail.com",
+        "raushangiri.raj@gmail.com"], // email1 from fetchBankDetails
+      subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
+      text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
+        `Name: ${personalDetails.customerName || 'N/A'}\n` +
+        `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
+        `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
+        `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
+        `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
+        `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
+        `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
+        `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
+        `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
+        `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
+        `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
+        `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
+        `Office Address: ${personalDetails.office_address || 'N/A'}\n`,
+        documentUrls: documentUrls,
+    };
+
+    try {
+      await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
+      alert('Email sent successfully!');
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Failed to send email.');
+    }
+  };
   return (
     <div className="container mt-4">
       {/* Personal Details Section */}
@@ -178,32 +245,66 @@ const Banklogindetails = () => {
 
       {/* Document Section */}
       <div className="card mt-2">
-        <div className="card-header">
-          <h5 className="mb-0">
-            <button className="btn btn-link" onClick={() => toggleSection(1)}>
-              Document
-            </button>
-          </h5>
-        </div>
-        <div className={`collapse ${activeIndex === 1 ? 'show' : ''}`}>
-          <div className="card-body">
-            {documents.length > 0 ? (
+      <div className="card-header">
+        <h5 className="mb-0">
+          <button className="btn btn-link" onClick={() => toggleSection(1)}>
+            Document
+          </button>
+        </h5>
+      </div>
+      <div className={`collapse ${activeIndex === 1 ? 'show' : ''}`}>
+        <div className="card-body">
+          {documents.length > 0 ? (
+            <>
+              {/* Select All Checkbox */}
+              <div className="mb-2">
+                <input
+                  type="checkbox"
+                  id="selectAll"
+                  checked={selectedDocuments.length === documents.length}
+                  onChange={handleSelectAll}
+                />
+                <label htmlFor="selectAll" className="ml-2">
+                  Select All
+                </label>
+              </div>
+
               <ul className="list-group">
                 {documents.map((doc) => (
-                  <li key={doc._id} className="list-group-item d-flex justify-content-between align-items-center">
-                    <span>{doc.document_name}</span>
-                    <a href={doc.readUrl} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-primary mr-2">
+                  <li
+                    key={doc._id}
+                    className="list-group-item d-flex justify-content-between align-items-center"
+                  >
+                    <div>
+                      {/* Individual Document Checkbox */}
+                      <input
+                        type="checkbox"
+                        id={`doc-${doc._id}`}
+                        checked={selectedDocuments.includes(doc._id)}
+                        onChange={() => handleDocumentSelection(doc._id)}
+                      />
+                      <label htmlFor={`doc-${doc._id}`} className="ml-2">
+                        {doc.document_name}
+                      </label>
+                    </div>
+                    <a
+                      href={doc.readUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-sm btn-primary mr-2"
+                    >
                       View
                     </a>
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p>No documents found.</p>
-            )}
-          </div>
+            </>
+          ) : (
+            <p>No documents found.</p>
+          )}
         </div>
       </div>
+    </div>
 
       {/* RM Details Section */}
       <div className="card mt-2">
@@ -265,7 +366,7 @@ const Banklogindetails = () => {
       <button className="btn btn-secondary mt-3 me-2" onClick={handleBack}>
         Back
       </button>
-      <button className="btn btn-primary mt-3" onClick={handleSave}>
+      <button className="btn btn-primary mt-3" onClick={sendEmail}>
         Share with RM
       </button>
       </div>

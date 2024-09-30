@@ -231,11 +231,6 @@ const OverviewDetails = () => {
       setMobileNumber(customer_mobilenumber);
     }
   }, [customer_mobilenumber])
-  
-
-  
-
-
 
   const baseurl = process.env.REACT_APP_API_BASE_URL;
 
