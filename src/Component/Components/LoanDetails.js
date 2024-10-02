@@ -21,7 +21,7 @@ const LoanDetails = () => {
   });
 
   const [bankOptions, setBankOptions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedLoanType, setSelectedLoanType] = useState('');
   const [fileNumber, setFileNumber] = useState(''); // Update this with the actual file number you need
   const { mobileNumber, fetchFileData, formData, setFormData, handleSubmit } = useOverview();
@@ -42,10 +42,10 @@ const LoanDetails = () => {
         banks.push({ value: 'other', label: 'Other' });
 
         setBankOptions(banks);
-        setLoading(false);
+        
       } catch (error) {
         console.error('Error fetching bank list:', error);
-        setLoading(false);
+        
       }
     };
     fetchBankList();
@@ -93,6 +93,7 @@ const handleAddReference = async (e) => {
 
   try {
     // Post loan details to the API
+    setLoading(true);
     const response = await axios.post(`${baseurl}/createLoandetails/${formData.file_number}`, updatedLoanDetail);
     if (response.status === 200) {
       alert('Loan details added successfully!');
@@ -103,19 +104,30 @@ const handleAddReference = async (e) => {
   } catch (error) {
     console.error('Error saving loan details:', error);
     alert('Error saving loan details');
+  }finally {
+    // Stop loader once form submission is done
+    setLoading(false);
   }
 };
 
   return (
     <>
-      <div className="tab-pane active">
+      <div className="position-relative tab-pane active">
+      {loading && (
+        <div
+          className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-light bg-opacity-75"
+          style={{ zIndex: 1050 }}
+        >
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
         <form onSubmit={handleAddReference} className="mb-4">
           <div className="mb-3 row">
           <div className="col-md-4">
               <label htmlFor="bank_name" className="form-label fw-bold">Bank Name</label>
-              {loading ? (
-                <p>Loading banks...</p>
-              ) : (
+              {
                 <Select
                   id="bank_name"
                   options={bankOptions}
@@ -125,7 +137,7 @@ const handleAddReference = async (e) => {
                   isSearchable={true}
                   required
                 />
-              )}
+             }
             </div>
 
             {isOtherSelected && (

@@ -27,11 +27,13 @@ const ReferenceDetails = () => {
   };
   
   // console.log(references,"references")
-
+  const [loading, setLoading] = useState(false);
   const handleAddReference = async (e) => {
     e.preventDefault(); // Prevent form's default behavior
   
     try {
+      setLoading(true);
+
       // Post the local form data to the API
       await axios.post(`${baseurl}/createreferencedetail/${formData.file_number}`, localFormData);
   
@@ -56,6 +58,9 @@ const ReferenceDetails = () => {
   
     } catch (error) {
       console.error("Error adding reference", error);
+    }finally {
+      // Stop loader once form submission is done
+      setLoading(false);
     }
   };
   
@@ -78,7 +83,17 @@ const ReferenceDetails = () => {
   
   return (
     <>
-      <div className="tab-pane active">
+      <div className="position-relative tab-pane active">
+      {loading && (
+        <div
+          className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-light bg-opacity-75"
+          style={{ zIndex: 1050 }}
+        >
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
       <form onSubmit={handleAddReference} className="mb-4">
   <div className="mb-3 row">
     <div className="col-md-4">

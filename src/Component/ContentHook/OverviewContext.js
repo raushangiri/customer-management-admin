@@ -217,8 +217,10 @@ reference_address: '',
         // Update overview data
         await axios.post(`${baseurl}/createpersonaldetails/${formData.file_number}`, formData);
       } else if (formType === 'personal') {
+        
         // Update personal data
         await axios.post(`${baseurl}/createpersonaldetails/${formData.file_number}`, formData);
+      
         resetFormData();
       }
       else if (formType === 'reference') {

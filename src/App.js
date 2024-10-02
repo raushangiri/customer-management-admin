@@ -95,6 +95,7 @@ function Main() {
         <Route path="/Adminsearch" element={<Adminsearch />} />
         <Route path="/Adminfilehistory" element={<Adminfilehistory />} />
         <Route path="/Adminsearch/:customer_mobilenumber" element={<Adminsearch />} />
+        <Route path="/teamleaderfilehistory" element={<Teamleaderfilehistory />} />
 
 
         

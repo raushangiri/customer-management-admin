@@ -167,6 +167,7 @@ const Disposition = () => {
                   {isFileEligible && <option value="Interested">Interested</option>} {/* Conditionally render Interested option */}
                   <option value="NotInterested">Not Interested</option>
                   <option value="FollowUp">Follow Up</option>
+                  
                 </select>
               </div>
 
@@ -204,6 +205,7 @@ const Disposition = () => {
                       <option value="Document shared">Document shared</option>
                       <option value="Follow-up">Follow-up</option>
                       <option value="Call Back">Call Back</option>
+                      <option value="visit to office">Visit to Office</option>
 
                       <option value="Do not want to share">Do not want to share</option>
 

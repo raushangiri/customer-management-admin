@@ -15,7 +15,7 @@ const Attachments = () => {
   const baseurl = process.env.REACT_APP_API_BASE_URL;
   const  formData1=useOverview().formData;
   const [documents, setDocuments] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // console.log(formData1.file_number,"formData1")
@@ -63,6 +63,7 @@ const Attachments = () => {
     formData.append('documentType', selectedDocumentType === 'other' ? documentName : selectedDocumentType);
 
     try {
+      setLoading(true);
       // Upload the file to the server (API endpoint: http://localhost:3007/api/v1/upload)
       const response = await axios.post(`${baseurl}/upload`, formData, {
         headers: {
@@ -97,6 +98,9 @@ if(response.status=200){
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Failed to upload the document. Please try again.');
+    }finally {
+      // Stop loader once form submission is done
+      setLoading(false);
     }
   };
 
@@ -131,7 +135,19 @@ if(response.status=200){
 
   return (
     <>
-      <div className="tab-pane active">
+      <div className="position-relative tab-pane active">
+
+      {loading && (
+        <div
+          className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-light bg-opacity-75"
+          style={{ zIndex: 1050 }}
+        >
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
+
         <form onSubmit={handleDocumentUpload}>
           <div className="mb-3 row">
             <div className="col-md-6">

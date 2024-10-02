@@ -74,14 +74,39 @@ const PersonalDetails = () => {
         console.log(formData.is_interested, 'formData');
       }, [formData]);
 
-      const onSubmit = (event) => {
+
+      const [loading, setLoading] = useState(false);    // State to track loading
+
+      const onSubmit = async (event) => {
         event.preventDefault();
-        const formType = 'personal'; // or 'personal', based on which part of the form is being submitted
-        handleSubmit(formType);
+        const formType = 'personal'; // Assuming you're submitting personal details
+        setLoading(true); // Start loader when form submission begins
+    
+        try {
+          // Call handleSubmit from context and wait for it to complete
+          await handleSubmit(formType);
+          // Handle success if needed (e.g., display success message)
+        } catch (error) {
+          // Handle error if the form submission fails
+          console.error('Error submitting form:', error);
+        } finally {
+          // Stop loader once form submission is done
+          setLoading(false);
+        }
       };
     return (
         <>
-            <div className="tab-pane active">
+            <div className="position-relative tab-pane active">
+            {loading && (
+        <div
+          className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-light bg-opacity-75"
+          style={{ zIndex: 1050 }}
+        >
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
                 <form onSubmit={onSubmit}>
                     <h4 className='text-end'><Link to="https://emicalculator.net/" target="_blank"> Loan EMI calculator</Link></h4>
                     <div className="mb-3 row">
@@ -187,17 +212,17 @@ const PersonalDetails = () => {
                                 onChange={(e) => setFormData({ ...formData, occupation_type: e.target.value })}
                             >
                                 <option value="">Select type</option>
-                                <option value="salaried_employee">Salaried Employee</option>
-                                <option value="self_employed">Self-Employed</option>
-                                <option value="business_owner">Business Owner</option>
-                                <option value="freelancer">Freelancer</option>
-                                <option value="government_employee">Government Employee</option>
-                                <option value="retired">Retired</option>
-                                <option value="student">Student</option>
-                                <option value="housewife_homemaker">Housewife/Homemaker</option>
-                                <option value="agriculture_farmer">Agriculture/Farmer</option>
-                                <option value="consultant">Consultant</option>
-                                <option value="other">Other</option>
+                                <option value="Salaried Employee">Salaried Employee</option>
+                                <option value="Self-Employed">Self-Employed</option>
+                                <option value="Business Owner">Business Owner</option>
+                                <option value="Freelancer">Freelancer</option>
+                                <option value="Government Employee">Government Employee</option>
+                                <option value="Retired">Retired</option>
+                                <option value="Student">Student</option>
+                                <option value="Housewife/Homemaker">Housewife/Homemaker</option>
+                                <option value="Agriculture/Farmer">Agriculture/Farmer</option>
+                                <option value="Consultant">Consultant</option>
+                                <option value="Other">Other</option>
                             </select>
                         </div>
                         <div className="col-md-6">
@@ -454,10 +479,10 @@ const PersonalDetails = () => {
                     </div>
 
 
-                    <button type="submit" className="btn btn-primary">
-                        Submit
-                    </button>
-
+                    
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'Submitting...' : 'Submit'}
+        </button>
                 </form>
             </div>
         </>
