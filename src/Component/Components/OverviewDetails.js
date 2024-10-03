@@ -358,6 +358,17 @@ const OverviewDetails = () => {
                 onChange={(e) => setFormData({ ...formData, previousProductModel: e.target.value })}
               />
             </div>
+            <div className="col-md-6">
+              <label htmlFor="model_number" className="form-label fw-bold">Previous Product Model Number</label>
+              <input
+                type="text"
+                className="form-control"
+                id="model_number"
+                placeholder="Enter previous product model Number"
+                value={formData.model_number}
+                onChange={(e) => setFormData({ ...formData, model_number: e.target.value })}
+              />
+            </div>
 
             {/* Previous Loan Amount */}
             <div className="col-md-6">
@@ -395,6 +406,28 @@ const OverviewDetails = () => {
                 placeholder="Enter previous loan insurance value"
                 value={formData.previousLoanInsuranceValue}
                 onChange={(e) => setFormData({ ...formData, previousLoanInsuranceValue: e.target.value })}
+              />
+            </div>
+            <div className="col-md-6">
+              <label htmlFor="carName" className="form-label fw-bold">Car Name</label>
+              <input
+                type="text"
+                className="form-control"
+                id="carName"
+                placeholder="Enter previous loan insurance value"
+                value={formData.carName}
+                onChange={(e) => setFormData({ ...formData, carName: e.target.value })}
+              />
+            </div>
+            <div className="col-md-6">
+              <label htmlFor="carNumber" className="form-label fw-bold">Car Number</label>
+              <input
+                type="text"
+                className="form-control"
+                id="carNumber"
+                placeholder="Enter previous loan insurance value"
+                value={formData.carNumber}
+                onChange={(e) => setFormData({ ...formData, carNumber: e.target.value })}
               />
             </div>
           </div>
