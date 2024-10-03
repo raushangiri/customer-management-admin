@@ -92,7 +92,7 @@ const Sidebar = () => {
               <NavLink to="/Team-Member" className={({ isActive }) => isActive ? 'active-link' : ''}> Team Members</NavLink>
             </li>
             <li><NavLink to="/team-filehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Team File History</NavLink></li>
-
+            <li><NavLink to="/team-performance" className={({ isActive }) => isActive ? 'active-link' : ''}>Team Performance</NavLink></li>
             <li>
               <NavLink to="/Adminsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
