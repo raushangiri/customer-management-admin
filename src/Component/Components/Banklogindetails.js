@@ -163,6 +163,7 @@ const Banklogindetails = () => {
     const emailData = {
       email: ["rohitkumargiri11@gmail.com",
         "raushangiri.raj@gmail.com"], 
+        cc:["jbjassociate@gmail.com"],
       subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
       text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
       `File Number: ${personalDetails.file_number || 'N/A'}\n`+
