@@ -87,10 +87,10 @@ if(response.status=200){
 
       // Call the update document API (replace '/api/update-document' with actual endpoint)
       await axios.post(`${baseurl}/updatedocumentdata`, updateDocumentData);
-
+      
       // Add the uploaded document to the state
       setUploadedDocuments([...uploadedDocuments, { ...updateDocumentData, file: selectedFile }]);
-
+      await fetchDocuments();
       // Reset form fields
       setSelectedFile('');
       setSelectedDocumentType('');
@@ -104,12 +104,13 @@ if(response.status=200){
     }
   };
 
-  const deleteFile = async (fileId) => {
+  const deleteFile = async (fileId,id) => {
     try {
       const response = await axios.delete(`${baseurl}/delete`, {
         data: { documentUrl: fileId}, // If deleting from FTP
       });
-      console.log(response.data.message);
+      await axios.delete(`${baseurl}/deleteDocument/${id}`);
+      await fetchDocuments();
       alert('File deleted successfully');
     } catch (error) {
       console.error('Error deleting file:', error);
@@ -118,20 +119,33 @@ if(response.status=200){
   };
 
 
+  const fetchDocuments = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/getdocumentdata/${formData1.file_number}`);
+      setDocuments(response.data.attachments);
+    } catch (err) {
+      setError('Error fetching document data');
+    }
+  };
+
+  // useEffect(() => {
+  //   const fetchDocuments = async () => {
+  //     try {
+  //       const response = await axios.get(`${baseurl}/getdocumentdata/${formData1.file_number}`);
+  //       setDocuments(response.data.attachments);
+  //     } catch (err) {
+  //       setError('Error fetching document data');
+  //     }
+  //   };
+
+  //   fetchDocuments();
+  // }, [formData1.file_number]);
+
   useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        const response = await axios.get(`${baseurl}/getdocumentdata/${formData1.file_number}`);
-        setDocuments(response.data.attachments);
-      } catch (err) {
-        setError('Error fetching document data');
-      }
-    };
-
-    fetchDocuments();
+    if (formData1.file_number) {
+      fetchDocuments();
+    }
   }, [formData1.file_number]);
-
- 
 
   return (
     <>
@@ -260,7 +274,7 @@ if(response.status=200){
                 </a>
               </td>
               <td>
-              <Link to={ ``} onClick={(e) => { e.preventDefault(); deleteFile(doc.downloadUrl); }}>
+              <Link to={ ``} onClick={(e) => { e.preventDefault(); deleteFile(doc.downloadUrl,doc._id); }}>
                 <FontAwesomeIcon icon={faTrash}  />
               </Link>
               </td>

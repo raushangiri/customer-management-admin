@@ -403,7 +403,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye,faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 const History = () => {
   const [loanFiles, setLoanFiles] = useState([]);
@@ -518,16 +518,16 @@ const History = () => {
     document.body.removeChild(link);
   };
 
-  if (loading) {
-    return <div className="container mt-4">Loading loan files...</div>;
-  }
+  // if (loading) {
+  //   return <div className="container mt-4">Loading loan files...</div>;
+  // }
 
-  if (error) {
-    return <div className="container mt-4 alert alert-danger">{error}</div>;
-  }
+  // if (error) {
+  //   return <div className="container mt-4 alert alert-danger">{error}</div>;
+  // }
 
   return (
-    <div className="container mt-4">
+    <div className="container  mt-4">
       <h2 className="mb-4">Loan Files History</h2>
 
       {/* Filters */}
@@ -593,7 +593,17 @@ const History = () => {
           </button>
         </div>
       </div>
-
+      <div className='position-relative'>
+      {loading && (
+        <div
+          className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-light bg-opacity-75"
+          style={{ zIndex: 1050 }}
+        >
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
       {/* Loan Files Table */}
       {loanFiles.length > 0 ? (
         <table className="table table-bordered">
@@ -612,6 +622,7 @@ const History = () => {
               <th scope="col">Loan Type</th>
               <th scope="col">File Status</th>
               <th scope="col" className="text-center">View Details</th>
+              <th scope="col" className="text-center">Search Details</th>
             </tr>
           </thead>
           <tbody>
@@ -644,6 +655,11 @@ const History = () => {
                     <FontAwesomeIcon icon={faEye} />
                   </Link>
                 </td>
+                <td className="text-center">
+                    <Link to={`/Adminsearch/${loanFile.customer_mobile_number}`}>
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </Link>
+                  </td>
               </tr>
             ))}
           </tbody>
@@ -653,6 +669,7 @@ const History = () => {
           No loan files available.
         </div>
       )}
+      </div>
     </div>
   );
 };
