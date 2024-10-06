@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, {useRef , useState,useEffect } from 'react';
 import axios from 'axios';
 import { useOverview } from '../ContentHook/OverviewContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,79 +45,216 @@ const Attachments = () => {
       setSelectedFile(file);
     }
   };
-// console.log(selectedFile,"selectedFile")
-  const handleDocumentUpload = async (event) => {
-     event.preventDefault();
 
-    if (!selectedFile || !selectedDocumentType ) {
+//   const handleDocumentUpload = async (event) => {
+//      event.preventDefault();
+
+//     if (!selectedFile || !selectedDocumentType ) {
+//       alert('Please select a file to upload.');
+//       return;
+//     }
+//     else if (selectedFile && !formData1.file_number) {
+//       alert('Please search file first');
+//       return;
+//     }
+
+//     const formData = new FormData();
+//     formData.append('file', selectedFile);
+//     formData.append('documentType', selectedDocumentType === 'other' ? documentName : selectedDocumentType);
+
+//     try {
+//       setLoading(true);
+//       // Upload the file to the server (API endpoint: http://localhost:3007/api/v1/upload)
+//       const response = await axios.post(`${baseurl}/upload`, formData, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//         },
+//       });
+// if(response.status=200){
+//   alert('Document uploaded successfully');
+//   setSelectedFile('');
+// } 
+//       // Extract the file URLs from the response
+//       const { downloadUrl, readUrl } = response.data;
+
+//       // After successful upload, update the document details using another API
+//       const updateDocumentData = {
+//         file_number: formData1.file_number, // Example: using timestamp as a unique file number
+//         document_type: selectedDocumentType,
+//         document_name: selectedDocumentType === 'other' ? documentName : selectedDocumentType,
+//         downloadUrl,
+//         readUrl,
+//       };
+
+//       // Call the update document API (replace '/api/update-document' with actual endpoint)
+//       await axios.post(`${baseurl}/updatedocumentdata`, updateDocumentData);
+      
+//       // Add the uploaded document to the state
+//       setUploadedDocuments([...uploadedDocuments, { ...updateDocumentData, file: selectedFile }]);
+//       await fetchDocuments();
+//       // Reset form fields
+//       setSelectedFile('');
+//       setSelectedDocumentType('');
+//       setDocumentName('');
+//     } catch (error) {
+//       console.error('Error uploading file:', error);
+//       alert('Failed to upload the document. Please try again.');
+//     }finally {
+//       // Stop loader once form submission is done
+//       setLoading(false);
+//     }
+//   };
+
+  const handleDocumentUpload = async (event) => {
+    event.preventDefault();
+  
+    if (!selectedFile || !selectedDocumentType) {
       alert('Please select a file to upload.');
       return;
-    }
-    else if (selectedFile && !formData1.file_number) {
+    } else if (selectedFile && !formData1.file_number) {
       alert('Please search file first');
       return;
     }
-
+  
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('documentType', selectedDocumentType === 'other' ? documentName : selectedDocumentType);
-
+  
     try {
       setLoading(true);
+      
       // Upload the file to the server (API endpoint: http://localhost:3007/api/v1/upload)
       const response = await axios.post(`${baseurl}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-if(response.status=200){
-  alert('Document uploaded successfully');
-} 
+  
+      if (response.status === 200) {
+        alert('Document uploaded successfully');
+        // Clear file input field using ref
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';  // Reset the file input field
+        }
+      }
+  
       // Extract the file URLs from the response
       const { downloadUrl, readUrl } = response.data;
-
-      // After successful upload, update the document details using another API
+  
+      // Update document details using another API
       const updateDocumentData = {
-        file_number: formData1.file_number, // Example: using timestamp as a unique file number
+        file_number: formData1.file_number,
         document_type: selectedDocumentType,
         document_name: selectedDocumentType === 'other' ? documentName : selectedDocumentType,
         downloadUrl,
         readUrl,
       };
-
-      // Call the update document API (replace '/api/update-document' with actual endpoint)
+  
+      // Call the update document API
       await axios.post(`${baseurl}/updatedocumentdata`, updateDocumentData);
-      
+  
       // Add the uploaded document to the state
       setUploadedDocuments([...uploadedDocuments, { ...updateDocumentData, file: selectedFile }]);
       await fetchDocuments();
-      // Reset form fields
-      setSelectedFile('');
+  
+      // Reset other form fields
       setSelectedDocumentType('');
       setDocumentName('');
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Failed to upload the document. Please try again.');
-    }finally {
-      // Stop loader once form submission is done
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Using a ref for the file input field
+  const fileInputRef = useRef(null);
+
+
+  const deleteFile = async (fileId, id) => {
+    setLoading(true);  // Start loader
+    try {
+      // Step 1: Delete from Firebase
+      try {
+        const firebaseDeleteResponse = await axios({
+          method: 'delete',
+          url: `${baseurl}/delete`,  // Ensure this points to Firebase delete route
+          data: { documentUrl: fileId },  // Pass fileId in body correctly
+        });
+      } catch (firebaseError) {
+        // If file doesn't exist on Firebase, log and proceed
+        console.error('Error deleting file');
+      }
+  
+      // Step 2: Now, delete the document entry from the backend
+      try {
+        await axios.delete(`${baseurl}/deleteDocument/${id}`);
+      } catch (backendError) {
+        // Log backend deletion error
+        throw new Error('Failed to delete document');
+      }
+      
+      alert('File deleted successfully');
+    } catch (error) {
+      // Handle any other error
+      console.error('Error deleting file or document:', error.message);
+      alert('Failed to delete file or document. Please try again.');
+    } finally {
+      fetchDocuments();
+      // Step 4: Stop loader regardless of success or failure
       setLoading(false);
     }
   };
 
-  const deleteFile = async (fileId,id) => {
-    try {
-      const response = await axios.delete(`${baseurl}/delete`, {
-        data: { documentUrl: fileId}, // If deleting from FTP
-      });
-      await axios.delete(`${baseurl}/deleteDocument/${id}`);
-      await fetchDocuments();
-      alert('File deleted successfully');
-    } catch (error) {
-      console.error('Error deleting file:', error);
-      alert('Failed to delete file');
-    }
-  };
 
+  
+  // const deleteFile = async (fileId,id) => {
+  //   console.log(fileId,"fileId")
+  //   try {
+  //     setLoading(true);
+  //     const response = await axios.delete(`${baseurl}/delete`, {
+  //       data: { documentUrl: fileId }, // If deleting from FTP
+  //     });
+
+  //     await axios.delete(`${baseurl}/deleteDocument/${id}`);
+  //     await fetchDocuments();
+  //     setLoading(false);
+  //     alert('File deleted successfully');
+ 
+  //   } catch (error) {
+  //     console.error('Error deleting file:', error);
+  //     alert('Failed to delete file');
+  //   }
+  // };
+  // const deleteFile = async (fileId, id) => {
+  //   console.log(fileId, "fileId");
+  //   try {
+  //     setLoading(true);
+  
+  //     // Send the DELETE request with documentUrl in the body
+  //     const response = await axios({
+  //       method: 'delete',
+  //       url: `${baseurl}/delete`,
+  //       data: { documentUrl: fileId }, // Pass data here correctly
+  //     });
+  
+  //     // Delete the document entry by id
+  //     await axios.delete(`${baseurl}/deleteDocument/${id}`);
+  
+  //     // Fetch the updated documents list
+  //     await fetchDocuments();
+  
+  //     alert('File deleted successfully');
+  //   } catch (error) {
+  //     console.error('Error deleting file:', error);
+  //     alert('Failed to delete file');
+  //     setLoading(false);
+  //   } finally {
+  //     // Ensure that setLoading is always called, even on error
+  //     setLoading(false);
+  //   }
+  // };
 
   const fetchDocuments = async () => {
     try {
@@ -213,7 +350,7 @@ if(response.status=200){
               <label htmlFor="documentFile" className="form-label fw-bold">
                 Upload Document
               </label>
-              <input type="file" className="form-control" id="documentFile" onChange={handleFileChange} />
+              <input type="file" className="form-control" ref={fileInputRef} id="documentFile" onChange={handleFileChange} />
             </div>
           </div>
 

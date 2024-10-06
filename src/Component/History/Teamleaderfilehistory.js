@@ -257,22 +257,20 @@ const Teamleaderfilehistory = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [salesAgent, setSalesAgent] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-
   const baseurl = process.env.REACT_APP_API_BASE_URL;
   const userId = localStorage.getItem('userId');
-
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   // Set default start and end dates (yesterday and today)
   useEffect(() => {
     const today = new Date();
     const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
+    yesterday.setDate(today.getDate() - 2);
+  
     setStartDate(yesterday.toISOString().split('T')[0]); // Format as yyyy-mm-dd
     setEndDate(today.toISOString().split('T')[0]);
   }, []);
-
+  
   // Function to fetch loan files based on filters
   const fetchLoanFiles = async () => {
     setLoading(true);
@@ -282,7 +280,7 @@ const Teamleaderfilehistory = () => {
         endDate,
         salesAgentName: salesAgent,
       };
-
+  
       const response = await axios.get(`${baseurl}/getSalesTeamLoanFiles/${userId}`, { params });
       if (response.data && response.data.status === 200 && response.data.data) {
         setLoanFiles(response.data.data); // Update state with the `data` array from the response
@@ -296,11 +294,13 @@ const Teamleaderfilehistory = () => {
       setLoading(false); // Stop loading after the request is complete
     }
   };
-
-  // Call fetchLoanFiles on component mount (default fetch for last day)
+  
+  // Call fetchLoanFiles only after startDate and endDate are set
   useEffect(() => {
-    fetchLoanFiles();
-  }, [userId, baseurl]);
+    if (startDate && endDate) {
+      fetchLoanFiles();
+    }
+  }, [userId, baseurl, startDate, endDate]);
 
   // Handle sales agent filter change
   const handleSalesAgentChange = (event) => {
@@ -322,9 +322,9 @@ const Teamleaderfilehistory = () => {
     fetchLoanFiles();
   };
 
-  if (loading) {
-    return <div className="container mt-4">Loading loan files...</div>;
-  }
+  // if (loading) {
+  //   return <div className="container mt-4">Loading loan files...</div>;
+  // }
 
   if (error) {
     return <div className="container mt-4 alert alert-danger">{error}</div>;
@@ -371,7 +371,18 @@ const Teamleaderfilehistory = () => {
           </button>
         </div>
       </div>
-
+      <div className='position-relative'>
+      {loading && (
+        <div
+          className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-light bg-opacity-75"
+          style={{ zIndex: 1050 }}
+        >
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
+      </div>
       {filteredLoanFiles.length > 0 ? (
         <table className="table table-bordered">
           <thead>

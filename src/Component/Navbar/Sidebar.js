@@ -8,6 +8,10 @@ import axios from 'axios';
 
 const Sidebar = () => {
   const [showSubMenu, setShowSubMenu] = useState(false);
+  const [showSubMenuhistory, setShowSubMenuhistory] = useState(false);
+  const [showSubMenuperformance, setShowSubMenuperformance] = useState(false);
+
+  
   const [userdata, setUserdata]=useState({});
   const userRole = localStorage.getItem('userRole'); 
   const userId = localStorage.getItem('userId'); 
@@ -46,8 +50,16 @@ const Sidebar = () => {
   const toggleSubMenu = () => {
     setShowSubMenu(!showSubMenu);
   };
+
+  const toggleSubMenufilehistory = () => {
+    setShowSubMenuhistory(!showSubMenuhistory);
+  };
+  const toggleSubMenufileperformance = () => {
+    setShowSubMenuperformance(!showSubMenuperformance);
+  };
+  
   return (
-    <div className="sidebar border border-primary">
+    <div className="sidebar border border-primary overflow-auto">
       <img src={logo} alt='logo' style={{ width: '90%' }} className='img1' />
       <ul>
       <p>
@@ -62,8 +74,40 @@ const Sidebar = () => {
             <li>
               <NavLink to="/Adminsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
-            <li><NavLink to="/team-filehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li>
-            <li><NavLink to="/Adminfilehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Team Performance</NavLink></li>
+            <li>
+            <div onClick={toggleSubMenufilehistory} className="submenu-title">
+            File History
+                <FontAwesomeIcon icon={faCircleChevronDown} />
+              </div>
+              {showSubMenuhistory && (
+                <ul className="submenu">
+                  <li><NavLink to="/adminsaleshistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Sales File History</NavLink></li>
+                  <li><NavLink to="/admintvrhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>TVR File History</NavLink></li>
+                  <li><NavLink to="/admincdrhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>CDR File History</NavLink></li>
+                  <li><NavLink to="/adminbankloginhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Bank Login File History</NavLink></li>
+                  <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Approval File History</NavLink></li>
+
+                </ul>
+              )}
+              {/* <NavLink to="/team-filehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li> */}
+            </li>
+            <li>
+              {/* <NavLink to="/Adminfilehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Team Performance</NavLink> */}
+              <div onClick={toggleSubMenufileperformance} className="submenu-title">
+              Team Performance
+                <FontAwesomeIcon icon={faCircleChevronDown} />
+              </div>
+              {showSubMenuperformance && (
+                <ul className="submenu">
+                  <li><NavLink to="/Adminfilehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Sales Team Performance</NavLink></li>
+                  <li><NavLink to="/tvrteamperformance" className={({ isActive }) => isActive ? 'active-link' : ''}>TVR Team Performance</NavLink></li>
+                  <li><NavLink to="/cdrteamperformance" className={({ isActive }) => isActive ? 'active-link' : ''}>CDR Team Performance</NavLink></li>
+                  <li><NavLink to="/bankloginteamperformance" className={({ isActive }) => isActive ? 'active-link' : ''}>Bank Login Team Performance</NavLink></li>
+                  {/* <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Approval Team Performance</NavLink></li> */}
+
+                </ul>
+              )}
+              </li>
             <li>
               <div onClick={toggleSubMenu} className="submenu-title">
                 Manage User

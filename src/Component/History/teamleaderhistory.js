@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-const teamleaderhistory = () => {
+const Teamleaderhistory = () => {
     const [loanFiles, setLoanFiles] = useState([]);
     const [filteredLoanFiles, setFilteredLoanFiles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,7 +19,7 @@ const teamleaderhistory = () => {
     useEffect(() => {
       const fetchLoanFiles = async () => {
         try {
-          const response = await axios.get(`${baseurl}/getSalesTeamLoanFiles/${userId}`);
+          const response = await axios.get(`${baseurl}/getLoanFilesByUserId/${userId}`);
           if (response.data && response.data.status === 200 && response.data.data) {
             setLoanFiles(response.data.data); // Update state with the `data` array from the response
             setFilteredLoanFiles(response.data.data); // Initialize filtered loan files
@@ -145,4 +149,4 @@ const teamleaderhistory = () => {
     );
   };
 
-export default teamleaderhistory
+export default Teamleaderhistory

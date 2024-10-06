@@ -444,7 +444,7 @@ const Adminfilehistory = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Team Performance Details</h2>
+      <h2>Sales Team Performance</h2>
 
       {/* Filter Options */}
       <div className="row mb-3">

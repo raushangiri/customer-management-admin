@@ -21,7 +21,7 @@ background: linear-gradient(135deg, #8CDFE9, #1A191A);
 }
 
 .sidebar {
-  width: 200px;
+  width: 250px;
   background-color: #2c3e50;
   padding: 20px;
   color: white;
@@ -59,7 +59,7 @@ background: linear-gradient(135deg, #8CDFE9, #1A191A);
 }
 
 .content-with-sidebar {
-  margin-left: 200px; 
+  margin-left: 250px; 
   padding: 20px;
   background-color: #ecf0f1;
   flex: 1;
