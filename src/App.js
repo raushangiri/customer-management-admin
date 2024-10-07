@@ -35,7 +35,7 @@ import Adminsearch from './Component/Components/Adminsearch';
 import Teamleader_dashboard from './Component/Dashboard/Teamleader_dashboard';
 import Adminfilehistory from './Component/History/adminfilehistory';
 import Teamperformance from './Component/Team_Leader/Teamperformance';
-import Teamleaderhistory from './Component/History/Teamleaderhistory';
+import Teamleaderhistory from './Component/History/teamleaderhistory';
 import Adminsaleshistory from './Component/History/Adminsaleshistory';
 import Admintvrhistory from './Component/History/Admintvrhistory';
 import Admincdrhistory from './Component/History/Admincdrhistory';
