@@ -43,6 +43,7 @@ import Adminbankloginhistory from './Component/History/Adminbankloginhistory';
 import Tvrteamperformance from './Component/History/Tvrteamperformance';
 import Cdrteamperformance from './Component/History/Cdrteamperformance';
 import Bankloginteamperformance from './Component/History/Bankloginteamperformance';
+import TeamleaderHistory from './Component/History/Teamleaderhistory';
 
 function App() {
   return (
@@ -105,7 +106,7 @@ function Main() {
         <Route path="/Adminsearch" element={<Adminsearch />} />
         <Route path="/Adminfilehistory" element={<Adminfilehistory />} />
         <Route path="/Adminsearch/:customer_mobilenumber" element={<Adminsearch />} />
-        <Route path="/teamleaderfilehistory" element={<Teamleaderhistory />} />
+        <Route path="/teamleaderfilehistory" element={<TeamleaderHistory />} />
         <Route path="/team-performance" element={<Teamperformance/>} />
         <Route path="/adminsaleshistory" element={<Adminsaleshistory/>} />
         <Route path="/admintvrhistory" element={<Admintvrhistory/>} />
