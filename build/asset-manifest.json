@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.615d78bb.css",
-    "main.js": "/static/js/main.ad01dd5f.js",
+    "main.css": "/static/css/main.1b195b97.css",
+    "main.js": "/static/js/main.c263aad6.js",
     "static/js/453.52df1bd5.chunk.js": "/static/js/453.52df1bd5.chunk.js",
     "static/media/jbj-fintech-logo.webp": "/static/media/jbj-fintech-logo.a4f1e28f9ddbf396cf48.webp",
     "index.html": "/index.html",
-    "main.615d78bb.css.map": "/static/css/main.615d78bb.css.map",
-    "main.ad01dd5f.js.map": "/static/js/main.ad01dd5f.js.map",
+    "main.1b195b97.css.map": "/static/css/main.1b195b97.css.map",
+    "main.c263aad6.js.map": "/static/js/main.c263aad6.js.map",
     "453.52df1bd5.chunk.js.map": "/static/js/453.52df1bd5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.615d78bb.css",
-    "static/js/main.ad01dd5f.js"
+    "static/css/main.1b195b97.css",
+    "static/js/main.c263aad6.js"
   ]
 }
