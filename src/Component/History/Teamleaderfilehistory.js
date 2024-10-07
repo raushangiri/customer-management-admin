@@ -326,9 +326,9 @@ const Teamleaderfilehistory = () => {
   //   return <div className="container mt-4">Loading loan files...</div>;
   // }
 
-  if (error) {
-    return <div className="container mt-4 alert alert-danger">{error}</div>;
-  }
+  // if (error) {
+  //   return <div className="container mt-4 alert alert-danger">{error}</div>;
+  // }
 
   return (
     <div className="container mt-4">
