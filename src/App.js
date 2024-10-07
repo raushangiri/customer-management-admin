@@ -35,7 +35,7 @@ import Adminsearch from './Component/Components/Adminsearch';
 import Teamleader_dashboard from './Component/Dashboard/Teamleader_dashboard';
 import Adminfilehistory from './Component/History/adminfilehistory';
 import Teamperformance from './Component/Team_Leader/Teamperformance';
-import Teamleaderhistory from './Component/History/Teamleaderhistory';
+// import Teamleaderhistory from './Component/History/Teamleaderhistory';
 import Adminsaleshistory from './Component/History/Adminsaleshistory';
 import Admintvrhistory from './Component/History/Admintvrhistory';
 import Admincdrhistory from './Component/History/Admincdrhistory';
@@ -43,7 +43,7 @@ import Adminbankloginhistory from './Component/History/Adminbankloginhistory';
 import Tvrteamperformance from './Component/History/Tvrteamperformance';
 import Cdrteamperformance from './Component/History/Cdrteamperformance';
 import Bankloginteamperformance from './Component/History/Bankloginteamperformance';
-import TeamleaderHistory from './Component/History/Teamleaderhistory';
+// import TeamleaderHistory from './Component/History/Teamleaderhistory';
 
 function App() {
   return (
@@ -106,7 +106,7 @@ function Main() {
         <Route path="/Adminsearch" element={<Adminsearch />} />
         <Route path="/Adminfilehistory" element={<Adminfilehistory />} />
         <Route path="/Adminsearch/:customer_mobilenumber" element={<Adminsearch />} />
-        <Route path="/teamleaderfilehistory" element={<TeamleaderHistory />} />
+        {/* <Route path="/teamleaderfilehistory" element={<TeamleaderHistory />} /> */}
         <Route path="/team-performance" element={<Teamperformance/>} />
         <Route path="/adminsaleshistory" element={<Adminsaleshistory/>} />
         <Route path="/admintvrhistory" element={<Admintvrhistory/>} />
