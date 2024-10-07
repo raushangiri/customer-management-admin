@@ -4,7 +4,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-const TeamleaderHistory = () => {
+const Teamleaderhistory = () => {
     const [loanFiles, setLoanFiles] = useState([]);
     const [filteredLoanFiles, setFilteredLoanFiles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -149,4 +149,4 @@ const TeamleaderHistory = () => {
     );
   };
 
-export default TeamleaderHistory
+export default Teamleaderhistory
