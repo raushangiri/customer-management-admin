@@ -272,6 +272,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // For making HTTP requests
 import { useOverview } from '../ContentHook/OverviewContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const UploadbankStatement = () => {
   const months = [
@@ -280,7 +283,7 @@ const UploadbankStatement = () => {
   ];
   const { formData } = useOverview();
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   const file_number = formData.file_number;
   const baseurl = process.env.REACT_APP_API_BASE_URL;
 
@@ -529,6 +532,13 @@ const UploadbankStatement = () => {
              <td>{statement.totalABB}</td>
              <td>{statement.oneYearABB}</td>
              <td>{statement.sixMonthABB}</td>
+             <td>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => navigate(`/viewbankstatement/${statement._id}`)}               >
+                    <FontAwesomeIcon icon={faEye} /> View Details
+                  </button>
+                </td>
            </tr>
          ))}
        </tbody>

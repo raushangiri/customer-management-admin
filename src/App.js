@@ -43,6 +43,7 @@ import Adminbankloginhistory from './Component/History/Adminbankloginhistory';
 import Tvrteamperformance from './Component/History/Tvrteamperformance';
 import Cdrteamperformance from './Component/History/Cdrteamperformance';
 import Bankloginteamperformance from './Component/History/Bankloginteamperformance';
+import Viewuploadedbankstatement from './Component/Components/Viewuploadedbankstatement';
 // import TeamleaderHistory from './Component/History/Teamleaderhistory';
 
 function App() {
@@ -115,6 +116,7 @@ function Main() {
         <Route path="/tvrteamperformance" element={<Tvrteamperformance/>} />
         <Route path="/cdrteamperformance" element={<Cdrteamperformance/>} />
         <Route path="/bankloginteamperformance" element={<Bankloginteamperformance/>} />
+        <Route path="/viewbankstatement/:_id" element={<Viewuploadedbankstatement/>} />
 
 
         
