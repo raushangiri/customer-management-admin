@@ -476,6 +476,14 @@ const PersonalDetails = () => {
                                 onChange={(e) => setFormData({ ...formData, other_income: e.target.value })}
                                 className="form-control" id="other_income" placeholder="Enter other income" />
                         </div>
+                        <div className="col-md-6">
+                            <label htmlFor="note" className="form-label fw-bold">Note</label>
+                            <input type="textarea"
+                                name='note'
+                                value={formData.note}
+                                onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                                className="form-control" id="note" placeholder="Enter Note" />
+                        </div>
                     </div>
 
 

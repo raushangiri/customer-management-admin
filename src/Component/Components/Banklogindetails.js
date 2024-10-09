@@ -13,8 +13,21 @@ const Banklogindetails = () => {
   const [personalDetails, setPersonalDetails] = useState(null);
   const [documents, setDocuments] = useState([]);
   const [error, setError] = useState(null);
-  const [bankDetails, setBankDetails] = useState([]);
+  // const [bankDetails, setBankDetails] = useState([]);
   const [selectedBankDetails, setSelectedBankDetails] = useState([]);
+
+  const [bankDetails, setBankDetails] = useState([
+    {
+      _id: 1,
+      bank_name: '',
+      rm1_name: '',
+      rm1_contact_number: '',
+      emails: [''],
+      ccEmails: [''],
+      remarks: '',
+      document_status: ''
+    }
+  ]);
 
   const toggleSection = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
@@ -42,23 +55,86 @@ const Banklogindetails = () => {
   }, [formData.file_number]);
 
   // Fetch bank login details
+  // useEffect(() => {
+  //   const fetchBankDetails = async () => {
+  //     try {
+  //       const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
+  //       setBankDetail(response.data);
+  //       setEmail2(response.data.email2 || '');
+  //       setRemarks(response.data.remarks || '');
+  //     } catch (error) {
+  //       console.error('Error fetching bank details:', error);
+  //     }
+  //   };
+  //   if (formData.file_number) {
+  //     fetchBankDetails();
+  //   }
+  // }, [formData.file_number]);
+
+
   useEffect(() => {
     const fetchBankDetails = async () => {
       try {
         const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
-        setBankDetail(response.data);
-        setEmail2(response.data.email2 || '');
-        setRemarks(response.data.remarks || '');
+        const bankDataArray = response.data;
+
+        if (bankDataArray && bankDataArray.length > 0) {
+          const bankData = bankDataArray[0];
+
+          // Set the state with fetched data
+          setBankDetail({
+            bank_name: bankData.bank_name || '',
+            rm1_name: bankData.rm1_name || '',
+            rm1_contact_number: bankData.rm1_contact_number || '',
+            emails: bankData.email_1 ? [bankData.email_1] : [], // Ensure it's always an array
+            ccEmails: bankData.email_2 ? [bankData.email_2] : [], // Ensure it's always an array
+            remarks: bankData.remarks || '',
+            document_status: bankData.document_status || '',
+          });
+        }
       } catch (error) {
         console.error('Error fetching bank details:', error);
       }
     };
+
     if (formData.file_number) {
       fetchBankDetails();
     }
-  }, [formData.file_number]);
+  }, [formData.file_number, baseurl]);
 
-  // Fetch document data
+
+  // Handle changes in inputs
+  const handleInputChange = (field, value) => {
+    setBankDetail((prevDetail) => ({ ...prevDetail, [field]: value }));
+  };
+
+  const handleEmailChange = (emailType, emailIndex, value) => {
+    setBankDetail((prevDetail) => {
+      const updatedEmails = [...prevDetail[emailType]];
+      updatedEmails[emailIndex] = value;
+      return { ...prevDetail, [emailType]: updatedEmails };
+    });
+  };
+
+  const handleAddEmail = (emailType) => {
+    setBankDetail((prevDetail) => ({
+      ...prevDetail,
+      [emailType]: [...prevDetail[emailType], ''],
+    }));
+  };
+
+  const handleRemoveEmail = (emailType, emailIndex) => {
+    setBankDetail((prevDetail) => {
+      const updatedEmails = [...prevDetail[emailType]];
+      updatedEmails.splice(emailIndex, 1);
+      return { ...prevDetail, [emailType]: updatedEmails };
+    });
+  };
+
+
+
+
+
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
@@ -71,8 +147,6 @@ const Banklogindetails = () => {
     fetchDocuments();
   }, [formData.file_number]);
 
-  console.log(documents)
-  // Fetch RM details (Bank Login details)
   useEffect(() => {
     const fetchRMDetails = async () => {
       try {
@@ -87,7 +161,6 @@ const Banklogindetails = () => {
     }
   }, [formData.file_number]);
 
-  // Handle selection change for RM details
   const handleSelectChange = (index) => {
     const updatedSelection = [...selectedBankDetails];
     if (updatedSelection.includes(index)) {
@@ -98,7 +171,6 @@ const Banklogindetails = () => {
     setSelectedBankDetails(updatedSelection);
   };
 
-  // Handle save operation
   const handleSave = async () => {
     try {
       const updatedDetails = {
@@ -120,15 +192,8 @@ const Banklogindetails = () => {
     // Now, you can either populate the form with this data to allow editing
   };
 
-
-
-
   const [selectedDocuments, setSelectedDocuments] = useState([]);
 
-  // Toggle accordion section
- 
-
-  // Handle individual checkbox selection
   const handleDocumentSelection = (docId) => {
     setSelectedDocuments((prevSelected) => {
       if (prevSelected.includes(docId)) {
@@ -139,68 +204,66 @@ const Banklogindetails = () => {
     });
   };
 
-  // Handle select all/deselect all
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      // Select all document IDs
+
       const allDocumentIds = documents.map((doc) => doc._id);
       setSelectedDocuments(allDocumentIds);
     } else {
       setSelectedDocuments([]);
     }
   };
-  const [loading, setLoading] = useState(false);    // State to track loading
-
+  const [loading, setLoading] = useState(false);
 
   const sendEmail = async () => {
-    if (!personalDetails ) {
+    if (!personalDetails) {
       alert('Personal details or recipient email not available.');
       return;
     }
     const documentUrls = documents.map((doc) => doc.downloadUrl);
     const documentNames = documents.map((doc) => doc.document_name);
-
+let ccemail=bankDetail.ccEmails;
     const emailData = {
-      email: ["rohitkumargiri11@gmail.com",
-        "raushangiri.raj@gmail.com"], 
-        cc:["jbjassociate@gmail.com"],
+      email: bankDetail.emails,
+      cc: [...ccemail,"jbjassociate@gmail.com"],
       subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
       text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
-      `File Number: ${personalDetails.file_number || 'N/A'}\n`+
-      `Name: ${personalDetails.customerName || 'N/A'}\n`+
-      `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n`+
-      `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n`+
-      `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n`+
-      `Father's Name: ${personalDetails.father_name || 'N/A'}\n`+
-      `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n`+
-      `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n`+
-      `Marital Status: ${personalDetails.marital_status || 'N/A'}\n`+
-      `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n`+
-      `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n`+
-      `Service Type: ${personalDetails.service_type || 'N/A'}\n`+
-      `Other Income: ${personalDetails.other_income || 'N/A'}\n`+
-      `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n`+
-      `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n`+
-      `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n`+
-      `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n`+
-      `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n`+
-      `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n`+
-      `Loan Category: ${personalDetails.loan_category || 'N/A'}\n`+
-      `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n`+
-      `Required Amount: ${personalDetails.required_amount || 'N/A'}\n`+
-      `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n`+
-      `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n`+
-      `Current Address: ${personalDetails.current_address || 'N/A'}\n`+
-      `Office Name: ${personalDetails.office_name || 'N/A'}\n`+
-      `Office Address: ${personalDetails.office_address || 'N/A'}\n`+
-      `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n`+
-      `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n`+
-      `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n`+
-      `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n`+
-      `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n`+
-      `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n`,
-        documentUrls: documentUrls,
-        documentNames:documentNames
+        `File Number: ${personalDetails.file_number || 'N/A'}\n` +
+        `Name: ${personalDetails.customerName || 'N/A'}\n` +
+        `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
+        `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
+        `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
+        `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
+        `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
+        `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
+        `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
+        `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
+        `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
+        `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
+        `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
+        `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
+        `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
+        `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
+        `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+        `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+        `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
+        `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
+        `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
+        `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
+        `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
+        `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
+        `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
+        `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
+        `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
+        `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
+        `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
+        `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
+        `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
+        `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+        `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n`+
+        `Note: ${personalDetails.note || 'N/A'}\n`,
+      documentUrls: documentUrls,
+      documentNames: documentNames
     };
 
     try {
@@ -212,10 +275,15 @@ const Banklogindetails = () => {
       alert('Failed to send email.');
     }
     finally {
-      // Stop loader once form submission is done
       setLoading(false);
     }
   };
+
+  
+
+  console.log(bankDetail.emails, "emails")
+  console.log(bankDetail.ccEmails, "ccEmails")
+
   return (
     <div className="position-relative container mt-4">
       {/* Personal Details Section */}
@@ -239,7 +307,7 @@ const Banklogindetails = () => {
         </div>
         <div className={`collapse ${activeIndex === 0 ? 'show' : ''}`}>
           <div className="card-body">
-                       {personalDetails ? (
+            {personalDetails ? (
               <div>
                 <p><strong>File Number:</strong> {personalDetails.file_number}</p>
                 <p><strong>Name:</strong> {personalDetails.customerName || 'N/A'}</p>
@@ -285,69 +353,69 @@ const Banklogindetails = () => {
 
       {/* Document Section */}
       <div className="card mt-2">
-      <div className="card-header">
-        <h5 className="mb-0">
-          <button className="btn btn-link" onClick={() => toggleSection(1)}>
-            Document
-          </button>
-        </h5>
-      </div>
-      <div className={`collapse ${activeIndex === 1 ? 'show' : ''}`}>
-        <div className="card-body">
-          {documents.length > 0 ? (
-            <>
-              {/* Select All Checkbox */}
-              <div className="mb-2">
-                <input
-                  type="checkbox"
-                  id="selectAll"
-                  checked={selectedDocuments.length === documents.length}
-                  onChange={handleSelectAll}
-                />
-                <label htmlFor="selectAll" className="ml-2">
-                  Select All
-                </label>
-              </div>
+        <div className="card-header">
+          <h5 className="mb-0">
+            <button className="btn btn-link" onClick={() => toggleSection(1)}>
+              Document
+            </button>
+          </h5>
+        </div>
+        <div className={`collapse ${activeIndex === 1 ? 'show' : ''}`}>
+          <div className="card-body">
+            {documents.length > 0 ? (
+              <>
+                {/* Select All Checkbox */}
+                <div className="mb-2">
+                  <input
+                    type="checkbox"
+                    id="selectAll"
+                    checked={selectedDocuments.length === documents.length}
+                    onChange={handleSelectAll}
+                  />
+                  <label htmlFor="selectAll" className="ml-2">
+                    Select All
+                  </label>
+                </div>
 
-              <ul className="list-group">
-                {documents.map((doc) => (
-                  <li
-                    key={doc._id}
-                    className="list-group-item d-flex justify-content-between align-items-center"
-                  >
-                    <div>
-                      {/* Individual Document Checkbox */}
-                      <input
-                        type="checkbox"
-                        id={`doc-${doc._id}`}
-                        checked={selectedDocuments.includes(doc._id)}
-                        onChange={() => handleDocumentSelection(doc._id)}
-                      />
-                      <label htmlFor={`doc-${doc._id}`} className="ml-2">
-                        {doc.document_name}
-                      </label>
-                    </div>
-                    <a
-                      href={doc.readUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm btn-primary mr-2"
+                <ul className="list-group">
+                  {documents.map((doc) => (
+                    <li
+                      key={doc._id}
+                      className="list-group-item d-flex justify-content-between align-items-center"
                     >
-                      View
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <p>No documents found.</p>
-          )}
+                      <div>
+                        {/* Individual Document Checkbox */}
+                        <input
+                          type="checkbox"
+                          id={`doc-${doc._id}`}
+                          checked={selectedDocuments.includes(doc._id)}
+                          onChange={() => handleDocumentSelection(doc._id)}
+                        />
+                        <label htmlFor={`doc-${doc._id}`} className="ml-2">
+                          {doc.document_name}
+                        </label>
+                      </div>
+                      <a
+                        href={doc.readUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-sm btn-primary mr-2"
+                      >
+                        View
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p>No documents found.</p>
+            )}
+          </div>
         </div>
       </div>
-    </div>
 
       {/* RM Details Section */}
-      <div className="card mt-2">
+      {/* <div className="card mt-2">
         <div className="card-header">
           <h5 className="mb-0">
             <button className="btn btn-link" onClick={() => toggleSection(2)}>
@@ -399,16 +467,182 @@ const Banklogindetails = () => {
             </table>
           </div>
         </div>
+      </div> */}
+      <div className="collapse show">
+        <div className="table-responsive">
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>Select</th>
+                <th>Bank Name</th>
+                <th>RM Name</th>
+                <th>RM Contact No</th>
+                <th>Email (To)</th>
+                <th>Email (CC)</th>
+                <th>Remarks</th>
+                <th>Document Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    type="checkbox"
+                    // className="form-control"
+                    checked={selectedBankDetails.includes(0)}
+                    onChange={() => setSelectedBankDetails([0])}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={bankDetail.bank_name}
+                    onChange={(e) => handleInputChange('bank_name', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={bankDetail.rm1_name}
+                    onChange={(e) => handleInputChange('rm1_name', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={bankDetail.rm1_contact_number}
+                    onChange={(e) => handleInputChange('rm1_contact_number', e.target.value)}
+                  />
+                </td>
+
+                {/* Emails - To (email_1) */}
+                <td>
+                  {Array.isArray(bankDetail.emails) && bankDetail.emails.map((email, emailIndex) => (
+                    <div key={emailIndex} className="input-group mb-2">
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => handleEmailChange('emails', emailIndex, e.target.value)}
+                        className="form-control"
+                        placeholder="Enter recipient email"
+                        required
+                      />
+                      {bankDetail.emails.length > 1 && (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => handleRemoveEmail('emails', emailIndex)}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => handleAddEmail('emails')}
+                  >
+                    Add
+                  </button>
+                </td>
+
+                {/* Emails - CC (email_2) */}
+
+                <td>
+  {Array.isArray(bankDetail.ccEmails) && bankDetail.ccEmails.map((ccEmail, emailIndex) => (
+    <div key={emailIndex} className="input-group mb-2">
+      <input
+        type="email"
+        value={ccEmail}
+        onChange={(e) => handleEmailChange('ccEmails', emailIndex, e.target.value)}
+        className="form-control"
+        placeholder="Enter CC email"
+      />
+      {bankDetail.ccEmails.length > 1 && (
+        <button
+          type="button"
+          className="btn btn-danger"
+          onClick={() => handleRemoveEmail('ccEmails', emailIndex)}
+        >
+          Remove
+        </button>
+      )}
+    </div>
+  ))}
+  <button
+    type="button"
+    className="btn btn-secondary"
+    onClick={() => handleAddEmail('ccEmails')}
+  >
+    Add
+  </button>
+</td>
+
+                {/* <td>
+                  {bankDetail.ccEmails.map((ccEmail, emailIndex) => (
+                    <div key={emailIndex} className="input-group mb-2">
+                      <input
+                        type="email"
+                        value={ccEmail}
+                        onChange={(e) =>
+                          handleEmailChange('ccEmails', emailIndex, e.target.value)
+                        }
+                        className="form-control"
+                        placeholder="Enter CC email"
+                      />
+                      {bankDetail.ccEmails.length > 1 && (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => handleRemoveEmail('ccEmails', emailIndex)}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => handleAddEmail('ccEmails')}
+                  >
+                    Add
+                  </button>
+                </td> */}
+
+                <td>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={bankDetail.remarks}
+                    onChange={(e) => handleInputChange('remarks', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={bankDetail.document_status}
+                    onChange={(e) => handleInputChange('document_status', e.target.value)}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      
       <div className='text-center'>
-      <button className="btn btn-secondary mt-3 me-2" onClick={handleBack}>
-        Back
-      </button>
-      <button className="btn btn-primary mt-3" onClick={sendEmail}>
-        Share with RM
-      </button>
+        <button className="btn btn-secondary mt-3 me-2" onClick={handleBack}>
+          Back
+        </button>
+        <button className="btn btn-primary mt-3" onClick={sendEmail}>
+          Share with RM
+        </button>
       </div>
     </div>
   );

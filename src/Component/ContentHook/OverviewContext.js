@@ -61,7 +61,7 @@ reference_occupation_type: '',
 reference_nature_of_business: '',
 company_name: '',
 reference_address: '',
-
+note:''
   });
 
   // Function to reset formData
@@ -110,6 +110,7 @@ reference_address: '',
       gst_and_itr_income: '',
       inhand_salary: '',
       other_income: '',
+      note:'',
       reference_name: '',
 reference_mobile_number: '',
 reference_occupation_type: '',
@@ -194,6 +195,7 @@ reference_address: '',
         gst_and_itr_income: data.gst_and_itr_income || '',
         inhand_salary: data.inhand_salary || '',
         other_income: data.other_income || '',
+        note:data.note||''
       }));
     } catch (error) {
       console.error('Error fetching personal data:', error);
