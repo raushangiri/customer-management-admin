@@ -207,7 +207,15 @@ const PersonalDetails = () => {
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="occupation_type" className="form-label fw-bold">Occupation Type</label>
-                            <select className="form-select" id="occupation_type"
+                            <input
+    type="text"
+    className="form-control"
+    id="occupation_type"
+    value={formData.occupation_type}
+    onChange={(e) => setFormData({ ...formData, occupation_type: e.target.value })}
+    placeholder="Enter Occupation Type"
+  />
+                            {/* <select className="form-select" id="occupation_type"
                                 value={formData.occupation_type}
                                 onChange={(e) => setFormData({ ...formData, occupation_type: e.target.value })}
                             >
@@ -223,11 +231,19 @@ const PersonalDetails = () => {
                                 <option value="Agriculture/Farmer">Agriculture/Farmer</option>
                                 <option value="Consultant">Consultant</option>
                                 <option value="Other">Other</option>
-                            </select>
+                            </select> */}
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="nature_of_business" className="form-label fw-bold">Nature of Business</label>
-                            <select className="form-select" id="nature_of_business"
+                            <input
+    type="text"
+    className="form-control"
+    id="nature_of_business"
+    value={formData.nature_of_business}
+    onChange={(e) => setFormData({ ...formData, nature_of_business: e.target.value })}
+    placeholder="Enter Nature of Business"
+  />
+                            {/* <select className="form-select" id="nature_of_business"
                                 value={formData.nature_of_business}
                                 onChange={(e) => setFormData({ ...formData, nature_of_business: e.target.value })}
                             >
@@ -247,16 +263,16 @@ const PersonalDetails = () => {
                                 <option value="Import/Export">Import/Export</option>
                                 <option value="Media and Entertainment">Media and Entertainment</option>
                                 <option value="Other">Other</option>
-                            </select>
+                            </select> */}
                         </div>
-                        <div className="col-md-6">
+                        {/* <div className="col-md-6">
                             <label htmlFor="service_type" className="form-label fw-bold">Service Type</label>
                             <select className="form-select" id="service_type"
                                 value={formData.service_type}
                                 onChange={(e) => setFormData({ ...formData, service_type: e.target.value })}
                             >
                                 <option value="">Select type</option>
-                                <option value="it_services">IT Services</option>
+                                <option value="it_services">9540384205</option>
                                 <option value="financial_services">Financial Services</option>
                                 <option value="legal_services">Legal Services</option>
                                 <option value="healthcare_services">Healthcare Services</option>
@@ -270,7 +286,19 @@ const PersonalDetails = () => {
                                 <option value="marketing_advertising_services">Marketing and Advertising Services</option>
                                 <option value="other">Other</option>
                             </select>
-                        </div>
+                        </div> */}
+
+<div className="col-md-6">
+  <label htmlFor="service_type" className="form-label fw-bold">Service Type</label>
+  <input
+    type="text"
+    className="form-control"
+    id="service_type"
+    value={formData.service_type}
+    onChange={(e) => setFormData({ ...formData, service_type: e.target.value })}
+    placeholder="Enter Service Type"
+  />
+</div>
                         <div className="col-md-6">
                             <label htmlFor="type_of_resident" className="form-label fw-bold">Type of Resident</label>
                             <select className="form-select" id="type_of_resident"

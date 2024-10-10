@@ -46,8 +46,8 @@ const Tvr_files = ({ onViewClick }) => {
             loanFiles.map((file, index) => (
               <tr key={file._id}>
                 <td>{index + 1}</td>
-                <td>{new Date(file.createdAt).toLocaleDateString()}<br />
-                {new Date(file.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                <td>{new Date(file.sales_assign_date).toLocaleDateString()}<br />
+                {new Date(file.sales_assign_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                 </td>
                 <td>{file.sales_agent_name}</td>
                 <td>{file.customer_name}</td>
