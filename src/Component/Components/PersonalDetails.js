@@ -207,15 +207,15 @@ const PersonalDetails = () => {
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="occupation_type" className="form-label fw-bold">Occupation Type</label>
-                            <input
+                            {/* <input
     type="text"
     className="form-control"
     id="occupation_type"
     value={formData.occupation_type}
     onChange={(e) => setFormData({ ...formData, occupation_type: e.target.value })}
     placeholder="Enter Occupation Type"
-  />
-                            {/* <select className="form-select" id="occupation_type"
+  /> */}
+                            <select className="form-select" id="occupation_type"
                                 value={formData.occupation_type}
                                 onChange={(e) => setFormData({ ...formData, occupation_type: e.target.value })}
                             >
@@ -231,7 +231,7 @@ const PersonalDetails = () => {
                                 <option value="Agriculture/Farmer">Agriculture/Farmer</option>
                                 <option value="Consultant">Consultant</option>
                                 <option value="Other">Other</option>
-                            </select> */}
+                            </select>
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="nature_of_business" className="form-label fw-bold">Nature of Business</label>
