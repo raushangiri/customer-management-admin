@@ -17,12 +17,12 @@ const TVRDashboard = () => {
     rejectedBankLoggedIn: 0
   });
   const baseurl = process.env.REACT_APP_API_BASE_URL;
-
+  const userId = localStorage.getItem('userId');
 
   // Function to fetch data from API
   const fetchData = async (start, end) => {
     try {
-      const response = await axios.get(`${baseurl}/getTvrDocumentsCountByUserId/6684?startDate=${start}&endDate=${end}`);
+      const response = await axios.get(`${baseurl}/getTvrDocumentsCountByUserId/${userId}?startDate=${start}&endDate=${end}`);
       const data = response.data;
       setDashboardData({
         tvrPending: data.tvrPending || 0,
