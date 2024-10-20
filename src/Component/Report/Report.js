@@ -104,17 +104,17 @@ const Report = ({ onApplyFilter, onDownloadCSV }) => {
   };
 
   const CDRconvertToCSV = (data) => {
-    const header = ['CDR Assigned Date','Time', 'Team Leader ID', 'Team Leader Name','CDR Agent ID', 'CDR Agent Name', 'CDR Status','Customer Name', 'Mobile Number'];
+    const header = ['Assigned Date','Time', 'Team Leader ID', 'Team Leader Name','CDR Agent ID', 'CDR Agent Name', 'CDR Status','Customer Name', 'Mobile Number'];
     const csvRows = data.map((row) => [
-      row.cdr_assign_date,
-      row.time,
+      row.cdr_assign_date|| '',
+      row.time|| '',
       row.teamleaderid || '', // Use empty string if no team leader ID
       row.teamleadername || '', // Use empty string if no team leader name
-      row.cdr_agent_id,
-      row.cdr_agent_name,
-      row.cdr_status,
-      row.customer_name,
-      row.customer_mobile_number,
+      row.cdr_agent_id|| '',
+      row.cdr_agent_name|| '',
+      row.cdr_status|| '',
+      row.customer_name|| '',
+      row.customer_mobile_number|| '',
     ]);
 
     // Join the header and rows into a CSV string

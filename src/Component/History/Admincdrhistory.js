@@ -84,6 +84,7 @@ const Admincdrhistory = () => {
     const downloadCSV = () => {
       const headers = [
         'Date',
+        'Time',
         userRole === 'admin' ? 'Team Leader Name' : null,
         userRole === 'admin' ? 'Agent Name' : null,
         'Customer Name',
@@ -91,41 +92,44 @@ const Admincdrhistory = () => {
         'Loan Type',
         'File Status',
       ]
-        .filter(Boolean)
+        .filter(Boolean) // Removes null headers
         .join(',');
-  
+    
       const rows = loanFiles.map((loanFile) => [
         loanFile.sales_assign_date
           ? new Date(loanFile.sales_assign_date).toLocaleString('en-GB', {
               dateStyle: 'short',
               timeStyle: 'short',
             })
-          : '',
-        userRole === 'admin' ? loanFile.teamleadername : null,
-        userRole === 'admin' ? loanFile.sales_agent_name : null,
-        loanFile.customer_name,
-        loanFile.customer_mobile_number,
-        loanFile.type_of_loan,
-        loanFile.file_status,
+          : null, // Return null if date is missing
+        userRole === 'admin' ? loanFile.teamleadername || null : null, // Return null if Team Leader Name is missing
+        userRole === 'admin' ? loanFile.sales_agent_name || null : null, // Return null if Agent Name is missing
+        loanFile.customer_name || null, // Return null if Customer Name is missing
+        loanFile.customer_mobile_number || null, // Return null if Mobile Number is missing
+        loanFile.type_of_loan || null, // Return null if Loan Type is missing
+        loanFile.file_status || null, // Return null if File Status is missing
       ]);
-  
+    
       const csvContent = [
         headers,
-        ...rows.map((row) => row.filter(Boolean).join(',')),
+        ...rows.map((row) =>
+          row.map((value) => (value !== null && value !== undefined ? value : '')).join(',')
+        ), // Replace null or undefined values with an empty string
       ].join('\n');
-  
+    
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       const url = URL.createObjectURL(blob);
-  
+    
       link.setAttribute('href', url);
-      link.setAttribute('download', `loan_files_history.csv`);
+      link.setAttribute('download', 'loan_files_history.csv');
       link.style.visibility = 'hidden';
-  
+    
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     };
+    
   
     // if (loading) {
     //   return <div className="container mt-4">Loading loan files...</div>;
@@ -284,3 +288,13 @@ const Admincdrhistory = () => {
   };
 
 export default Admincdrhistory
+
+
+
+
+
+
+
+
+
+

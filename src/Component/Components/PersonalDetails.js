@@ -14,6 +14,7 @@ const PersonalDetails = () => {
     const [selectedLoanType, setSelectedLoanType] = useState('');
 
     const loanMasterData = {
+        'no information':['no information'],
         'Auto Loan': ['External BT', 'Internal BT', 'Refinance', 'New Car', 'Sale Purchage'],
         'Business Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
         'Land and Property Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
