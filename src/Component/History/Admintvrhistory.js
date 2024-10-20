@@ -378,6 +378,7 @@ const Admintvrhistory = () => {
       'Customer Name',
       'Mobile Number',
       'Loan Type',
+      'TVR Status',
       'File Status',
     ]
       .filter(Boolean) // Remove any null headers
@@ -395,7 +396,9 @@ const Admintvrhistory = () => {
       loanFile.customer_name || null,
       loanFile.customer_mobile_number || null,
       loanFile.type_of_loan || null,
+      loanFile.tvr_status || null,
       loanFile.file_status || null,
+
     ]);
   
     const csvContent = [
@@ -524,6 +527,7 @@ const Admintvrhistory = () => {
                 <th scope="col">Mobile Number</th>
                 <th scope="col">Loan Type</th>
                 <th scope="col">TVR Status</th>
+                <th scope="col">File Status</th>
                 <th scope="col" className="text-center">
                   View Details
                 </th>
@@ -551,13 +555,14 @@ const Admintvrhistory = () => {
                   {userRole === 'admin' && (
                     <>
                       <td>{loanFile.teamleadername}</td>
-                      <td>{loanFile.sales_agent_name}</td>
+                      <td>{loanFile.tvr_agent_name}</td>
                     </>
                   )}
                   <td>{loanFile.customer_name}</td>
                   <td>{loanFile.customer_mobile_number}</td>
                   <td>{loanFile.type_of_loan}</td>
                   <td>{loanFile.tvr_status}</td>
+                  <td>{loanFile.file_status}</td>
                   <td className="text-center">
                     <Link to={`/view/${loanFile._id}`}>
                       <FontAwesomeIcon icon={faEye} />

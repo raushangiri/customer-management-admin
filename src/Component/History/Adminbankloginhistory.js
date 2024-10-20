@@ -89,6 +89,7 @@ const Adminbankloginhistory = () => {
         'Customer Name',
         'Mobile Number',
         'Loan Type',
+        'Login Status',
         'File Status',
       ]
         .filter(Boolean)
@@ -106,6 +107,7 @@ const Adminbankloginhistory = () => {
         loanFile.customer_name,
         loanFile.customer_mobile_number,
         loanFile.type_of_loan,
+        loanFile.banklogin_status,
         loanFile.file_status,
       ]);
   
@@ -230,6 +232,7 @@ const Adminbankloginhistory = () => {
                 <th scope="col">Mobile Number</th>
                 <th scope="col">Loan Type</th>
                 <th scope="col">CDR Status</th>
+                <th scope="col">File Status</th>
                 <th scope="col" className="text-center">View Details</th>
                 <th scope="col" className="text-center">Search Details</th>
               </tr>
@@ -259,6 +262,7 @@ const Adminbankloginhistory = () => {
                   <td>{loanFile.customer_mobile_number}</td>
                   <td>{loanFile.type_of_loan}</td>
                   <td>{loanFile.banklogin_status}</td>
+                  <td>{loanFile.file_status}</td>
                   <td className="text-center">
                     <Link to={`/view-filedetails/${loanFile.file_number}`}>
                       <FontAwesomeIcon icon={faEye} />

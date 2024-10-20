@@ -90,6 +90,7 @@ const Admincdrhistory = () => {
         'Customer Name',
         'Mobile Number',
         'Loan Type',
+        'CDR Status',
         'File Status',
       ]
         .filter(Boolean) // Removes null headers
@@ -106,7 +107,8 @@ const Admincdrhistory = () => {
         userRole === 'admin' ? loanFile.sales_agent_name || null : null, // Return null if Agent Name is missing
         loanFile.customer_name || null, // Return null if Customer Name is missing
         loanFile.customer_mobile_number || null, // Return null if Mobile Number is missing
-        loanFile.type_of_loan || null, // Return null if Loan Type is missing
+        loanFile.type_of_loan || null,
+        loanFile.cdr_status || null, // Return null if Loan Type is missing
         loanFile.file_status || null, // Return null if File Status is missing
       ]);
     
@@ -234,6 +236,7 @@ const Admincdrhistory = () => {
                 <th scope="col">Mobile Number</th>
                 <th scope="col">Loan Type</th>
                 <th scope="col">CDR Status</th>
+                <th scope="col">File Status</th>
                 <th scope="col" className="text-center">View Details</th>
                 <th scope="col" className="text-center">Search Details</th>
               </tr>
@@ -263,6 +266,7 @@ const Admincdrhistory = () => {
                   <td>{loanFile.customer_mobile_number}</td>
                   <td>{loanFile.type_of_loan}</td>
                   <td>{loanFile.cdr_status}</td>
+                  <td>{loanFile.file_status}</td>
                   <td className="text-center">
                     <Link to={`/view-filedetails/${loanFile.file_number}`}>
                       <FontAwesomeIcon icon={faEye} />
