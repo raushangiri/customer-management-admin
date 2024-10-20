@@ -290,7 +290,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 const Admintvrhistory = () => {
   const [loanFiles, setLoanFiles] = useState([]);
@@ -300,8 +300,9 @@ const Admintvrhistory = () => {
   const [endDate, setEndDate] = useState('');
   const [filterAgent, setFilterAgent] = useState('');
   const [filterTL, setFilterTL] = useState('');
-  const [filterTvrStatus, setFilterTvrStatus] = useState(''); // New state for tvr_status filter
-
+  const [filterTvrStatus, setFilterTvrStatus] = useState('');
+  const [filterFileStatus, setFilterFileStatus] = useState('');
+  
   const baseurl = process.env.REACT_APP_API_BASE_URL;
   const userId = localStorage.getItem('userId');
   const userRole = localStorage.getItem('userRole');
@@ -310,16 +311,12 @@ const Admintvrhistory = () => {
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
-    const formattedDate = yesterday.toISOString().split('T')[0];
-    return formattedDate;
+    return yesterday.toISOString().split('T')[0];
   };
 
   const getDefaultEndDate = () => {
     const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate());
-    const formattedDate = yesterday.toISOString().split('T')[0];
-    return formattedDate;
+    return today.toISOString().split('T')[0];
   };
 
   const fetchLoanFiles = async (start, end, agent = '', tl = '') => {
@@ -339,7 +336,7 @@ const Admintvrhistory = () => {
         setError('No loan files found.');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Error fetching loan files:', error);
       setError('Failed to fetch loan files.');
     } finally {
       setLoading(false);
@@ -356,19 +353,18 @@ const Admintvrhistory = () => {
   }, [userId]);
 
   const applyFilters = () => {
-    // Filters already applied during fetch
     fetchLoanFiles(startDate, endDate, filterAgent, filterTL);
   };
 
-  // Filter loan files by tvr_status on the client-side
-  const filteredLoanFiles = loanFiles.filter((loanFile) => {
-    if (filterTvrStatus) {
-      return loanFile.tvr_status === filterTvrStatus;
-    }
-    return true; // If no filter is selected, return all loan files
-  });
+  // Filter Logic
+  const filteredLoanFiles = loanFiles
+    .filter((loanFile) => {
+      if (filterTvrStatus && loanFile.tvr_status !== filterTvrStatus) return false;
+      if (filterFileStatus && loanFile.file_status !== filterFileStatus) return false;
+      return true;
+    })
+    .sort((a, b) => new Date(b.tvr_assign_date) - new Date(a.tvr_assign_date));
 
-  // Convert loan files data to CSV
   const downloadCSV = () => {
     const headers = [
       'Date',
@@ -381,44 +377,46 @@ const Admintvrhistory = () => {
       'TVR Status',
       'File Status',
     ]
-      .filter(Boolean) // Remove any null headers
+      .filter(Boolean)
       .join(',');
-  
+
     const rows = loanFiles.map((loanFile) => [
       loanFile.sales_assign_date
         ? new Date(loanFile.sales_assign_date).toLocaleString('en-GB', {
             dateStyle: 'short',
             timeStyle: 'short',
           })
-        : null, // Set to null if date is not available
-      userRole === 'admin' ? loanFile.teamleadername || null : null, // Fallback to null if value is missing
+        : null,
+      userRole === 'admin' ? loanFile.teamleadername || null : null,
       userRole === 'admin' ? loanFile.sales_agent_name || null : null,
       loanFile.customer_name || null,
       loanFile.customer_mobile_number || null,
       loanFile.type_of_loan || null,
       loanFile.tvr_status || null,
       loanFile.file_status || null,
-
     ]);
-  
+
     const csvContent = [
       headers,
-      ...rows.map((row) => row.map((value) => value !== null ? value : '').join(',')), // Replace null with empty string for CSV formatting
+      ...rows.map((row) => row.map((value) => value !== null ? value : '').join(',')),
     ].join('\n');
-  
+
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
-  
+
     link.setAttribute('href', url);
     link.setAttribute('download', 'loan_files_history.csv');
     link.style.visibility = 'hidden';
-  
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
-  
+
+  // Dynamically extract unique file statuses and tvr statuses
+  const fileStatusOptions = Array.from(new Set(loanFiles.map(loanFile => loanFile.file_status)));
+  const tvrStatusOptions = Array.from(new Set(loanFiles.map(loanFile => loanFile.tvr_status)));
 
   return (
     <div className="container mt-4">
@@ -476,17 +474,40 @@ const Admintvrhistory = () => {
           </>
         )}
 
-        {/* New filter for TVR Status */}
+        {/* TVR Status Dropdown Filter */}
         <div className="col-md-4">
           <label htmlFor="filterTvrStatus">TVR Status:</label>
-          <input
-            type="text"
+          <select
             className="form-control"
             id="filterTvrStatus"
-            placeholder="Enter TVR Status"
             value={filterTvrStatus}
             onChange={(e) => setFilterTvrStatus(e.target.value)}
-          />
+          >
+            <option value="">All TVR Status</option>
+            {tvrStatusOptions.map((status, index) => (
+              <option key={index} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* File Status Dropdown Filter */}
+        <div className="col-md-4">
+          <label htmlFor="filterFileStatus">File Status:</label>
+          <select
+            className="form-control"
+            id="filterFileStatus"
+            value={filterFileStatus}
+            onChange={(e) => setFilterFileStatus(e.target.value)}
+          >
+            <option value="">All File Status</option>
+            {fileStatusOptions.map((status, index) => (
+              <option key={index} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="col-md-4">
@@ -528,12 +549,7 @@ const Admintvrhistory = () => {
                 <th scope="col">Loan Type</th>
                 <th scope="col">TVR Status</th>
                 <th scope="col">File Status</th>
-                <th scope="col" className="text-center">
-                  View Details
-                </th>
-                <th scope="col" className="text-center">
-                  Search Details
-                </th>
+                <th scope="col">View</th>
               </tr>
             </thead>
             <tbody>
@@ -541,36 +557,26 @@ const Admintvrhistory = () => {
                 <tr key={loanFile._id}>
                   <th scope="row">{index + 1}</th>
                   <td>
-                    {loanFile.tvr_assign_date && (
-                      <>
-                        {new Date(loanFile.tvr_assign_date).toLocaleDateString('en-GB')}
-                        <br />
-                        {new Date(loanFile.tvr_assign_date).toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </>
-                    )}
+                    {loanFile.tvr_assign_date &&
+                      new Date(loanFile.tvr_assign_date).toLocaleString('en-GB', {
+                        dateStyle: 'short',
+                        timeStyle: 'short',
+                      })}
                   </td>
                   {userRole === 'admin' && (
                     <>
-                      <td>{loanFile.teamleadername}</td>
-                      <td>{loanFile.tvr_agent_name}</td>
+                      <td>{loanFile.teamleadername || '-'}</td>
+                      <td>{loanFile.sales_agent_name || '-'}</td>
                     </>
                   )}
-                  <td>{loanFile.customer_name}</td>
-                  <td>{loanFile.customer_mobile_number}</td>
-                  <td>{loanFile.type_of_loan}</td>
-                  <td>{loanFile.tvr_status}</td>
-                  <td>{loanFile.file_status}</td>
-                  <td className="text-center">
-                    <Link to={`/view/${loanFile._id}`}>
+                  <td>{loanFile.customer_name || '-'}</td>
+                  <td>{loanFile.customer_mobile_number || '-'}</td>
+                  <td>{loanFile.type_of_loan || '-'}</td>
+                  <td>{loanFile.tvr_status || '-'}</td>
+                  <td>{loanFile.file_status || '-'}</td>
+                  <td>
+                    <Link to={`/viewtvrfile/${loanFile._id}`}>
                       <FontAwesomeIcon icon={faEye} />
-                    </Link>
-                  </td>
-                  <td className="text-center">
-                    <Link to={`/search/${loanFile._id}`}>
-                      <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </Link>
                   </td>
                 </tr>
@@ -580,9 +586,11 @@ const Admintvrhistory = () => {
         ) : (
           <p>No loan files found.</p>
         )}
+        {error && <p className="text-danger">{error}</p>}
       </div>
     </div>
   );
 };
 
 export default Admintvrhistory;
+
