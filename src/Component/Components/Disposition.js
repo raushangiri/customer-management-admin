@@ -36,7 +36,7 @@ const Disposition = () => {
     };
 
     checkFileReassignStatus();
-  }, []); // Empty dependency array means this will run once when the component is mounted
+  }, [fileNumber]); // Empty dependency array means this will run once when the component is mounted
 
 
 
