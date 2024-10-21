@@ -475,6 +475,7 @@ const History = () => {
   const downloadCSV = () => {
     const headers = [
       'Date',
+      'Time',
       userRole === 'admin' ? 'Team Leader Name' : null,
       userRole === 'admin' ? 'Agent Name' : null,
       'Customer Name',
@@ -656,9 +657,22 @@ const History = () => {
                   </Link>
                 </td>
                 <td className="text-center">
+                    {userRole === 'admin' && (
                     <Link to={`/Adminsearch/${loanFile.customer_mobile_number}`}>
                       <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </Link>
+                     )}
+                     {userRole === 'sales' && (
+                    <Link to={`/Salesearch/${loanFile.customer_mobile_number}`}>
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </Link>
+                     )}
+                    {userRole === 'TVR' && (
+                    <Link to={`/Tvrsearch/${loanFile.customer_mobile_number}`}>
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </Link>
+                     )}
+                     
                   </td>
               </tr>
             ))}

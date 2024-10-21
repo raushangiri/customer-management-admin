@@ -286,17 +286,23 @@ const sendEmail = async () => {
     return;
   }
 
-  // Function to extract file name with extension from URL
-  const extractFileName = (url) => {
-    const fileName = url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'));
-    return fileName || 'document.pdf'; // Default to a generic name if extraction fails
+  // Function to extract file name with extension and append unique identifier if necessary
+  const extractFileName = (url, index) => {
+    // Extract file name with extension
+    const fileNameWithExtension = url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'));
+    
+    // Separate file name and extension
+    const dotIndex = fileNameWithExtension.lastIndexOf('.');
+    const fileName = fileNameWithExtension.substring(0, dotIndex);
+    const extension = fileNameWithExtension.substring(dotIndex);
+    
+    // Return file name with index and extension intact
+    return `${fileName}_${index}${extension}`;
   };
 
-  // Combine document URLs and document names with correct file names
-  const documentList = documents.map((doc) => ({
-    url: doc.downloadUrl,
-    name: extractFileName(doc.downloadUrl) || doc.document_name  // Ensure file name with extension
-  }));
+  // Extracting document URLs and document names with unique identifiers
+  const documentUrls = documents.map((doc) => doc.downloadUrl);
+  const documentNames = documents.map((doc, index) => extractFileName(doc.downloadUrl, index));
 
   let ccemail = bankDetail.ccEmails || [];
   const emailData = {
@@ -338,7 +344,8 @@ const sendEmail = async () => {
       `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
       `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
       `Note: ${personalDetails.note || 'N/A'}\n`,
-    documents: documentList  // Sending the document list with extracted file names and URLs
+    documentUrls: documentUrls,  // Sending document URLs
+    documentNames: documentNames // Sending document names with unique identifiers
   };
 
   try {
