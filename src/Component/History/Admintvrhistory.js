@@ -381,8 +381,8 @@ const Admintvrhistory = () => {
       .join(',');
 
     const rows = loanFiles.map((loanFile) => [
-      loanFile.sales_assign_date
-        ? new Date(loanFile.sales_assign_date).toLocaleString('en-GB', {
+      loanFile.tvr_assign_date
+        ? new Date(loanFile.tvr_assign_date).toLocaleString('en-GB', {
             dateStyle: 'short',
             timeStyle: 'short',
           })

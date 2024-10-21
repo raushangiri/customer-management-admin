@@ -21,6 +21,8 @@ const Admincdrhistory = () => {
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(today.getDate() - 1); 
+      
+        // Format the date as 'YYYY-MM-DD'
         const formattedDate = yesterday.toISOString().split('T')[0]; 
       
         return formattedDate;
@@ -125,7 +127,7 @@ const Admincdrhistory = () => {
       <div className="container  mt-4">
         <h2 className="mb-4">CDR Files History</h2>
   
-        
+        {/* Filters */}
         <div className="row mb-4">
           <div className="col-md-4">
             <label htmlFor="startDate">Start Date:</label>

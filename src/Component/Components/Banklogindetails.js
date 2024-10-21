@@ -215,71 +215,144 @@ const Banklogindetails = () => {
   };
   const [loading, setLoading] = useState(false);
 
-  const sendEmail = async () => {
-    if (!personalDetails) {
-      alert('Personal details or recipient email not available.');
-      return;
-    }
-    const documentUrls = documents.map((doc) => doc.downloadUrl);
-    const documentNames = documents.map((doc) => doc.document_name);
-let ccemail=bankDetail.ccEmails;
-    const emailData = {
-      email: bankDetail.emails,
-      cc: [...ccemail,"jbjassociate@gmail.com"],
-      subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
-      text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
-        `File Number: ${personalDetails.file_number || 'N/A'}\n` +
-        `Name: ${personalDetails.customerName || 'N/A'}\n` +
-        `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
-        `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
-        `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
-        `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
-        `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
-        `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
-        `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
-        `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
-        `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
-        `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
-        `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
-        `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
-        `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
-        `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
-        `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
-        `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
-        `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
-        `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
-        `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
-        `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
-        `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
-        `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
-        `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
-        `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
-        `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
-        `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
-        `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
-        `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
-        `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
-        `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
-        `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n`+
-        `Note: ${personalDetails.note || 'N/A'}\n`,
-      documentUrls: documentUrls,
-      documentNames: documentNames
-    };
+//   const sendEmail = async () => {
+//     if (!personalDetails) {
+//       alert('Personal details or recipient email not available.');
+//       return;
+//     }
+//     const documentList = documents.map((doc) => ({
+//       url: doc.downloadUrl,
+//       name: doc.document_name
+//     }));
+// let ccemail=bankDetail.ccEmails;
+//     const emailData = {
+//       email: bankDetail.emails,
+//       cc: [...ccemail,"jbjassociate@gmail.com"],
+//       subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
+//       text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
+//         `File Number: ${personalDetails.file_number || 'N/A'}\n` +
+//         `Name: ${personalDetails.customerName || 'N/A'}\n` +
+//         `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
+//         `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
+//         `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
+//         `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
+//         `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
+//         `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
+//         `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
+//         `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
+//         `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
+//         `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
+//         `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
+//         `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
+//         `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
+//         `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
+//         `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+//         `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+//         `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
+//         `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
+//         `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
+//         `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
+//         `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
+//         `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
+//         `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
+//         `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
+//         `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
+//         `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
+//         `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
+//         `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
+//         `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
+//         `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+//         `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n`+
+//         `Note: ${personalDetails.note || 'N/A'}\n`,
+//         documents: documentList
+//     };
 
-    try {
-      setLoading(true);
-      await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
-      alert('Email sent successfully!');
-    } catch (error) {
-      console.error('Error sending email:', error);
-      alert('Failed to send email.');
-    }
-    finally {
-      setLoading(false);
-    }
+//     try {
+//       setLoading(true);
+//       await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
+//       alert('Email sent successfully!');
+//     } catch (error) {
+//       console.error('Error sending email:', error);
+//       alert('Failed to send email.');
+//     }
+//     finally {
+//       setLoading(false);
+//     }
+//   };
+
+const sendEmail = async () => {
+  if (!personalDetails) {
+    alert('Personal details or recipient email not available.');
+    return;
+  }
+
+  // Function to extract file name with extension from URL
+  const extractFileName = (url) => {
+    const fileName = url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'));
+    return fileName || 'document.pdf'; // Default to a generic name if extraction fails
   };
 
-  
+  // Combine document URLs and document names with correct file names
+  const documentList = documents.map((doc) => ({
+    url: doc.downloadUrl,
+    name: extractFileName(doc.downloadUrl) || doc.document_name  // Ensure file name with extension
+  }));
+
+  let ccemail = bankDetail.ccEmails || [];
+  const emailData = {
+    email: bankDetail.emails,
+    cc: [...ccemail, "jbjassociate@gmail.com"],
+    subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
+    text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
+      `File Number: ${personalDetails.file_number || 'N/A'}\n` +
+      `Name: ${personalDetails.customerName || 'N/A'}\n` +
+      `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
+      `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
+      `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
+      `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
+      `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
+      `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
+      `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
+      `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
+      `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
+      `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
+      `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
+      `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
+      `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
+      `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
+      `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+      `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+      `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
+      `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
+      `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
+      `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
+      `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
+      `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
+      `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
+      `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
+      `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
+      `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
+      `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
+      `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
+      `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
+      `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+      `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+      `Note: ${personalDetails.note || 'N/A'}\n`,
+    documents: documentList  // Sending the document list with extracted file names and URLs
+  };
+
+  try {
+    setLoading(true);
+    await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
+    alert('Email sent successfully!');
+  } catch (error) {
+    console.error('Error sending email:', error);
+    alert('Failed to send email.');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   console.log(bankDetail.emails, "emails")
   console.log(bankDetail.ccEmails, "ccEmails")
