@@ -19,11 +19,8 @@ const Admincdrhistory = () => {
   
     const getDefaultStartDate = () => {
         const today = new Date();
-        // Subtract 1 day from the current date
         const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1); // Set to yesterday
-      
-        // Format the date as 'YYYY-MM-DD'
+        yesterday.setDate(today.getDate() - 1); 
         const formattedDate = yesterday.toISOString().split('T')[0]; 
       
         return formattedDate;
@@ -31,11 +28,8 @@ const Admincdrhistory = () => {
   
     const getDefaultEndDate = () => {
         const today = new Date();
-        // Subtract 1 day from the current date
         const yesterday = new Date(today);
-        yesterday.setDate(today.getDate()); // Set to yesterday
-      
-        // Format the date as 'YYYY-MM-DD'
+        yesterday.setDate(today.getDate()); 
         const formattedDate = yesterday.toISOString().split('T')[0]; 
       
         return formattedDate;
@@ -49,7 +43,6 @@ const Admincdrhistory = () => {
           params: {
             startDate: start,
             endDate: end,
-            
           },
         });
   
@@ -71,16 +64,12 @@ const Admincdrhistory = () => {
       const end = getDefaultEndDate();
       setStartDate(start);
       setEndDate(end);
-      
-  
       fetchLoanFiles(start, end);
     }, [userId]);
   
     const applyFilters = () => {
       fetchLoanFiles(startDate, endDate, filterAgent, filterTL);
     };
-  
-    // Convert loan files data to CSV
     const downloadCSV = () => {
       const headers = [
         'Date',
@@ -93,7 +82,7 @@ const Admincdrhistory = () => {
         'CDR Status',
         'File Status',
       ]
-        .filter(Boolean) // Removes null headers
+        .filter(Boolean) 
         .join(',');
     
       const rows = loanFiles.map((loanFile) => [
@@ -102,21 +91,21 @@ const Admincdrhistory = () => {
               dateStyle: 'short',
               timeStyle: 'short',
             })
-          : null, // Return null if date is missing
-        userRole === 'admin' ? loanFile.teamleadername || null : null, // Return null if Team Leader Name is missing
-        userRole === 'admin' ? loanFile.sales_agent_name || null : null, // Return null if Agent Name is missing
-        loanFile.customer_name || null, // Return null if Customer Name is missing
-        loanFile.customer_mobile_number || null, // Return null if Mobile Number is missing
+          : null, 
+        userRole === 'admin' ? loanFile.teamleadername || null : null, 
+        userRole === 'admin' ? loanFile.sales_agent_name || null : null, 
+        loanFile.customer_name || null, 
+        loanFile.customer_mobile_number || null, 
         loanFile.type_of_loan || null,
-        loanFile.cdr_status || null, // Return null if Loan Type is missing
-        loanFile.file_status || null, // Return null if File Status is missing
+        loanFile.cdr_status || null, 
+        loanFile.file_status || null, 
       ]);
     
       const csvContent = [
         headers,
         ...rows.map((row) =>
           row.map((value) => (value !== null && value !== undefined ? value : '')).join(',')
-        ), // Replace null or undefined values with an empty string
+        ), 
       ].join('\n');
     
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -131,21 +120,12 @@ const Admincdrhistory = () => {
       link.click();
       document.body.removeChild(link);
     };
-    
-  
-    // if (loading) {
-    //   return <div className="container mt-4">Loading loan files...</div>;
-    // }
-  
-    // if (error) {
-    //   return <div className="container mt-4 alert alert-danger">{error}</div>;
-    // }
-  
+
     return (
       <div className="container  mt-4">
         <h2 className="mb-4">CDR Files History</h2>
   
-        {/* Filters */}
+        
         <div className="row mb-4">
           <div className="col-md-4">
             <label htmlFor="startDate">Start Date:</label>
@@ -219,7 +199,7 @@ const Admincdrhistory = () => {
             </div>
           </div>
         )}
-        {/* Loan Files Table */}
+      
         {loanFiles.length > 0 ? (
           <table className="table table-bordered">
             <thead>
@@ -268,12 +248,12 @@ const Admincdrhistory = () => {
                   <td>{loanFile.cdr_status}</td>
                   <td>{loanFile.file_status}</td>
                   <td className="text-center">
-                    <Link to={`/view-filedetails/${loanFile.file_number}`}>
+                    <Link to={`/view-filedetails/${loanFile.file_number}`}className="btn btn-info btn-sm">
                       <FontAwesomeIcon icon={faEye} />
                     </Link>
                   </td>
                   <td className="text-center">
-                      <Link to={`/Adminsearch/${loanFile.customer_mobile_number}`}>
+                      <Link to={`/Adminsearch/${loanFile.customer_mobile_number}`}className="btn btn-warning btn-sm ms-2">
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                       </Link>
                     </td>

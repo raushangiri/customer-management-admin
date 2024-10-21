@@ -290,7 +290,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 const Admintvrhistory = () => {
   const [loanFiles, setLoanFiles] = useState([]);
@@ -575,8 +575,13 @@ const Admintvrhistory = () => {
                   <td>{loanFile.tvr_status || '-'}</td>
                   <td>{loanFile.file_status || '-'}</td>
                   <td>
-                    <Link to={`/viewtvrfile/${loanFile._id}`}>
+                    <Link to={`/view-filedetails/${loanFile.file_number}`}className="btn btn-info btn-sm">
                       <FontAwesomeIcon icon={faEye} />
+                    </Link>
+                    </td>
+                    <td>
+                    <Link to={`/Adminsearch/${loanFile.customer_mobile_number}`} className="btn btn-warning btn-sm ms-2">
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </Link>
                   </td>
                 </tr>

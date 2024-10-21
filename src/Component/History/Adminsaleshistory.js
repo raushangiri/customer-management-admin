@@ -501,16 +501,21 @@ const Adminsaleshistory = () => {
       </div>
 
       <div className='position-relative'>
-        {loading && (
-          <div
-            className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-light bg-opacity-75"
-            style={{ zIndex: 1050 }}
-          >
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </div>
-        )}
+      {loading && (
+  <div
+    className="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center"
+    style={{
+      zIndex: 1050,
+      width: '100px', // Adjust width as needed
+      height: '100px', // Adjust height as needed
+    }}
+  >
+    <div className="spinner-border text-primary" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  </div>
+)}
+
         {/* Loan Files Table */}
         {loanFiles.length > 0 ? (
           <table className="table table-bordered">
@@ -547,10 +552,13 @@ const Adminsaleshistory = () => {
                   <td>{loanFile.type_of_loan}</td>
                   <td>{loanFile.file_status}</td>
                   <td>
-                    <Link to={`/loandetails/${loanFile._id}`} className="btn btn-info btn-sm">
+                    <Link to={`/view-filedetails/${loanFile.file_number}`} className="btn btn-info btn-sm">
                       <FontAwesomeIcon icon={faEye} />
                     </Link>
-                    <Link to={`/editloan/${loanFile._id}`} className="btn btn-warning btn-sm ms-2">
+                    
+                    </td>
+                    <td>
+                    <Link to={`/Adminsearch/${loanFile.customer_mobile_number}`} className="btn btn-warning btn-sm ms-2">
                       <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </Link>
                   </td>
