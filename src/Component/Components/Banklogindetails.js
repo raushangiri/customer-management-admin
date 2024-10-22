@@ -29,6 +29,12 @@ const Banklogindetails = () => {
     }
   ]);
 
+  const [references, setReferences] = useState([]);
+
+ 
+
+
+
   const toggleSection = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
@@ -49,10 +55,21 @@ const Banklogindetails = () => {
         console.error('Error fetching personal details:', error);
       }
     };
+    const fetchReferences = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getreferencedetail/${formData.file_number}`);
+        setReferences(Array.isArray(response.data.data) ? response.data.data : [response.data.data]);
+      } catch (error) {
+        console.error("Error fetching references", error);
+      }
+    };
     if (formData.file_number) {
       fetchPersonalDetails();
+      fetchReferences();
     }
   }, [formData.file_number]);
+
+  console.log(references,"references")
 
   // Fetch bank login details
   // useEffect(() => {
@@ -280,6 +297,85 @@ const Banklogindetails = () => {
 //     }
 //   };
 
+// const sendEmail = async () => {
+//   if (!personalDetails) {
+//     alert('Personal details or recipient email not available.');
+//     return;
+//   }
+
+//   // Function to extract file name with extension and append unique identifier if necessary
+//   const extractFileName = (url, index) => {
+//     // Extract file name with extension
+//     const fileNameWithExtension = url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'));
+    
+//     // Separate file name and extension
+//     const dotIndex = fileNameWithExtension.lastIndexOf('.');
+//     const fileName = fileNameWithExtension.substring(0, dotIndex);
+//     const extension = fileNameWithExtension.substring(dotIndex);
+    
+//     // Return file name with index and extension intact
+//     return `${fileName}_${index}${extension}`;
+//   };
+
+//   // Extracting document URLs and document names with unique identifiers
+//   const documentUrls = documents.map((doc) => doc.downloadUrl);
+//   const documentNames = documents.map((doc, index) => extractFileName(doc.downloadUrl, index));
+
+//   let ccemail = bankDetail.ccEmails || [];
+//   const emailData = {
+//     email: bankDetail.emails,
+//     cc: [...ccemail, "jbjassociate@gmail.com"],
+//     subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
+//     text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
+//       `File Number: ${personalDetails.file_number || 'N/A'}\n` +
+//       `Name: ${personalDetails.customerName || 'N/A'}\n` +
+//       `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
+//       `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
+//       `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
+//       `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
+//       `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
+//       `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
+//       `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
+//       `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
+//       `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
+//       `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
+//       `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
+//       `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
+//       `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
+//       `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
+//       `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+//       `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+//       `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
+//       `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
+//       `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
+//       `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
+//       `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
+//       `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
+//       `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
+//       `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
+//       `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
+//       `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
+//       `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
+//       `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
+//       `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
+//       `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+//       `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+//       `Note: ${personalDetails.note || 'N/A'}\n`,
+//     documentUrls: documentUrls,  // Sending document URLs
+//     documentNames: documentNames // Sending document names with unique identifiers
+//   };
+
+//   try {
+//     setLoading(true);
+//     await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
+//     alert('Email sent successfully!');
+//   } catch (error) {
+//     console.error('Error sending email:', error);
+//     alert('Failed to send email.');
+//   } finally {
+//     setLoading(false);
+//   }
+// };
 const sendEmail = async () => {
   if (!personalDetails) {
     alert('Personal details or recipient email not available.');
@@ -288,21 +384,27 @@ const sendEmail = async () => {
 
   // Function to extract file name with extension and append unique identifier if necessary
   const extractFileName = (url, index) => {
-    // Extract file name with extension
     const fileNameWithExtension = url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'));
-    
-    // Separate file name and extension
     const dotIndex = fileNameWithExtension.lastIndexOf('.');
     const fileName = fileNameWithExtension.substring(0, dotIndex);
     const extension = fileNameWithExtension.substring(dotIndex);
-    
-    // Return file name with index and extension intact
     return `${fileName}_${index}${extension}`;
   };
 
   // Extracting document URLs and document names with unique identifiers
   const documentUrls = documents.map((doc) => doc.downloadUrl);
   const documentNames = documents.map((doc, index) => extractFileName(doc.downloadUrl, index));
+
+  // Prepare reference details as a formatted string
+  const referenceDetails = references.map((ref, index) => (
+    `\n\nReference ${index + 1}:\n` +
+    `Name: ${ref.reference_name || 'N/A'}\n` +
+    `Mobile Number: ${ref.reference_mobile_number || 'N/A'}\n` +
+    `Occupation Type: ${ref.reference_occupation_type || 'N/A'}\n` +
+    `Nature of Business: ${ref.reference_nature_of_business || 'N/A'}\n` +
+    `Company Name: ${ref.company_name || 'N/A'}\n` +
+    `Address: ${ref.reference_address || 'N/A'}`
+  )).join('\n'); // Concatenate all references
 
   let ccemail = bankDetail.ccEmails || [];
   const emailData = {
@@ -341,10 +443,9 @@ const sendEmail = async () => {
       `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
       `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
       `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
-      `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
-      `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
-      `Note: ${personalDetails.note || 'N/A'}\n`,
-    documentUrls: documentUrls,  // Sending document URLs
+      `Note: ${personalDetails.note || 'N/A'}\n\n` +
+      `References:\n${referenceDetails}`, // Include the reference details in the email
+    documentUrls: documentUrls, // Sending document URLs
     documentNames: documentNames // Sending document names with unique identifiers
   };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Chat from '../Components/Chat';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
@@ -54,7 +55,7 @@ const Dashboard = () => {
   return (
     <>
       <p>Welcome back Admin</p>
-
+{/* <div className='text-end'><Chat/></div> */}
       {/* Date filter form */}
       <form onSubmit={handleFilterSubmit}>
         <div className="row mb-5">
