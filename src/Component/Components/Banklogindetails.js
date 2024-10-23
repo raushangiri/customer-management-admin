@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOverview } from '../ContentHook/OverviewContext';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate,useParams } from 'react-router-dom'; // Import useNavigate
 
 const Banklogindetails = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -15,7 +15,7 @@ const Banklogindetails = () => {
   const [error, setError] = useState(null);
   // const [bankDetails, setBankDetails] = useState([]);
   const [selectedBankDetails, setSelectedBankDetails] = useState([]);
-
+  const { _id } = useParams();
   const [bankDetails, setBankDetails] = useState([
     {
       _id: 1,
@@ -164,19 +164,20 @@ const Banklogindetails = () => {
     fetchDocuments();
   }, [formData.file_number]);
 
-  useEffect(() => {
-    const fetchRMDetails = async () => {
-      try {
-        const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
-        setBankDetails(response.data || []);
-      } catch (error) {
-        console.error('Error fetching RM details:', error);
-      }
-    };
-    if (formData.file_number) {
-      fetchRMDetails();
+  const fetchRMDetails = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/getbanklogindetailsbyid/${_id}`);
+      setBankDetails(response.data || []);
+    } catch (error) {
+      console.error('Error fetching RM details:', error);
     }
-  }, [formData.file_number]);
+  };
+  useEffect(() => {
+    
+  
+      fetchRMDetails();
+  
+  }, []);
 
   const handleSelectChange = (index) => {
     const updatedSelection = [...selectedBankDetails];

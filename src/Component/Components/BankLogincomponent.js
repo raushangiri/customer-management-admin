@@ -313,7 +313,7 @@ const BankLogincomponent = () => {
                             <td>{detail.email_1}</td>
                             <td>
                                 {detail.document_status === "Ready to share" ? (
-                                    <Link className="btn btn-primary" to={`/Banklogindetails`}>
+                                    <Link className="btn btn-primary" to={`/Banklogindetails/${detail._id}`}>
                                         Share with RM
                                     </Link>
                                 ) : (

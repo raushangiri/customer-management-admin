@@ -432,6 +432,56 @@ const History = () => {
     return today.toISOString();
   };
 
+  // const fetchLoanFiles = async (start, end, agent = '', tl = '') => {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     const response = await axios.get(`${baseurl}/getLoanFilesByUserId/${userId}`, {
+  //       params: {
+  //         startDate: start,
+  //         endDate: end,
+  //         salesAgentName: agent,
+  //         teamLeaderName: tl,
+  //       },
+  //     });
+
+  //     if (response.data.success) {
+  //       setLoanFiles(response.data.data);
+  //     } else {
+  //       setError('No loan files found.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error submitting form:', error);
+  //     setError('Failed to fetch loan files.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const start = getDefaultStartDate();
+  //   const end = getDefaultEndDate();
+  //   setStartDate(start);
+  //   setEndDate(end);
+
+  //   fetchLoanFiles(start, end);
+  // }, [userId]);
+
+  useEffect(() => {
+    const start = getDefaultStartDate();
+    const end = getDefaultEndDate();
+    setStartDate(start);
+    setEndDate(end);
+  
+    fetchLoanFiles(start, end);
+  }, [userId]);
+  
+  // Add this function to sort loan files by date
+  const sortLoanFilesByDate = (loanFiles) => {
+    return loanFiles.sort((a, b) => new Date(b.sales_assign_date) - new Date(a.sales_assign_date));
+  };
+  
+  // Modify the fetchLoanFiles function to sort the files
   const fetchLoanFiles = async (start, end, agent = '', tl = '') => {
     setLoading(true);
     setError(null);
@@ -444,9 +494,11 @@ const History = () => {
           teamLeaderName: tl,
         },
       });
-
+  
       if (response.data.success) {
-        setLoanFiles(response.data.data);
+        // Sort the loan files by sales_assign_date
+        const sortedLoanFiles = sortLoanFilesByDate(response.data.data);
+        setLoanFiles(sortedLoanFiles);
       } else {
         setError('No loan files found.');
       }
@@ -457,15 +509,7 @@ const History = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const start = getDefaultStartDate();
-    const end = getDefaultEndDate();
-    setStartDate(start);
-    setEndDate(end);
-
-    fetchLoanFiles(start, end);
-  }, [userId]);
+  
 
   const applyFilters = () => {
     fetchLoanFiles(startDate, endDate, filterAgent, filterTL);
