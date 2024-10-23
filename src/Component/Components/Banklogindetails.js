@@ -5,8 +5,6 @@ import { useNavigate,useParams } from 'react-router-dom'; // Import useNavigate
 
 const Banklogindetails = () => {
   const [activeIndex, setActiveIndex] = useState(null);
-  const [email2, setEmail2] = useState('');
-  const [remarks, setRemarks] = useState('');
   const [bankDetail, setBankDetail] = useState({});
   const baseurl = process.env.REACT_APP_API_BASE_URL;
   const { formData } = useOverview();
@@ -30,15 +28,9 @@ const Banklogindetails = () => {
   ]);
 
   const [references, setReferences] = useState([]);
-
- 
-
-
-
   const toggleSection = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
-
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -92,7 +84,7 @@ const Banklogindetails = () => {
   useEffect(() => {
     const fetchBankDetails = async () => {
       try {
-        const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
+        const response = await axios.get(`${baseurl}/getbanklogindetailsbyid/${_id}`);
         const bankDataArray = response.data;
 
         if (bankDataArray && bankDataArray.length > 0) {
@@ -179,36 +171,6 @@ const Banklogindetails = () => {
   
   }, []);
 
-  const handleSelectChange = (index) => {
-    const updatedSelection = [...selectedBankDetails];
-    if (updatedSelection.includes(index)) {
-      updatedSelection.splice(updatedSelection.indexOf(index), 1);
-    } else {
-      updatedSelection.push(index);
-    }
-    setSelectedBankDetails(updatedSelection);
-  };
-
-  const handleSave = async () => {
-    try {
-      const updatedDetails = {
-        ...bankDetail,
-        email2,
-        remarks,
-      };
-      await axios.post(`${baseurl}/updatebanklogindetails/${formData.file_number}`, updatedDetails);
-      alert('Bank details updated successfully!');
-    } catch (error) {
-      console.error('Error updating bank details:', error);
-    }
-  };
-
-  const handleEdit = (index) => {
-    // Here you can implement functionality to edit specific bank details
-    console.log('Editing RM detail at index:', index);
-    const selectedDetail = bankDetails[index];
-    // Now, you can either populate the form with this data to allow editing
-  };
 
   const [selectedDocuments, setSelectedDocuments] = useState([]);
 
@@ -463,8 +425,7 @@ const sendEmail = async () => {
 };
 
 
-  console.log(bankDetail.emails, "emails")
-  console.log(bankDetail.ccEmails, "ccEmails")
+
 
   return (
     <div className="position-relative container mt-4">
@@ -764,37 +725,7 @@ const sendEmail = async () => {
   </button>
 </td>
 
-                {/* <td>
-                  {bankDetail.ccEmails.map((ccEmail, emailIndex) => (
-                    <div key={emailIndex} className="input-group mb-2">
-                      <input
-                        type="email"
-                        value={ccEmail}
-                        onChange={(e) =>
-                          handleEmailChange('ccEmails', emailIndex, e.target.value)
-                        }
-                        className="form-control"
-                        placeholder="Enter CC email"
-                      />
-                      {bankDetail.ccEmails.length > 1 && (
-                        <button
-                          type="button"
-                          className="btn btn-danger"
-                          onClick={() => handleRemoveEmail('ccEmails', emailIndex)}
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => handleAddEmail('ccEmails')}
-                  >
-                    Add
-                  </button>
-                </td> */}
+             
 
                 <td>
                   <input
