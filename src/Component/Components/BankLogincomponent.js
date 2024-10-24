@@ -3,7 +3,7 @@ import axios from 'axios';
 import { statuses } from '../../Component/Bank-login/Data'; // Adjust the path if necessary
 import { useOverview } from '../ContentHook/OverviewContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
+import { faEye ,faTrash } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 import { Link } from 'react-router-dom';
 
 const BankLogincomponent = () => {
@@ -83,6 +83,18 @@ const BankLogincomponent = () => {
         setSelectedStatus(event.target.value);
         setSelectedReason('');
     };
+
+const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this entry?")) {
+        try {
+            await axios.delete(`${baseurl}/deleteBankDetail/${id}`);
+            setBankLoginDetails(bankLoginDetails.filter(detail => detail._id !== id));
+            alert("Entry deleted successfully.");
+        } catch (error) {
+            alert("Error deleting the entry.");
+        }
+    }
+};
 
     const handleBankChange = async (event) => {
         const bankName = event.target.value;
@@ -328,6 +340,14 @@ const BankLogincomponent = () => {
 
                                     <FontAwesomeIcon icon={faEye} />
                                 </Link>
+</td>
+<td>
+                                                <FontAwesomeIcon
+                                                    icon={faTrash}
+                                                    className="text-danger"
+                                                    onClick={() => handleDelete(detail._id)}
+                                                    style={{ cursor: 'pointer' }}
+                                                />
                             </td>
                         </tr>
                     ))}
@@ -339,3 +359,321 @@ const BankLogincomponent = () => {
 };
 
 export default BankLogincomponent;
+
+
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { statuses } from '../../Component/Bank-login/Data'; // Adjust the path if necessary
+// import { useOverview } from '../ContentHook/OverviewContext';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons'; // Import the delete icon
+// import { Link } from 'react-router-dom';
+
+// const BankLogincomponent = () => {
+//     const [loginStatus, setLoginStatus] = useState('');
+//     const [selectedStatus, setSelectedStatus] = useState('');
+//     const [selectedReason, setSelectedReason] = useState('');
+//     const [selectedBank, setSelectedBank] = useState('');
+//     const [bankDetail, setBankDetail] = useState({ "RM NAME": '', "RM CONTACT NO": '' });
+//     const [bankNames, setBankNames] = useState([]);
+//     const [remarks, setRemarks] = useState('');
+//     const [email1, setEmail1] = useState('');
+//     const [email2, setEmail2] = useState('');
+//     const [documentStatus, setDocumentStatus] = useState('');
+//     const baseurl = process.env.REACT_APP_API_BASE_URL;
+//     const { formData, handleSubmit } = useOverview();
+//     const userId = localStorage.getItem('userId');
+//     const [bankLoginDetails, setBankLoginDetails] = useState([]);
+//     const [loading, setLoading] = useState(true);
+//     const [error, setError] = useState(null);
+
+//     useEffect(() => {
+//         const fetchBankLoginDetails = async () => {
+//             try {
+//                 const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
+//                 setBankLoginDetails(response.data);
+//                 setLoading(false);
+//             } catch (error) {
+//                 setError('Error fetching data');
+//                 setLoading(false);
+//             }
+//         };
+
+//         fetchBankLoginDetails();
+//     }, [userId]);
+
+//     // Fetch bank names from the API
+//     useEffect(() => {
+//         const loanType = "Auto Loan";  // Example loan type
+//         axios.post(`${baseurl}/getBankNames`, { Loan_Type: loanType })
+//             .then(response => {
+//                 if (response.data.success) {
+//                     setBankNames(response.data.bankNames);
+//                 }
+//             })
+//             .catch(error => {
+//                 console.error("Error fetching bank names:", error);
+//             });
+//     }, []);
+
+//     const handleLoginStatusChange = (event) => {
+//         setLoginStatus(event.target.value);
+//         setSelectedStatus('');
+//         setSelectedReason('');
+//         setSelectedBank('');
+//         setBankDetail({ "rm1_name": '', "rm1_contact_number": '', "email_1": "" });
+//     };
+
+//     const handleStatusChange = (event) => {
+//         setSelectedStatus(event.target.value);
+//         setSelectedReason('');
+//     };
+
+//     const handleBankChange = async (event) => {
+//         const bankName = event.target.value;
+//         setSelectedBank(bankName);
+
+//         if (bankName && formData.type_of_loan) {
+//             // Fetch RM details based on loan type and selected bank
+//             try {
+//                 const response = await axios.post(`${baseurl}/getrmDetails`, {
+//                     loan_type: formData.type_of_loan,  // Assuming formData contains the type_of_loan
+//                     bank_name: bankName
+//                 });
+//                 if (response.data.bankDetail) {
+//                     setBankDetail(response.data.bankDetail);
+//                 }
+//             } catch (error) {
+//                 console.error("Error fetching RM details:", error);
+//             }
+//         }
+//     };
+
+//     const handleSubmitForm = async () => {
+//         const payload = {
+//             userId: userId,
+//             file_number: formData.file_number,
+//             bank_login_status: loginStatus,
+//             call_status: selectedStatus,
+//             reason_for_notlogin: selectedReason,
+//             loan_type: formData.type_of_loan,  // Use loan_type from formData
+//             bank_name: selectedBank,
+//             rm1_name: bankDetail['rm1_name'],
+//             rm1_contact_number: bankDetail["rm1_contact_number"],
+//             email_1: bankDetail["email_1"],
+//             email_2: email2,
+//             document_status: documentStatus,
+//             remarks: remarks,
+//         };
+
+//         try {
+//             const response = await axios.post(`${baseurl}/createBankDetail`, payload);
+//             if (response.data.message) {
+//                 alert("Bank details saved successfully!");
+//             }
+//         } catch (error) {
+//             alert(error.response?.data?.error || "Error saving bank details");
+//         }
+//     };
+
+//     const handleDelete = async (id) => {
+//         if (window.confirm("Are you sure you want to delete this entry?")) {
+//             try {
+//                 await axios.delete(`${baseurl}/deleteBankDetail/${id}`);
+//                 setBankLoginDetails(bankLoginDetails.filter(detail => detail._id !== id));
+//                 alert("Entry deleted successfully.");
+//             } catch (error) {
+//                 alert("Error deleting the entry.");
+//             }
+//         }
+//     };
+
+//     const filteredReasons = statuses.find(status => status.login_status === selectedStatus)?.reasons || [];
+
+//     return (
+//         <div className="container mt-4">
+//             <div className="row-md-6">
+//                 <div className="col-md-6">
+//                     <div className="form-group">
+//                         <label htmlFor="loginStatus">Check Login Status:</label>
+//                         <select id="loginStatus" className="form-control" value={loginStatus} onChange={handleLoginStatusChange}>
+//                             <option value="">Select</option>
+//                             <option value="Yes">Yes</option>
+//                             <option value="No">No</option>
+//                         </select>
+//                     </div>
+//                 </div>
+//             </div>
+
+//             {loginStatus === 'No' && (
+//                 <>
+//                     <div className="form-group mt-3">
+//                         <label htmlFor="status">Status:</label>
+//                         <select id="status" className="form-control" value={selectedStatus} onChange={handleStatusChange}>
+//                             <option value="">Select</option>
+//                             {statuses.map(status => (
+//                                 <option key={status.login_status} value={status.login_status}>
+//                                     {status.login_status}
+//                                 </option>
+//                             ))}
+//                         </select>
+//                     </div>
+
+//                     {selectedStatus && (
+//                         <div className="form-group mt-3">
+//                             <label htmlFor="reason">Reason:</label>
+//                             <select id="reason" className="form-control" value={selectedReason} onChange={(e) => setSelectedReason(e.target.value)}>
+//                                 <option value="">Select</option>
+//                                 {filteredReasons.map(reason => (
+//                                     <option key={reason} value={reason}>
+//                                         {reason}
+//                                     </option>
+//                                 ))}
+//                             </select>
+//                             <label htmlFor="remark">Remark:</label>
+//                             <textarea
+//                                 className="form-control"
+//                                 id="remarks"
+//                                 placeholder="Enter remarks"
+//                                 value={remarks}
+//                                 onChange={(e) => setRemarks(e.target.value)}
+//                             />
+//                         </div>
+//                     )}
+//                 </>
+//             )}
+
+//             {loginStatus === 'Yes' && (
+//                 <>
+//                     <div className="row">
+//                         <div className="col-md-6">
+//                             <div className="form-group mt-3">
+//                                 <label htmlFor="bankName">Bank Name:</label>
+//                                 <select id="bankName" className="form-control" value={selectedBank} onChange={handleBankChange}>
+//                                     <option value="">Select</option>
+//                                     {bankNames.map((bank, index) => (
+//                                         <option key={index} value={bank}>
+//                                             {bank}
+//                                         </option>
+//                                     ))}
+//                                 </select>
+//                             </div>
+//                         </div>
+
+//                         {selectedBank && (
+//                             <>
+//                                 <div className="col-md-6 form-group mt-3">
+//                                     <label htmlFor="rm1_name">RM Name:</label>
+//                                     <input
+//                                         id="rm1_name"
+//                                         type="text"
+//                                         className="form-control"
+//                                         value={bankDetail.rm1_name || ''}
+//                                         onChange={(e) => setBankDetail(prev => ({ ...prev, "rm1_name": e.target.value }))}
+//                                     />
+//                                 </div>
+
+//                                 <div className="col-md-6 form-group mt-3">
+//                                     <label htmlFor="rm1_contact_number">RM Contact No:</label>
+//                                     <input
+//                                         id="rm1_contact_number"
+//                                         type="text"
+//                                         className="form-control"
+//                                         value={bankDetail.rm1_contact_number || ''}
+//                                         onChange={(e) => setBankDetail(prev => ({ ...prev, "rm1_contact_number": e.target.value }))}
+//                                     />
+//                                 </div>
+
+//                                 <div className="col-md-6 form-group mt-3">
+//                                     <label htmlFor="email_1">Email 1:</label>
+//                                     <input
+//                                         id="email_1"
+//                                         type="email"
+//                                         className="form-control"
+//                                         value={bankDetail.email_1}
+//                                         onChange={(e) => setBankDetail(prev => ({ ...prev, "email_1": e.target.value }))}
+//                                     />
+//                                 </div>
+
+//                                 <div className="col-md-6 form-group mt-3">
+//                                     <label htmlFor="email_2">Email 2:</label>
+//                                     <input
+//                                         id="email_2"
+//                                         type="email"
+//                                         className="form-control"
+//                                         value={email2}
+//                                         onChange={(e) => setEmail2(e.target.value)}
+//                                     />
+//                                 </div>
+
+//                                 <div className="col-md-6 form-group mt-3">
+//                                     <label htmlFor="documentStatus">Document Status:</label>
+//                                     <input
+//                                         id="documentStatus"
+//                                         type="text"
+//                                         className="form-control"
+//                                         value={documentStatus}
+//                                         onChange={(e) => setDocumentStatus(e.target.value)}
+//                                     />
+//                                 </div>
+//                             </>
+//                         )}
+//                     </div>
+//                 </>
+//             )}
+
+//             <div className="form-group mt-3">
+//                 <button onClick={handleSubmitForm} className="btn btn-primary">
+//                     Submit
+//                 </button>
+//             </div>
+
+//             {loading ? (
+//                 <div>Loading...</div>
+//             ) : (
+//                 <>
+//                     {error && <div>{error}</div>}
+//                     {bankLoginDetails.length > 0 && (
+//                         <div className="mt-4">
+//                             <h4>Bank Login Details</h4>
+//                             <table className="table">
+//                                 <thead>
+//                                     <tr>
+//                                         <th>Bank Name</th>
+//                                         <th>Status</th>
+//                                         <th>Actions</th>
+//                                     </tr>
+//                                 </thead>
+//                                 <tbody>
+//                                     {bankLoginDetails.map(detail => (
+//                                         <tr key={detail._id}>
+//                                             <td>{detail.bank_name}</td>
+//                                             <td>{detail.bank_login_status}</td>
+//                                             <td>
+//                                                 <Link to={`/view-details/${detail._id}`}>
+//                                                     <FontAwesomeIcon icon={faEye} className="mr-2" />
+//                                                 </Link>
+//                                                 <FontAwesomeIcon
+//                                                     icon={faTrash}
+//                                                     className="text-danger"
+//                                                     onClick={() => handleDelete(detail._id)}
+//                                                     style={{ cursor: 'pointer' }}
+//                                                 />
+//                                             </td>
+//                                         </tr>
+//                                     ))}
+//                                 </tbody>
+//                             </table>
+//                         </div>
+//                     )}
+//                 </>
+//             )}
+//         </div>
+//     );
+// };
+
+// export default BankLogincomponent;

@@ -1,3 +1,339 @@
+// import React, { useState, useEffect } from 'react';
+// import Select from 'react-select';
+// import axios from 'axios';
+// import { useOverview } from '../ContentHook/OverviewContext';
+
+// const LoanDetails = () => {
+//   const [Loandetails, setLoandetails] = useState([]);
+//   const baseurl = process.env.REACT_APP_API_BASE_URL;
+//   const [isEditing, setIsEditing] = useState(false); // Track if the form is in edit mode
+
+//   const [loandetail, setloandetail] = useState({
+//     bank_name: '',
+//     emi_amount: '',
+//     emi_date: '',
+//     loan_start_date: '',
+//     loan_end_date: '',
+//     no_of_emi_bounces: '',
+//     bounces_reason: '',
+//     car_details: '',
+//     other_bank_name: ''
+//   });
+
+//   const [bankOptions, setBankOptions] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [selectedLoanType, setSelectedLoanType] = useState('');
+//   const [fileNumber, setFileNumber] = useState('');
+//   const { mobileNumber, fetchFileData, formData, setFormData, handleSubmit } = useOverview();
+//   const [isOtherSelected, setIsOtherSelected] = useState(false);
+//   const [otherBankName, setOtherBankName] = useState('');
+
+//   // Fetch bank list from API
+//   useEffect(() => {
+//     const fetchBankList = async () => {
+//       try {
+//         const response = await axios.get(`${baseurl}/getlist`);
+//         const banks = response.data.bankNames.map(bank => ({
+//           value: bank,
+//           label: bank
+//         }));
+
+//         // Add "Other" option to the bank list
+//         banks.push({ value: 'other', label: 'Other' });
+//         setBankOptions(banks);
+//       } catch (error) {
+//         console.error('Error fetching bank list:', error);
+//       }
+//     };
+//     fetchBankList();
+//   }, []);
+
+//   // Handle selection of bank from dropdown
+//   const handleBankSelect = (selectedOption) => {
+//     if (selectedOption.value === 'other') {
+//       setIsOtherSelected(true);
+//       setloandetail({ ...loandetail, bank_name: '' });
+//     } else {
+//       setIsOtherSelected(false);
+//       setloandetail({ ...loandetail, bank_name: selectedOption.value });
+//     }
+//   };
+
+//   const fetchLoanDetails = async (fileNumber, setLoandetails) => {
+//     try {
+//       const response = await axios.get(`${baseurl}/getLoandetails/${fileNumber}`);
+//       if (Array.isArray(response.data.data)) {
+//         setLoandetails(response.data.data);
+//         console.log(response.data.data, 'data');
+//       }
+//     } catch (error) {
+//       console.error('Error fetching loan details:', error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (formData.file_number) {
+//       fetchLoanDetails(formData.file_number, setLoandetails);
+//     }
+//   }, [formData.file_number]);
+
+//   const handleEditClick = (loanDetail) => {
+//     setloandetail(loanDetail); // Populate the form with the loan details for editing
+//     setIsEditing(true); // Set form to edit mode
+//   };
+
+//   const handleAddReference = async (e) => {
+//     e.preventDefault();
+
+//     const updatedLoanDetail = {
+//       ...loandetail,
+//       bank_name: isOtherSelected ? loandetail.other_bank_name : loandetail.bank_name,
+//     };
+
+//     try {
+//       setLoading(true);
+//       const response = await axios.post(`${baseurl}/createLoandetails/${formData.file_number}`, updatedLoanDetail);
+//       if (response.status === 200) {
+//         alert('Loan details added successfully!');
+//         fetchLoanDetails(formData.file_number, setLoandetails);
+//         setIsEditing(false); // Reset editing mode
+//       } else {
+//         alert('Failed to save loan details');
+//       }
+//     } catch (error) {
+//       console.error('Error saving loan details:', error);
+//       alert('Error saving loan details');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleUpdateReference = async (e) => {
+//     e.preventDefault();
+  
+//     const updatedLoanDetail = {
+//       ...loandetail,
+//       bank_name: isOtherSelected ? loandetail.other_bank_name : loandetail.bank_name,
+//     };
+  
+//     try {
+//       setLoading(true);
+//       // Pass the loanId in the URL
+//       const response = await axios.put(`${baseurl}/updateLoandetails/${loandetail._id}`, updatedLoanDetail);
+//       if (response.status === 200) {
+//         alert('Loan details updated successfully!');
+//         fetchLoanDetails(formData.file_number, setLoandetails);
+//         setIsEditing(false); // Exit edit mode
+//       } else {
+//         alert('Failed to update loan details');
+//       }
+//     } catch (error) {
+//       console.error('Error updating loan details:', error);
+//       alert('Error updating loan details');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+  
+
+//   return (
+//     <>
+//       <div className="position-relative tab-pane active">
+//         {loading && (
+//           <div
+//             className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-light bg-opacity-75"
+//             style={{ zIndex: 1050 }}
+//           >
+//             <div className="spinner-border text-primary" role="status">
+//               <span className="visually-hidden">Loading...</span>
+//             </div>
+//           </div>
+//         )}
+//         <form onSubmit={isEditing ? handleUpdateReference : handleAddReference} className="mb-4">
+          // <div className="mb-3 row">
+          //   <div className="col-md-4">
+          //     <label htmlFor="bank_name" className="form-label fw-bold">Bank Name</label>
+          //     <Select
+          //       id="bank_name"
+          //       options={bankOptions}
+          //       value={bankOptions.find(option => option.value === loandetail.bank_name || option.value === 'other')}
+          //       onChange={handleBankSelect}
+          //       placeholder="Select a bank"
+          //       isSearchable={true}
+          //       required
+          //     />
+          //   </div>
+
+          //   {isOtherSelected && (
+          //     <div className="col-md-4">
+          //       <label htmlFor="other_bank_name" className="form-label fw-bold">Enter Bank Name</label>
+          //       <input
+          //         type="text"
+          //         className="form-control"
+          //         id="other_bank_name"
+          //         value={loandetail.other_bank_name}
+          //         onChange={(e) => setloandetail({ ...loandetail, other_bank_name: e.target.value })}
+          //         placeholder="Enter custom bank name"
+          //         required
+          //       />
+          //     </div>
+          //   )}
+
+          //   <div className="col-md-4">
+          //     <label htmlFor="emi_amount" className="form-label fw-bold">EMI Amount</label>
+          //     <input
+          //       type="number"
+          //       className="form-control"
+          //       id="emi_amount"
+          //       value={loandetail.emi_amount}
+          //       onChange={(e) => setloandetail({ ...loandetail, emi_amount: e.target.value })}
+          //       placeholder="Enter EMI Amount"
+          //     />
+          //   </div>
+
+          //   <div className="col-md-4">
+          //     <label htmlFor="loan_term" className="form-label fw-bold">Loan Term</label>
+          //     <input
+          //       type="text"
+          //       className="form-control"
+          //       id="loan_term"
+          //       value={loandetail.loan_term}
+          //       onChange={(e) => setloandetail({ ...loandetail, loan_term: e.target.value })}
+          //       placeholder="Enter Loan Term"
+                
+          //     />
+          //   </div>
+
+          //   <div className="col-md-4">
+          //     <label htmlFor="loan_start_date" className="form-label fw-bold">Loan Start Date</label>
+          //     <input
+          //       type="date"
+          //       className="form-control"
+          //       id="loan_start_date"
+          //       value={loandetail.loan_start_date}
+          //       onChange={(e) => setloandetail({ ...loandetail, loan_start_date: e.target.value })}
+                
+          //     />
+          //   </div>
+
+          //   <div className="col-md-4">
+          //     <label htmlFor="loan_end_date" className="form-label fw-bold">Loan End Date</label>
+          //     <input
+          //       type="date"
+          //       className="form-control"
+          //       id="loan_end_date"
+          //       value={loandetail.loan_end_date}
+          //       onChange={(e) => setloandetail({ ...loandetail, loan_end_date: e.target.value })}
+                
+          //     />
+          //   </div>
+
+          //   <div className="col-md-4">
+          //     <label htmlFor="emi_amount" className="form-label fw-bold">EMI Date</label>
+          //     <input
+          //       type="date"
+          //       className="form-control"
+          //       id="emi_amount"
+          //       value={loandetail.emi_date}
+          //       onChange={(e) => setloandetail({ ...loandetail, emi_date: e.target.value })}
+                
+          //     />
+          //   </div>
+
+          //   <div className="col-md-4">
+          //     <label htmlFor="no_of_emi_bounces" className="form-label fw-bold">No of EMI Bounces</label>
+          //     <input
+          //       type="number"
+          //       className="form-control"
+          //       id="no_of_emi_bounces"
+          //       value={loandetail.no_of_emi_bounces}
+          //       onChange={(e) => setloandetail({ ...loandetail, no_of_emi_bounces: e.target.value })}
+          //       placeholder="Enter No of EMI Bounces"
+                
+          //     />
+          //   </div>
+
+          //   <div className="col-md-4">
+          //     <label htmlFor="bounces_reason" className="form-label fw-bold">Bounces Reason</label>
+          //     <select
+          //       className="form-select"
+          //       id="bounces_reason"
+          //       value={loandetail.bounces_reason}
+          //       onChange={(e) => setloandetail({ ...loandetail, bounces_reason: e.target.value })}
+                
+          //     >
+          //       <option value="">Select Reason</option>
+          //       <option value="insufficient_funds">Insufficient Funds</option>
+          //       <option value="technical_issue">Technical Issue</option>
+          //     </select>
+          //   </div>
+
+          //   <div className="col-md-4">
+          //     <label htmlFor="car_details" className="form-label fw-bold">Car Details</label>
+          //     <input
+          //       type="text"
+          //       className="form-control"
+          //       id="car_details"
+          //       value={loandetail.car_details}
+          //       onChange={(e) => setloandetail({ ...loandetail, car_details: e.target.value })}
+          //       placeholder="Enter Car Details"
+                
+          //     />
+          //   </div>
+          // </div>
+
+//           {/* Conditionally render "Save" or "Update" button */}
+//           <button type="submit" className="btn btn-primary">
+//             {isEditing ? 'Update Loan Details' : 'Save Loan Details'}
+//           </button>
+//         </form>
+
+//         <div className="mb-4">
+//           {Loandetails.length > 0 ? (
+//             <table className="table">
+//               <thead>
+//                 <tr>
+//                   <th scope="col">#</th>
+//                   <th scope="col">Bank Name</th>
+//                   <th scope="col">EMI Amount</th>
+//                   <th scope="col">Loan Term</th>
+//                   <th scope="col">Loan Start Date</th>
+//                   <th scope="col">Loan End Date</th>
+//                   <th scope="col">EMI Date</th>
+//                   <th scope="col">No of EMI Bounces</th>
+//                   <th scope="col">Bounces Reason</th>
+//                   <th scope="col">Car Details</th>
+//                   <th scope="col">Actions</th> {/* New column for actions */}
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {Loandetails.map((reference, index) => (
+//                   <tr key={reference._id}>
+//                     <th scope="row">{index + 1}</th>
+//                     <td>{reference.bank_name}</td>
+//                     <td>{reference.emi_amount}</td>
+//                     <td>{reference.loan_term}</td>
+//                     <td>{reference.loan_start_date}</td>
+//                     <td>{reference.loan_end_date}</td>
+//                     <td>{reference.emi_date}</td>
+//                     <td>{reference.no_of_emi_bounces}</td>
+//                     <td>{reference.bounces_reason}</td> 
+//                     <td>{reference.car_details}</td> 
+//                     <td> <button className="btn btn-secondary" onClick={() => handleEditClick(reference)}>Edit</button> 
+//                     </td> </tr> ))} 
+//                     </tbody> 
+//                     </table> ) : ( <p>No loan details available.</p> )} 
+//                     </div> 
+//                     </div> 
+//                     </> ); };
+
+// export default LoanDetails;
+
+
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
@@ -22,11 +358,9 @@ const LoanDetails = () => {
 
   const [bankOptions, setBankOptions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedLoanType, setSelectedLoanType] = useState('');
-  const [fileNumber, setFileNumber] = useState('');
-  const { mobileNumber, fetchFileData, formData, setFormData, handleSubmit } = useOverview();
   const [isOtherSelected, setIsOtherSelected] = useState(false);
-  const [otherBankName, setOtherBankName] = useState('');
+
+  const { formData } = useOverview();
 
   // Fetch bank list from API
   useEffect(() => {
@@ -48,6 +382,24 @@ const LoanDetails = () => {
     fetchBankList();
   }, []);
 
+  // Fetch loan details
+  const fetchLoanDetails = async (fileNumber) => {
+    try {
+      const response = await axios.get(`${baseurl}/getLoandetails/${fileNumber}`);
+      if (Array.isArray(response.data.data)) {
+        setLoandetails(response.data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching loan details:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (formData.file_number) {
+      fetchLoanDetails(formData.file_number);
+    }
+  }, [formData.file_number]);
+
   // Handle selection of bank from dropdown
   const handleBankSelect = (selectedOption) => {
     if (selectedOption.value === 'other') {
@@ -59,44 +411,47 @@ const LoanDetails = () => {
     }
   };
 
-  const fetchLoanDetails = async (fileNumber, setLoandetails) => {
-    try {
-      const response = await axios.get(`${baseurl}/getLoandetails/${fileNumber}`);
-      if (Array.isArray(response.data.data)) {
-        setLoandetails(response.data.data);
-        console.log(response.data.data, 'data');
-      }
-    } catch (error) {
-      console.error('Error fetching loan details:', error);
-    }
+  // Edit loan details
+  const handleEditClick = (loanDetail) => {
+    setloandetail(loanDetail);
+    setIsEditing(true);
   };
 
-  useEffect(() => {
-    if (formData.file_number) {
-      fetchLoanDetails(formData.file_number, setLoandetails);
+  // Delete loan details
+  const handleDeleteClick = async (loanId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this loan detail?');
+    if (confirmDelete) {
+      try {
+        setLoading(true);
+        const response = await axios.delete(`${baseurl}/deleteLoanDetails/${loanId}`);
+        if (response.status === 200) {
+          alert('Loan detail deleted successfully!');
+          fetchLoanDetails(formData.file_number);
+        } else {
+          alert('Failed to delete loan detail');
+        }
+      } catch (error) {
+        console.error('Error deleting loan detail:', error);
+        alert('Error deleting loan detail');
+      } finally {
+        setLoading(false);
+      }
     }
-  }, [formData.file_number]);
-
-  const handleEditClick = (loanDetail) => {
-    setloandetail(loanDetail); // Populate the form with the loan details for editing
-    setIsEditing(true); // Set form to edit mode
   };
 
   const handleAddReference = async (e) => {
     e.preventDefault();
-
-    const updatedLoanDetail = {
-      ...loandetail,
-      bank_name: isOtherSelected ? loandetail.other_bank_name : loandetail.bank_name,
-    };
-
     try {
       setLoading(true);
+      const updatedLoanDetail = {
+        ...loandetail,
+        bank_name: isOtherSelected ? loandetail.other_bank_name : loandetail.bank_name,
+      };
       const response = await axios.post(`${baseurl}/createLoandetails/${formData.file_number}`, updatedLoanDetail);
       if (response.status === 200) {
         alert('Loan details added successfully!');
-        fetchLoanDetails(formData.file_number, setLoandetails);
-        setIsEditing(false); // Reset editing mode
+        fetchLoanDetails(formData.file_number);
+        setIsEditing(false);
       } else {
         alert('Failed to save loan details');
       }
@@ -110,20 +465,17 @@ const LoanDetails = () => {
 
   const handleUpdateReference = async (e) => {
     e.preventDefault();
-  
-    const updatedLoanDetail = {
-      ...loandetail,
-      bank_name: isOtherSelected ? loandetail.other_bank_name : loandetail.bank_name,
-    };
-  
     try {
       setLoading(true);
-      // Pass the loanId in the URL
+      const updatedLoanDetail = {
+        ...loandetail,
+        bank_name: isOtherSelected ? loandetail.other_bank_name : loandetail.bank_name,
+      };
       const response = await axios.put(`${baseurl}/updateLoandetails/${loandetail._id}`, updatedLoanDetail);
       if (response.status === 200) {
         alert('Loan details updated successfully!');
-        fetchLoanDetails(formData.file_number, setLoandetails);
-        setIsEditing(false); // Exit edit mode
+        fetchLoanDetails(formData.file_number);
+        setIsEditing(false);
       } else {
         alert('Failed to update loan details');
       }
@@ -134,7 +486,6 @@ const LoanDetails = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -150,6 +501,8 @@ const LoanDetails = () => {
           </div>
         )}
         <form onSubmit={isEditing ? handleUpdateReference : handleAddReference} className="mb-4">
+          {/* Form inputs remain unchanged */}
+          {/* Conditionally render "Save" or "Update" button */}
           <div className="mb-3 row">
             <div className="col-md-4">
               <label htmlFor="bank_name" className="form-label fw-bold">Bank Name</label>
@@ -281,8 +634,6 @@ const LoanDetails = () => {
               />
             </div>
           </div>
-
-          {/* Conditionally render "Save" or "Update" button */}
           <button type="submit" className="btn btn-primary">
             {isEditing ? 'Update Loan Details' : 'Save Loan Details'}
           </button>
@@ -303,7 +654,7 @@ const LoanDetails = () => {
                   <th scope="col">No of EMI Bounces</th>
                   <th scope="col">Bounces Reason</th>
                   <th scope="col">Car Details</th>
-                  <th scope="col">Actions</th> {/* New column for actions */}
+                  <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -317,17 +668,35 @@ const LoanDetails = () => {
                     <td>{reference.loan_end_date}</td>
                     <td>{reference.emi_date}</td>
                     <td>{reference.no_of_emi_bounces}</td>
-                    <td>{reference.bounces_reason}</td> 
-                    <td>{reference.car_details}</td> 
-                    <td> <button className="btn btn-secondary" onClick={() => handleEditClick(reference)}>Edit</button> 
-                    </td> </tr> ))} 
-                    </tbody> 
-                    </table> ) : ( <p>No loan details available.</p> )} 
-                    </div> 
-                    </div> 
-                    </> ); };
+                    <td>{reference.bounces_reason}</td>
+                    <td>{reference.car_details}</td>
+                    <td>
+                      <button className="btn btn-secondary me-2" onClick={() => handleEditClick(reference)}>
+                        Edit
+                      </button>
+                      </td>
+                      <td>
+                      <button className="btn btn-danger" onClick={() => handleDeleteClick(reference._id)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No loan details available.</p>
+          )}
+        </div>
+      </div>
+    </>
+  );
+};
 
 export default LoanDetails;
+
+
+
 
 
 
