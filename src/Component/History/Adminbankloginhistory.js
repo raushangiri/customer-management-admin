@@ -84,8 +84,10 @@ const Adminbankloginhistory = () => {
     const downloadCSV = () => {
       const headers = [
         'Date',
+        'Time',
         userRole === 'admin' ? 'Team Leader Name' : null,
         userRole === 'admin' ? 'Agent Name' : null,
+        'Sales Agent Name',
         'Customer Name',
         'Mobile Number',
         'Loan Type',
@@ -96,14 +98,15 @@ const Adminbankloginhistory = () => {
         .join(',');
   
       const rows = loanFiles.map((loanFile) => [
-        loanFile.sales_assign_date
-          ? new Date(loanFile.sales_assign_date).toLocaleString('en-GB', {
+        loanFile.banklogin_assign_date
+          ? new Date(loanFile.banklogin_assign_date).toLocaleString('en-GB', {
               dateStyle: 'short',
               timeStyle: 'short',
             })
           : '',
         userRole === 'admin' ? loanFile.teamleadername : null,
-        userRole === 'admin' ? loanFile.sales_agent_name : null,
+        userRole === 'admin' ? loanFile.banklogin_agent_name : null,
+        loanFile.sales_agent_name || null,
         loanFile.customer_name,
         loanFile.customer_mobile_number,
         loanFile.type_of_loan,

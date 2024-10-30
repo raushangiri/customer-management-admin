@@ -716,6 +716,16 @@ const History = () => {
                       <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </Link>
                      )}
+                     {userRole === 'CDR' && (
+                    <Link to={`/Cdrsearch/${loanFile.customer_mobile_number}`}>
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </Link>
+                     )}
+                     {userRole === 'Bank login' && (
+                    <Link to={`/bankloginsearch/${loanFile.customer_mobile_number}`}>
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </Link>
+                     )}
                      
                   </td>
               </tr>

@@ -45,6 +45,8 @@ import Cdrteamperformance from './Component/History/Cdrteamperformance';
 import Bankloginteamperformance from './Component/History/Bankloginteamperformance';
 import Viewuploadedbankstatement from './Component/Components/Viewuploadedbankstatement';
 import Salessearch from './Component/Components/Salessearch';
+import CDRsearch from './Component/Components/CDRsearch';
+import Bankloginsearch from './Component/Components/Bankloginsearch';
 // import TeamleaderHistory from './Component/History/Teamleaderhistory';
 
 function App() {
@@ -103,6 +105,7 @@ function Main() {
         <Route path="/Banklogindetails/:_id" element={<Banklogindetails />} />
         
         <Route path="/Tvrsearch" element={<Tvrsearch />} />
+        <Route path="/Cdrsearch" element={<CDRsearch />} />
         <Route path="/team-filehistory" element={<Teamleaderfilehistory />} />
         <Route path="/Cdrsearch" element={<Cdrsearch />} />
         <Route path="/Adminsearch" element={<Adminsearch />} />
@@ -110,6 +113,9 @@ function Main() {
         <Route path="/Adminsearch/:customer_mobilenumber" element={<Adminsearch />} />
         <Route path="/Salesearch/:customer_mobilenumber" element={<Salessearch />} />
         <Route path="/Tvrsearch/:customer_mobilenumber" element={<Tvrsearch />} />
+        <Route path="/cdrsearch/:customer_mobilenumber" element={<CDRsearch />} />
+        <Route path="/bankloginsearch/:customer_mobilenumber" element={<Bankloginsearch />} />
+
         <Route path="/teamleaderfilehistory" element={<Teamleaderhistory />} />
         <Route path="/team-performance" element={<Teamperformance/>} />
         <Route path="/adminsaleshistory" element={<Adminsaleshistory/>} />
