@@ -324,15 +324,17 @@ const handleDelete = async (id) => {
                             <td>{detail.rm1_contact_number}</td>
                             <td>{detail.email_1}</td>
                             <td>
-                                {detail.document_status === "Ready to share" ? (
-                                    <Link className="btn btn-primary" to={`/Banklogindetails/${detail._id}`}>
-                                        Share with RM
-                                    </Link>
-                                ) : (
-                                    detail.document_status
-                                )}
-                            </td>
-
+    {(detail.document_status === "Ready to share" || detail.document_status === "document shared") ? (
+        <Link 
+            className={`btn ${detail.document_status === "document shared" ? "btn-success" : "btn-primary"}`}
+            to={`/Banklogindetails/${detail._id}`}
+        >
+            {detail.document_status}
+        </Link>
+    ) : (
+        detail.document_status
+    )}
+</td>
                             <td>{detail.remarks}</td>
                             <td className="text-center">
                                 {/* <Link to={`/view-filedetails/${detail._id}`}> */}

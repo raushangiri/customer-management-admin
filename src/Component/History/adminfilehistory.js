@@ -357,6 +357,20 @@ const Adminfilehistory = () => {
   const [filterTL, setFilterTL] = useState('');
   const baseurl = process.env.REACT_APP_API_BASE_URL;
 
+  // Set the startDate and endDate to current date on initial render
+  useEffect(() => {
+    const today = new Date().toISOString().slice(0, 10); // Format to yyyy-mm-dd
+    setStartDate(today);
+    setEndDate(today);
+  }, []);
+
+  // Fetch data whenever startDate or endDate changes
+  useEffect(() => {
+    if (startDate && endDate) {
+      fetchFilteredData();
+    }
+  }, [startDate, endDate]);
+
   // Function to fetch data from API based on filters
   const fetchFilteredData = async () => {
     if (!startDate || !endDate) return;
@@ -567,3 +581,4 @@ const Adminfilehistory = () => {
 };
 
 export default Adminfilehistory;
+

@@ -409,7 +409,8 @@ const sendEmail = async () => {
       `Note: ${personalDetails.note || 'N/A'}\n\n` +
       `References:\n${referenceDetails}`, // Include the reference details in the email
     documentUrls: documentUrls, // Sending document URLs
-    documentNames: documentNames // Sending document names with unique identifiers
+    documentNames: documentNames,
+    _id:_id // Sending document names with unique identifiers
   };
 
   try {
