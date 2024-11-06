@@ -19,7 +19,10 @@ const Attachments = () => {
   const [error, setError] = useState(null);
 
   // console.log(formData1.file_number,"formData1")
-  const allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+  const allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // Excel (.xlsx)
+  'application/vnd.ms-excel', // Older Excel (.xls)
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // Word (.docx)
+  'application/msword'] // Older Word (.doc)];
   const maxFileSize = 5 * 1024 * 1024; // 5 MB
 
   const handleDocumentTypeChange = (event) => {
