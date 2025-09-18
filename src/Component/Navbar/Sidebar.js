@@ -59,8 +59,19 @@ const Sidebar = () => {
   };
   
   return (
-    <div className="sidebar border border-primary overflow-auto">
-      <img src={logo} alt='logo' style={{ width: '90%' }} className='img1' />
+    <div className="sidebar border border-primary overflow-auto"
+     style={{
+      flex: 1,
+      background: "linear-gradient(to bottom, #1e3c72, #2a5298)", // adjust colors
+      color: "white",
+    }}
+    >
+      {/* <img src={logo} alt='logo' style={{ width: '90%' }} className='img1' /> */}
+       <div className="text-center">
+      <img src={logo} alt="logo" style={{ width: "150px" }} className="mb-3" />
+      {/* <h4 className="fw-bold">JBJ Fintech</h4> */}
+      {/* <p className="mb-0">A Professional Way For Funding</p> */}
+    </div>
       <ul>
       <p>
   <FontAwesomeIcon icon={faUser} className='mx-2'/>
@@ -84,7 +95,7 @@ const Sidebar = () => {
                   <li><NavLink to="/adminsaleshistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Sales File History</NavLink></li>
                   <li><NavLink to="/admintvrhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>TVR File History</NavLink></li>
                   <li><NavLink to="/admincdrhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>CDR File History</NavLink></li>
-                  <li><NavLink to="/adminbankloginhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Bank Login File History</NavLink></li>
+                  <li><NavLink to="/adminbankloginhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>bank_login File History</NavLink></li>
                   <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Approval File History</NavLink></li>
 
                 </ul>
@@ -102,13 +113,14 @@ const Sidebar = () => {
                   <li><NavLink to="/Adminfilehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Sales Team Performance</NavLink></li>
                   <li><NavLink to="/tvrteamperformance" className={({ isActive }) => isActive ? 'active-link' : ''}>TVR Team Performance</NavLink></li>
                   <li><NavLink to="/cdrteamperformance" className={({ isActive }) => isActive ? 'active-link' : ''}>CDR Team Performance</NavLink></li>
-                  <li><NavLink to="/bankloginteamperformance" className={({ isActive }) => isActive ? 'active-link' : ''}>Bank Login Team Performance</NavLink></li>
+                  <li><NavLink to="/bankloginteamperformance" className={({ isActive }) => isActive ? 'active-link' : ''}>bank_login Performance</NavLink></li>
                   {/* <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Approval Team Performance</NavLink></li> */}
 
                 </ul>
               )}
               </li>
-            <li>
+              <li><NavLink to="/user-list" className={({ isActive }) => isActive ? 'active-link' : ''}>Manage Users</NavLink></li>
+            {/* <li>
               <div onClick={toggleSubMenu} className="submenu-title">
                 Manage User
                 <FontAwesomeIcon icon={faCircleChevronDown} />
@@ -120,7 +132,7 @@ const Sidebar = () => {
                   <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Unlock User</NavLink></li>
                 </ul>
               )}
-            </li>
+            </li> */}
             <li>
               <NavLink to="/upload-csv" className={({ isActive }) => isActive ? 'active-link' : ''}>Upload File</NavLink>
             </li>
@@ -186,7 +198,7 @@ const Sidebar = () => {
             <li>
               <NavLink  to="/banklogin-dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
             </li>
-            <li><NavLink  to="/bank-login-team" className={({ isActive }) => isActive ? 'active-link' : ''}>Bank Login Team</NavLink></li>
+            <li><NavLink  to="/bank-login-team" className={({ isActive }) => isActive ? 'active-link' : ''}>bank_login</NavLink></li>
             <li>
               <NavLink to="/Adminsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>

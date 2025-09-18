@@ -61,67 +61,171 @@ function ChangePassword() {
     };
 
     return (
-        <>
-            <ToastContainer />
-            <div className="d-flex justify-content-center align-items-center vh-100">
-                <div className='container login' style={{ width: '50%' }}>
-                    <div className="d-flex justify-content-center mt-3">
-                        <img src={logo} alt='logo' style={{ width: '15%' }} className='img1' />
-                    </div>
-                    <h4 className='mt-3 text-center'>Reset Your Password</h4>
-                    <div className='row'>
-                        {/* User ID Field */}
-                        <div className="mb-3">
-                            <label htmlFor="floatingInput" className="form-label">Enter Your User ID</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="floatingInput"
-                                placeholder="Enter Your User ID"
-                                value={userId}
-                                onChange={handleUserIdChange}
-                            />
-                        </div>
+        // <>
+        //     <ToastContainer />
+        //     <div className="d-flex justify-content-center align-items-center vh-100">
+        //         <div className='container login' style={{ width: '50%' }}>
+        //             <div className="d-flex justify-content-center mt-3">
+        //                 <img src={logo} alt='logo' style={{ width: '15%' }} className='img1' />
+        //             </div>
+        //             <h4 className='mt-3 text-center'>Reset Your Password</h4>
+        //             <div className='row'>
+        //                 {/* User ID Field */}
+        //                 <div className="mb-3">
+        //                     <label htmlFor="floatingInput" className="form-label">Enter Your User ID</label>
+        //                     <input
+        //                         type="text"
+        //                         className="form-control"
+        //                         id="floatingInput"
+        //                         placeholder="Enter Your User ID"
+        //                         value={userId}
+        //                         onChange={handleUserIdChange}
+        //                     />
+        //                 </div>
 
-                        {/* Current Password Field */}
-                        <div className="mb-3">
-                            <label htmlFor="currentPassword" className="form-label">Enter Your Current Password</label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="currentPassword"
-                                placeholder="Enter Your Current Password"
-                                value={currentPassword}
-                                onChange={handleCurrentPasswordChange}
-                            />
-                        </div>
+        //                 {/* Current Password Field */}
+        //                 <div className="mb-3">
+        //                     <label htmlFor="currentPassword" className="form-label">Enter Your Current Password</label>
+        //                     <input
+        //                         type="password"
+        //                         className="form-control"
+        //                         id="currentPassword"
+        //                         placeholder="Enter Your Current Password"
+        //                         value={currentPassword}
+        //                         onChange={handleCurrentPasswordChange}
+        //                     />
+        //                 </div>
 
-                        {/* New Password Field */}
-                        <div className="mb-3">
-                            <label htmlFor="newPassword" className="form-label">Enter Your New Password</label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="newPassword"
-                                placeholder="Enter Your New Password"
-                                value={newPassword}
-                                onChange={handleNewPasswordChange}
-                            />
-                        </div>
+        //                 {/* New Password Field */}
+        //                 <div className="mb-3">
+        //                     <label htmlFor="newPassword" className="form-label">Enter Your New Password</label>
+        //                     <input
+        //                         type="password"
+        //                         className="form-control"
+        //                         id="newPassword"
+        //                         placeholder="Enter Your New Password"
+        //                         value={newPassword}
+        //                         onChange={handleNewPasswordChange}
+        //                     />
+        //                 </div>
 
-                        {/* Change Password Button */}
-                        <div className='text-center mb-3'>
-                        <Link to="/" type="button" className="btn btn-primary loginButton mx-2" style={{ width: '25%' }} >
-                                Login
-                            </Link>
-                            <button type="button" className="btn btn-primary loginButton" style={{ width: '25%' }} onClick={handleChangePassword}>
-                                Change Password
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
+        //                 {/* Change Password Button */}
+        //                 <div className='text-center mb-3'>
+        //                 <Link to="/" type="button" className="btn btn-primary loginButton mx-2" style={{ width: '25%' }} >
+        //                         Login
+        //                     </Link>
+        //                     <button type="button" className="btn btn-primary loginButton" style={{ width: '25%' }} onClick={handleChangePassword}>
+        //                         Change Password
+        //                     </button>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </>
+   
+   <>
+  <ToastContainer />
+  <div className="d-flex vh-100">
+    {/* Left Side - Logo Section */}
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{
+        flex: 1,
+        background: "linear-gradient(to bottom, #1e3c72, #2a5298)",
+        color: "white",
+      }}
+    >
+      <div className="text-center">
+        <img src={logo} alt="logo" style={{ width: "250px" }} className="mb-3" />
+        <h4 className="fw-bold">JBJ Fintech</h4>
+        <p className="mb-0">A Professional Way For Funding</p>
+      </div>
+    </div>
+
+    {/* Right Side - Reset Password Form */}
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ flex: 1, backgroundColor: "#f8f9fa" }}
+    >
+      <div
+        className="p-4 shadow rounded bg-white"
+        style={{ width: "400px", borderRadius: "12px" }}
+      >
+        <h5 className="text-center mb-4 fw-bold">Reset Your Password</h5>
+
+        {/* User ID Field */}
+        <div className="mb-3">
+          <label htmlFor="floatingInput" className="form-label">
+            User ID
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="floatingInput"
+            placeholder="Enter Your User ID"
+            value={userId}
+            onChange={handleUserIdChange}
+          />
+        </div>
+
+        {/* Current Password Field */}
+        <div className="mb-3">
+          <label htmlFor="currentPassword" className="form-label">
+            Current Password
+          </label>
+          <input
+            type="password"
+            className="form-control"
+            id="currentPassword"
+            placeholder="Enter Your Current Password"
+            value={currentPassword}
+            onChange={handleCurrentPasswordChange}
+          />
+        </div>
+
+        {/* New Password Field */}
+        <div className="mb-3">
+          <label htmlFor="newPassword" className="form-label">
+            New Password
+          </label>
+          <input
+            type="password"
+            className="form-control"
+            id="newPassword"
+            placeholder="Enter Your New Password"
+            value={newPassword}
+            onChange={handleNewPasswordChange}
+          />
+        </div>
+
+        {/* Buttons */}
+        <div className="text-center">
+          <Link
+            to="/"
+            type="button"
+            className="btn btn-outline-secondary mx-2"
+            style={{ width: "45%" }}
+          >
+            Back to Login
+          </Link>
+          <button
+            type="button"
+            className="btn btn-primary"
+            style={{
+              width: "45%",
+              background: "linear-gradient(to right, #1e3c72, #2a5298)",
+              border: "none",
+            }}
+            onClick={handleChangePassword}
+          >
+            Change Password
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</>
+
     );
 }
 

@@ -153,7 +153,7 @@
 //                   <>
 //                   <td>{loanFile.teamleadername}</td>
 //                   <td>{loanFile.sales_agent_name}</td>
-                  
+
 //                   </>
 //                 )}
 //                 <td>{loanFile.customer_name}</td>
@@ -205,19 +205,19 @@
 //     const today = new Date();
 //     const last1Day = new Date(today);
 //     last1Day.setDate(today.getDate() - 1);
-    
+
 //     // Set the time to 12:00 AM for start of the day
 //     last1Day.setHours(0, 0, 0, 0);
-  
+
 //     return last1Day.toISOString(); // Full ISO date with time
 //   };
-  
+
 //   const getDefaultEndDate = () => {
 //     const today = new Date();
-    
+
 //     // Set the time to 11:59:59 PM for the end of the day
 //     today.setHours(23, 59, 59, 999);
-  
+
 //     return today.toISOString(); // Full ISO date with time
 //   };
 
@@ -437,14 +437,14 @@
 //     const end = getDefaultEndDate();
 //     setStartDate(start);
 //     setEndDate(end);
-  
+
 //     fetchLoanFiles(start, end);
 //   }, [userId]);
-  
+
 //   const sortLoanFilesByDate = (loanFiles) => {
 //     return loanFiles.sort((a, b) => new Date(b.sales_assign_date) - new Date(a.sales_assign_date));
 //   };
-  
+
 //   const fetchLoanFiles = async (start, end, agent = '', tl = '') => {
 //     setLoading(true);
 //     setError(null);
@@ -457,7 +457,7 @@
 //           teamLeaderName: tl,
 //         },
 //       });
-  
+
 //       if (response.data.success) {
 //         const sortedLoanFiles = sortLoanFilesByDate(response.data.data);
 //         setLoanFiles(sortedLoanFiles);
@@ -582,7 +582,7 @@
 //             Apply Filters
 //           </button>
 //           {' '}
-        
+
 //           <button className="btn btn-success mt-4" onClick={downloadCSV}>
 //             Download CSV
 //           </button>
@@ -676,7 +676,7 @@
 //                       <FontAwesomeIcon icon={faMagnifyingGlass} />
 //                     </Link>
 //                      )}
-                     
+
 //                   </td>
 //               </tr>
 //             ))}
@@ -715,70 +715,61 @@ const History = () => {
 
   const [allLoanFiles, setAllLoanFiles] = useState([]); // Stores all API data
   const [filteredLoanFiles, setFilteredLoanFiles] = useState([]); // Filtered data for display
-  
+
 
   const baseurl = process.env.REACT_APP_API_BASE_URL;
   const userId = localStorage.getItem('userId');
   const userRole = localStorage.getItem('userRole');
 
-  const getDefaultStartDate = () => {
-    const today = new Date();
-    const last1Day = new Date(today);
-    last1Day.setDate(today.getDate() - 1);
-    last1Day.setHours(0, 0, 0, 0);
-    return last1Day.toISOString();
+  
+
+  const handleStartDateChange = (e) => {
+    const selected = new Date(e.target.value);
+    selected.setHours(0, 0, 0, 0); // beginning of the day
+    setStartDate(selected.toISOString());
   };
 
-  const getDefaultEndDate = () => {
-    const today = new Date();
-    today.setHours(23, 59, 59, 999);
-    return today.toISOString();
+  const handleEndDateChange = (e) => {
+    const selected = new Date(e.target.value);
+    selected.setHours(23, 59, 59, 999); // end of the day
+    setEndDate(selected.toISOString());
   };
 
-  useEffect(() => {
-    const start = getDefaultStartDate();
-    const end = getDefaultEndDate();
-    setStartDate(start);
-    setEndDate(end);
-  
-    fetchLoanFiles(start, end);
-  }, [userId]);
-  
+
   const sortLoanFilesByDate = (loanFiles) => {
     return loanFiles.sort((a, b) => new Date(b.sales_assign_date) - new Date(a.sales_assign_date));
   };
 
-  // const fetchLoanFiles = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.get(
-  //       `${baseurl}/getLoanFilesByUserId/${userId}`
-  //     );
-  //     if (response.data.success) {
-  //       const loanFiles = response.data.data;
 
-  //       setAllLoanFiles(loanFiles); // Store full data
-  //       setFilteredLoanFiles(loanFiles); // Initially show all data
+  const handleFileStatusFilter = (e) => {
+  const selectedStatus = e.target.value;
+  setFilterFileStatus(selectedStatus);
 
-  //       // Extract unique file status options
-  //       const uniqueFileStatuses = [
-  //         ...new Set(loanFiles.map((file) => file.file_status)),
-  //       ];
-  //       setFileStatusOptions(uniqueFileStatuses);
-  //     } else {
-  //       setError("No loan files found.");
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //     setError("Failed to fetch loan files.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const statusField = roleStatusMap[userRole] || "file_status";
 
-<div className="mb-3">
+  if (selectedStatus === "") {
+    setFilteredLoanFiles(allLoanFiles);
+  } else {
+    const filteredData = allLoanFiles.filter(
+      (file) => file[statusField] === selectedStatus
+    );
+    setFilteredLoanFiles(filteredData);
+  }
+};
+
+
+  useEffect(() => {
+  if (loanFiles.length > 0) {
+    const uniqueStatuses = [...new Set(loanFiles.map((file) => file.file_status))];
+    setFileStatusOptions(uniqueStatuses);
+  }
+}, [loanFiles]); // runs only when loanFiles updates
+
+
+
+  <div className="mb-3">
   <label htmlFor="fileStatus" className="form-label">
-    Filter by Sales Status:
+    Filter by File Status:
   </label>
   <select
     id="fileStatus"
@@ -794,97 +785,73 @@ const History = () => {
     ))}
   </select>
 </div>
-const fetchLoanFiles = async () => {
-  setLoading(true);
-  try {
-    const response = await axios.get(`${baseurl}/getLoanFilesByUserId/${userId}`);
-    if (response.data.success) {
-      const loanFiles = response.data.data;
 
-      setAllLoanFiles(loanFiles); // Store full data
-      setFilteredLoanFiles(loanFiles); // Initially show all data
-
-      // Extract unique 'sales_status' options
-      const uniqueStatuses = [
-        ...new Set(loanFiles.map((file) => file.sales_status)) // Use the correct field
-      ];
-      setFileStatusOptions(uniqueStatuses);
-    } else {
-      setError("No loan files found.");
-    }
-  } catch (err) {
-    console.error(err);
-    setError("Failed to fetch loan files.");
-  } finally {
-    setLoading(false);
-  }
-};
-
-const handleFileStatusFilter = (e) => {
-  const selectedStatus = e.target.value;
-  setFilterFileStatus(selectedStatus);
-
-  // Filter based on 'sales_status'
-  if (selectedStatus === "") {
-    setFilteredLoanFiles(allLoanFiles); // Show all data if no filter is selected
-  } else {
-    const filteredData = allLoanFiles.filter(
-      (file) => file.sales_status === selectedStatus // Filter by 'sales_status'
-    );
-    setFilteredLoanFiles(filteredData);
-  }
-};
-
-
-  // const handleFileStatusFilter = (e) => {
-  //   const selectedStatus = e.target.value;
-  //   setFilterFileStatus(selectedStatus);
-
-  //   // Filter data locally
-  //   if (selectedStatus === "") {
-  //     setFilteredLoanFiles(allLoanFiles); // Show all data if no filter is selected
-  //   } else {
-  //     const filteredData = allLoanFiles.filter(
-  //       (file) => file.file_status === selectedStatus
-  //     );
-  //     setFilteredLoanFiles(filteredData);
-  //   }
-  // };
-
-  // Function to fetch loan files and extract file statuses
-  // const fetchLoanFiles = async (start, end, agent = '', tl = '', fileStatus = '') => {
+  // const fetchLoanFiles = async () => {
   //   setLoading(true);
-  //   setError(null);
   //   try {
-  //     const response = await axios.get(`${baseurl}/getLoanFilesByUserId/${userId}`, {
-  //       params: {
-  //         startDate: start,
-  //         endDate: end,
-  //         salesAgentName: agent,
-  //         teamLeaderName: tl,
-  //         fileStatus: fileStatus, // Pass fileStatus as a filter
-  //       },
-  //     });
-
+  //     const response = await axios.get(`${baseurl}/getLoanFilesByUserId/${userId}`);
   //     if (response.data.success) {
-  //       const sortedLoanFiles = sortLoanFilesByDate(response.data.data);
-  //       setLoanFiles(sortedLoanFiles);
+  //       const loanFiles = response.data.data;
 
-  //       // Extract unique file statuses for dropdown
-  //       const statuses = Array.from(
-  //         new Set(response.data.data.map((file) => file.file_status))
-  //       );
-  //       setFileStatusOptions(statuses);
+  //       setAllLoanFiles(loanFiles); 
+  //       setFilteredLoanFiles(loanFiles); 
+  //       const uniqueStatuses = [
+  //         ...new Set(loanFiles.map((file) => file.sales_status)) 
+  //       ];
+  //       setFileStatusOptions(uniqueStatuses);
   //     } else {
-  //       setError('No loan files found.');
+  //       setError("No loan files found.");
   //     }
-  //   } catch (error) {
-  //     console.error('Error fetching loan files:', error);
-  //     setError('Failed to fetch loan files.');
+  //   } catch (err) {
+  //     console.error(err);
+  //     setError("Failed to fetch loan files.");
   //   } finally {
   //     setLoading(false);
   //   }
   // };
+
+
+  const fetchLoanFiles = async (
+    start = startDate,
+    end = endDate,
+    salesAgentName = filterAgent,
+    teamLeaderName = filterTL
+  ) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${baseurl}/getLoanFilesByUserId/${userId}`,
+        {
+          params: {
+            startDate: start,
+            endDate: end,
+            salesAgentName: salesAgentName || "",
+            teamLeaderName: teamLeaderName || "",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        const loanFiles = response.data.data;
+
+        setAllLoanFiles(loanFiles);
+        setFilteredLoanFiles(loanFiles);
+
+        // extract unique statuses for dropdown
+        const uniqueStatuses = [
+          ...new Set(loanFiles.map((file) => file.sales_status)),
+        ];
+        setFileStatusOptions(uniqueStatuses);
+      } else {
+        setError("No loan files found.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch loan files.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const applyFilters = () => {
     fetchLoanFiles(startDate, endDate, filterAgent, filterTL, filterFileStatus);
@@ -907,9 +874,9 @@ const handleFileStatusFilter = (e) => {
     const rows = loanFiles.map((loanFile) => [
       loanFile.sales_assign_date
         ? new Date(loanFile.sales_assign_date).toLocaleString('en-GB', {
-            dateStyle: 'short',
-            timeStyle: 'short',
-          })
+          dateStyle: 'short',
+          timeStyle: 'short',
+        })
         : '',
       userRole === 'admin' ? loanFile.teamleadername : null,
       userRole === 'admin' ? loanFile.sales_agent_name : null,
@@ -937,6 +904,60 @@ const handleFileStatusFilter = (e) => {
     document.body.removeChild(link);
   };
 
+const roleDateMap = {
+  "sales": "sales_action_date",
+  "TVR": "tvr_action_date",
+  "CDR": "cdr_action_date",
+  "Bank login": "banklogin_action_date",
+  "admin": "sales_action_date", // default for admin (can be changed)
+};
+
+const roleStatusMap = {
+  "sales": "sales_status",
+  "TVR": "tvr_status",
+  "CDR": "cdr_status",
+  "Bank_login": "banklogin_status",
+  "admin": "file_status", // admin sees final file status
+};
+
+const getDefaultStartDate = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // midnight today
+  console.log(today,"time");
+  return today.toISOString();
+};
+
+const getDefaultEndDate = () => {
+  const now = new Date();
+  const isoString = now.toISOString();
+  console.log("Default End Date (current time):", isoString);
+  return isoString;
+};
+
+
+useEffect(() => {
+  const start = getDefaultStartDate();
+  const end = getDefaultEndDate();
+  setStartDate(start);
+  setEndDate(end);
+
+  // Fetch records immediately on mount
+  fetchLoanFiles(start, end);
+}, [userId]);
+
+useEffect(() => {
+  if (allLoanFiles.length > 0) {
+    const statusField = roleStatusMap[userRole] || "file_status";
+    const uniqueStatuses = [
+      ...new Set(allLoanFiles.map((file) => file[statusField])),
+    ].filter(Boolean);
+    setFileStatusOptions(uniqueStatuses);
+  }
+  
+}, [allLoanFiles, userRole]);
+
+
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Loan Files History</h2>
@@ -949,8 +970,8 @@ const handleFileStatusFilter = (e) => {
             type="date"
             className="form-control"
             id="startDate"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            value={startDate.split("T")[0]}   // extract YYYY-MM-DD
+            onChange={handleStartDateChange}
           />
         </div>
 
@@ -960,8 +981,8 @@ const handleFileStatusFilter = (e) => {
             type="date"
             className="form-control"
             id="endDate"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            value={endDate.split("T")[0]}
+            onChange={handleEndDateChange}
           />
         </div>
 
@@ -992,85 +1013,93 @@ const handleFileStatusFilter = (e) => {
             </div>
           </>
         )}
-
-        {/* File Status Dropdown */}
         <div className="mb-3">
-        <label htmlFor="fileStatus" className="form-label">
-          Filter by File Status:
-        </label>
-        <select
-          id="fileStatus"
-          className="form-select"
-          value={filterFileStatus}
-          onChange={handleFileStatusFilter}
-        >
-          <option value="">All</option>
-          {fileStatusOptions.map((status, index) => (
-            <option key={index} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-      </div>
+          <label htmlFor="fileStatus" className="form-label">
+            Filter by File Status:
+          </label>
+          <select
+            id="fileStatus"
+            className="form-select"
+            value={filterFileStatus}
+            onChange={handleFileStatusFilter}
+          >
+            <option value="">All</option>
+            {fileStatusOptions.map((status, index) => (
+              <option key={index} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div className="col-md-3 d-flex align-items-end">
           <button className="btn btn-primary me-2" onClick={applyFilters}>
             Apply Filters
           </button>
-          <button className="btn btn-success" onClick={downloadCSV}>
-            Download CSV
-          </button>
+          {(userRole === 'admin' || userRole === 'Team leader')&& (
+            <>
+              <button className="btn btn-success" onClick={downloadCSV}>
+                Download CSV
+              </button>
+            </>
+          )}
         </div>
       </div>
-
-      {/* Loan Files Table */}
       <div className="position-relative">
         {loading && (
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         )}
-        {!loading && loanFiles.length > 0 ? (
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Date</th>
-                {userRole === 'admin' && <th>TL Name</th>}
-                {userRole === 'admin' && <th>Agent Name</th>}
-                <th>Customer Name</th>
-                <th>Mobile Number</th>
-                <th>Loan Type</th>
-                <th>File Status</th>
-                <th className="text-center">View Details</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loanFiles.map((loanFile, index) => (
-                <tr key={loanFile._id}>
-                  <td>{index + 1}</td>
-                  <td>{new Date(loanFile.sales_assign_date).toLocaleDateString()}</td>
-                  {userRole === 'admin' && <td>{loanFile.teamleadername}</td>}
-                  {userRole === 'admin' && <td>{loanFile.sales_agent_name}</td>}
-                  <td>{loanFile.customer_name}</td>
-                  <td>{loanFile.customer_mobile_number}</td>
-                  <td>{loanFile.type_of_loan}</td>
-                  <td>{loanFile.file_status}</td>
-                  <td className="text-center">
-                    <Link
-                      to={`/loan-details/${loanFile._id}`}
-                      className="btn btn-primary btn-sm"
-                    >
-                      <FontAwesomeIcon icon={faEye} />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className="text-muted">No loan files available.</p>
-        )}
+       {!loading && filteredLoanFiles.length > 0 ? (
+  <table className="table table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th>
+        {userRole === 'admin' && <th>TL Name</th>}
+        {userRole === 'admin' && <th>Agent Name</th>}
+        <th>Customer Name</th>
+        <th>Mobile Number</th>
+        <th>Loan Type</th>
+        <th>File Status</th>
+        <th className="text-center">View Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      {filteredLoanFiles.map((loanFile, index) => (
+        <tr key={loanFile._id}>
+          <td>{index + 1}</td>
+          <td>
+  {(() => {
+    const dateField = roleDateMap[userRole] || "sales_assign_date";
+    return loanFile[dateField]
+      ? new Date(loanFile[dateField]).toLocaleDateString()
+      : "";
+  })()}
+</td>
+          {userRole === "admin" && <td>{loanFile.teamleadername}</td>}
+          {userRole === "admin" && <td>{loanFile.sales_agent_name}</td>}
+          <td>{loanFile.customer_name}</td>
+          <td>{loanFile.customer_mobile_number}</td>
+          <td>{loanFile.type_of_loan}</td>
+          <td>{loanFile.file_status}</td>
+          <td className="text-center">
+            <Link
+              to={`/loan-details/${loanFile._id}`}
+              className="btn btn-primary btn-sm"
+            >
+              <FontAwesomeIcon icon={faEye} />
+            </Link>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+) : (
+  <p className="text-muted">No loan files available.</p>
+)}
+
       </div>
     </div>
   );

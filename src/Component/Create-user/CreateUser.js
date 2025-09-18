@@ -110,7 +110,7 @@ const CreateUser = () => {
   return (
     <>
     
-      <h3 className='text-center mt-5 pt-5'>Add New User</h3>
+      <h3 className='text-center mt-5 pt-5'>Create New User</h3>
       <div className='container mb-5' style={{ width: '60%', background: "#2c3e50" }}>
         <div className="mb-3">
           <label htmlFor="userRole" className="form-label text-light">Select User Role</label>
@@ -126,7 +126,7 @@ const CreateUser = () => {
             <option value="sales">Sales Agent</option>
             <option value="TVR">TVR Team</option>
             <option value="CDR">CDR Team</option>
-            <option value="Bank login">Bank Login Team</option>
+            <option value="Bank login">bank_login</option>
           </select>
         </div>
 
@@ -186,7 +186,7 @@ const CreateUser = () => {
               />
             </div>
 
-            <div className="d-flex text-center">
+            <div className="d-flex justify-content-center text-center">
               <button
                 type="button"
                 className="btn btn-primary mb-3 mx-2"
