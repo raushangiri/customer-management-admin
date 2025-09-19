@@ -766,7 +766,6 @@ const History = () => {
 }, [loanFiles]); // runs only when loanFiles updates
 
 
-
   <div className="mb-3">
   <label htmlFor="fileStatus" className="form-label">
     Filter by File Status:
@@ -833,7 +832,7 @@ const History = () => {
 
       if (response.data.success) {
         const loanFiles = response.data.data;
-
+        setLoanFiles(loanFiles);
         setAllLoanFiles(loanFiles);
         setFilteredLoanFiles(loanFiles);
 
@@ -852,7 +851,7 @@ const History = () => {
       setLoading(false);
     }
   };
-
+console.log(loanFiles,"loanFiles");
   const applyFilters = () => {
     fetchLoanFiles(startDate, endDate, filterAgent, filterTL, filterFileStatus);
   };
@@ -905,11 +904,11 @@ const History = () => {
   };
 
 const roleDateMap = {
-  "sales": "sales_action_date",
+  "sales": "sales_assign_date",
   "TVR": "tvr_action_date",
   "CDR": "cdr_action_date",
   "Bank login": "banklogin_action_date",
-  "admin": "sales_action_date", // default for admin (can be changed)
+  "admin": "sales_assign_date", // default for admin (can be changed)
 };
 
 const roleStatusMap = {
@@ -1086,7 +1085,7 @@ useEffect(() => {
           <td>{loanFile.file_status}</td>
           <td className="text-center">
             <Link
-              to={`/loan-details/${loanFile._id}`}
+              to={`/view-filedetails/${loanFile.file_number}`}
               className="btn btn-primary btn-sm"
             >
               <FontAwesomeIcon icon={faEye} />

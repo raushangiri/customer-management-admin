@@ -47,6 +47,7 @@ import Viewuploadedbankstatement from './Component/Components/Viewuploadedbankst
 import Salessearch from './Component/Components/Salessearch';
 import CDRsearch from './Component/Components/CDRsearch';
 import Bankloginsearch from './Component/Components/Bankloginsearch';
+import Chat from './Component/Chat/Chat';
 // import TeamleaderHistory from './Component/History/Teamleaderhistory';
 
 function App() {
@@ -126,6 +127,7 @@ function Main() {
         <Route path="/cdrteamperformance" element={<Cdrteamperformance/>} />
         <Route path="/bankloginteamperformance" element={<Bankloginteamperformance/>} />
         <Route path="/viewbankstatement/:_id" element={<Viewuploadedbankstatement/>} />
+        <Route path="/chat" element={<Chat />} />
 
 
         

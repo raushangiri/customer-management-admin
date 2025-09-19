@@ -1,7 +1,7 @@
 import React, { useState,useEffect, useId } from 'react';
 import { NavLink, Link  } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleChevronDown,faUser } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
+import { faCircleChevronDown,faUser,faComment } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 import './Sidebar.css'; // Optional: For styling
 import logo from "../Auth/jbj-fintech-logo.webp";
 import axios from 'axios';
@@ -207,7 +207,7 @@ const Sidebar = () => {
 
           </>
         )}
-
+  <li><NavLink to="/chat">Chat <FontAwesomeIcon icon={faComment} /></NavLink></li>
         <li><NavLink to="/">Logout</NavLink></li>
 
       </ul>
