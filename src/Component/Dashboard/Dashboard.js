@@ -92,7 +92,7 @@ const Dashboard = () => {
             <div className="card-body">
               <h5 className="card-title"> Total File uploaded</h5>
               <p>Total Count: {dashboardData.loanFileCount}</p>
-              <p> Total Amount: </p>
+              {/* <p> Total Amount: </p> */}
             </div>
           </div>
         </div>
@@ -101,7 +101,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title"> Total Intrested</h5>
         <p>Total Count: {dashboardData.interestedCount}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
       </div>
     </div>
   </div>
@@ -110,7 +110,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title"> Total Not-Intrested</h5>
         <p>Total Count: {dashboardData.notInterestedCount}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
       </div>
     </div>
   </div>
@@ -119,7 +119,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Pending TVR</h5>
         <p>Total Count: {dashboardData.tvrPending}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
@@ -129,7 +129,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Completed TVR</h5>
         <p>Total Count: {dashboardData.tvrCompleted}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
@@ -139,7 +139,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Rejected TVR</h5>
         <p>Total Count: {dashboardData.tvrRejected}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
@@ -149,7 +149,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Pending CDR</h5>
         <p>Total Count: {dashboardData.cdrPending}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
@@ -159,7 +159,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Completed CDR</h5>
         <p>Total Count: {dashboardData.cdrCompleted}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
@@ -169,7 +169,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Rejected CDR</h5>
         <p>Total Count: {dashboardData.cdrRejected}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
@@ -179,7 +179,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Bank logged-in</h5>
         <p>Total Count: {dashboardData.bankloginCompleted}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
@@ -189,7 +189,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Approved Bank logged-in</h5>
         <p>Total Count: </p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
@@ -199,7 +199,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Rejected Bank logged-in</h5>
         <p>Total Count: {dashboardData.bankloginRejected}</p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
@@ -209,7 +209,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total File Completed</h5>
         <p>Total Count: </p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
       </div>
     </div>
   </div>
@@ -218,7 +218,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total File Rejected</h5>
         <p>Total Count: </p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
       </div>
     </div>
   </div>
@@ -227,7 +227,7 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Disbursal File</h5>
         <p>Total Count: </p>
-        <p> Total Amount: </p>
+        {/* <p> Total Amount: </p> */}
       </div>
     </div>
   </div>
