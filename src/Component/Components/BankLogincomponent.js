@@ -3,7 +3,7 @@ import axios from 'axios';
 import { statuses } from '../../Component/Bank-login/Data'; // Adjust the path if necessary
 import { useOverview } from '../ContentHook/OverviewContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye ,faTrash } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
+import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 import { Link } from 'react-router-dom';
 
 const BankLogincomponent = () => {
@@ -24,6 +24,51 @@ const BankLogincomponent = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+
+    const [addbankformData, setAddbankformData] = useState({
+        Loan_Type: "",
+        Bank_Name: "",
+        rm1_name: "",
+        rm1_contact_number: "",
+        rm2_name: "",
+        rm2_contact_number: "",
+        email_1: "",
+        email_2: "",
+        email_3: "",
+    });
+
+    const handleChange = (e) => {
+        setAddbankformData({
+            ...addbankformData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSave = async () => {
+        try {
+            const response = await axios.post(`${baseurl}/createbankmaster`, addbankformData);
+            alert("Bank saved successfully!");
+            setAddbankformData({
+                Loan_Type: "",
+                Bank_Name: "",
+                rm1_name: "",
+                rm1_contact_number: "",
+                rm2_name: "",
+                rm2_contact_number: "",
+                email_1: "",
+                email_2: "",
+                email_3: "",
+            });
+            window.bootstrap.Modal.getInstance(
+                document.getElementById("addBankModal")
+            ).hide();
+        } catch (err) {
+            console.error("Error saving bank:", err);
+            alert("Failed to save bank");
+        }
+    };
+
+
     useEffect(() => {
         const fetchBankLoginDetails = async () => {
             try {
@@ -39,11 +84,9 @@ const BankLogincomponent = () => {
         fetchBankLoginDetails();
     }, [userId]);
 
-
-
     // Fetch bank names from the API
     useEffect(() => {
-        const loanType = "Auto Loan";  // Example loan type
+        const loanType = "Auto Loan"; 
         axios.post(`${baseurl}/getBankNames`, { Loan_Type: loanType })
             .then(response => {
                 if (response.data.success) {
@@ -54,22 +97,6 @@ const BankLogincomponent = () => {
                 console.error("Error fetching bank names:", error);
             });
     }, []);
-
-
-
-    // if (loading) {
-    //     return (
-    //       <div className="d-flex justify-content-center">
-    //         <div className="spinner-border" role="status">
-    //           <span className="sr-only">Loading...</span>
-    //         </div>
-    //       </div>
-    //     );
-    //   }
-
-    //   if (error) {
-    //     return <div className="alert alert-danger">{error}</div>;
-    //   }
 
     const handleLoginStatusChange = (event) => {
         setLoginStatus(event.target.value);
@@ -84,27 +111,26 @@ const BankLogincomponent = () => {
         setSelectedReason('');
     };
 
-const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this entry?")) {
-        try {
-            await axios.delete(`${baseurl}/deleteBankDetail/${id}`);
-            setBankLoginDetails(bankLoginDetails.filter(detail => detail._id !== id));
-            alert("Entry deleted successfully.");
-        } catch (error) {
-            alert("Error deleting the entry.");
+    const handleDelete = async (id) => {
+        if (window.confirm("Are you sure you want to delete this entry?")) {
+            try {
+                await axios.delete(`${baseurl}/deleteBankDetail/${id}`);
+                setBankLoginDetails(bankLoginDetails.filter(detail => detail._id !== id));
+                alert("Entry deleted successfully.");
+            } catch (error) {
+                alert("Error deleting the entry.");
+            }
         }
-    }
-};
+    };
 
     const handleBankChange = async (event) => {
         const bankName = event.target.value;
         setSelectedBank(bankName);
 
         if (bankName && formData.type_of_loan) {
-            // Fetch RM details based on loan type and selected bank
             try {
                 const response = await axios.post(`${baseurl}/getrmDetails`, {
-                    loan_type: formData.type_of_loan,  // Assuming formData contains the type_of_loan
+                    loan_type: formData.type_of_loan,  
                     bank_name: bankName
                 });
                 if (response.data.bankDetail) {
@@ -122,7 +148,7 @@ const handleDelete = async (id) => {
             bank_login_status: loginStatus,
             call_status: selectedStatus,
             reason_for_notlogin: selectedReason,
-            loan_type: formData.type_of_loan,  // Use loan_type from formData
+            loan_type: formData.type_of_loan,  
             bank_name: selectedBank,
             rm1_name: bankDetail['rm1_name'],
             rm1_contact_number: bankDetail["rm1_contact_number"],
@@ -146,9 +172,7 @@ const handleDelete = async (id) => {
 
 
     const handleShareWithRM = (detail) => {
-        // Logic to share the document with RM
         alert(`Document shared with RM for ${detail.file_name}`);
-        // You can add your API call here to share the document
     };
 
     return (
@@ -209,7 +233,12 @@ const handleDelete = async (id) => {
                     <div className="row">
                         <div className="col-md-6">
                             <div className="form-group mt-3">
-                                <label htmlFor="bankName">Bank Name:</label>
+                                <label htmlFor="bankName">Bank Name:  <a href="#"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#addBankModal"
+                                    style={{ marginLeft: "10px", fontSize: "0.9rem" }}>
+                                    Add Bank
+                                </a></label>
                                 <select id="bankName" className="form-control" value={selectedBank} onChange={handleBankChange}>
                                     <option value="">Select</option>
                                     {bankNames.map((bank, index) => (
@@ -218,6 +247,168 @@ const handleDelete = async (id) => {
                                         </option>
                                     ))}
                                 </select>
+                            </div>
+
+
+                            <div
+                                className="modal fade"
+                                id="addBankModal"
+                                tabIndex="-1"
+                                aria-labelledby="addBankModalLabel"
+                                aria-hidden="true"
+                            >
+                                <div className="modal-dialog modal-lg">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title" id="addBankModalLabel">
+                                                Add Bank Details
+                                            </h5>
+                                            <button
+                                                type="button"
+                                                className="btn-close"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close"
+                                            ></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <form>
+                                                <div className="row">
+                                                    <div className="col-md-6 mb-3">
+                                                        <label className="form-label">Loan Type</label>
+                                                        <select
+                                                            className="form-control"
+                                                            name="Loan_Type"
+                                                            value={addbankformData.Loan_Type}
+                                                            onChange={handleChange}
+                                                        >
+                                                            <option value="">Select Loan Type</option>
+                                                            <option value="Auto Loan">Auto Loan</option>
+                                                            <option value="Business Loan">Business Loan</option>
+                                                            <option value="Land and Property Loan">
+                                                                Land and Property Loan
+                                                            </option>
+                                                            <option value="Home Loan">Home Loan</option>
+                                                            <option value="Personal Loan">Personal Loan</option>
+                                                            <option value="Education Loan">Education Loan</option>
+                                                            <option value="Insurance">Insurance</option>
+                                                            <option value="Working Capital Loan">
+                                                                Working Capital Loan
+                                                            </option>
+                                                            <option value="Small Business Loan">
+                                                                Small Business Loan
+                                                            </option>
+                                                            <option value="Drop Down OD">Drop Down OD</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="col-md-6 mb-3">
+                                                        <label className="form-label">Bank Name</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            placeholder="Bank Name"
+                                                            name="Bank_Name"
+                                                            value={addbankformData.Bank_Name}
+                                                            onChange={handleChange}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-6 mb-3">
+                                                        <label className="form-label">RM1 Name</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            placeholder="RM1 Name"
+                                                            name="rm1_name"
+                                                            value={addbankformData.rm1_name}
+                                                            onChange={handleChange}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-6 mb-3">
+                                                        <label className="form-label">RM1 Contact</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            placeholder="RM1 Contact"
+                                                            name="rm1_contact_number"
+                                                            value={addbankformData.rm1_contact_number}
+                                                            onChange={handleChange}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-6 mb-3">
+                                                        <label className="form-label">RM2 Name</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            placeholder="RM2 Name"
+                                                            name="rm2_name"
+                                                            value={addbankformData.rm2_name}
+                                                            onChange={handleChange}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-6 mb-3">
+                                                        <label className="form-label">RM2 Contact</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            placeholder="RM2 Contact"
+                                                            name="rm2_contact_number"
+                                                            value={addbankformData.rm2_contact_number}
+                                                            onChange={handleChange}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-4 mb-3">
+                                                        <label className="form-label">Email 1</label>
+                                                        <input
+                                                            type="email"
+                                                            className="form-control"
+                                                            placeholder="Email 1"
+                                                            name="email_1"
+                                                            value={addbankformData.email_1}
+                                                            onChange={handleChange}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-4 mb-3">
+                                                        <label className="form-label">Email 2</label>
+                                                        <input
+                                                            type="email"
+                                                            className="form-control"
+                                                            placeholder="Email 2"
+                                                            name="email_2"
+                                                            value={addbankformData.email_2}
+                                                            onChange={handleChange}
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-4 mb-3">
+                                                        <label className="form-label">Email 3</label>
+                                                        <input
+                                                            type="email"
+                                                            className="form-control"
+                                                            placeholder="Email 3"
+                                                            name="email_3"
+                                                            value={addbankformData.email_3}
+                                                            onChange={handleChange}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div className="modal-footer d-flex justify-content-center">
+                                            <button
+                                                type="button"
+                                                className="btn btn-primary"
+                                                onClick={handleSave}
+                                            >
+                                                Save Bank
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-secondary"
+                                                data-bs-dismiss="modal"
+                                            >
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -324,17 +515,17 @@ const handleDelete = async (id) => {
                             <td>{detail.rm1_contact_number}</td>
                             <td>{detail.email_1}</td>
                             <td>
-    {(detail.document_status === "Ready to share" || detail.document_status === "document shared") ? (
-        <Link 
-            className={`btn ${detail.document_status === "document shared" ? "btn-success" : "btn-primary"}`}
-            to={`/Banklogindetails/${detail._id}`}
-        >
-            {detail.document_status}
-        </Link>
-    ) : (
-        detail.document_status
-    )}
-</td>
+                                {(detail.document_status === "Ready to share" || detail.document_status === "document shared") ? (
+                                    <Link
+                                        className={`btn ${detail.document_status === "document shared" ? "btn-success" : "btn-primary"}`}
+                                        to={`/Banklogindetails/${detail._id}`}
+                                    >
+                                        {detail.document_status}
+                                    </Link>
+                                ) : (
+                                    detail.document_status
+                                )}
+                            </td>
                             <td>{detail.remarks}</td>
                             <td className="text-center">
                                 {/* <Link to={`/view-filedetails/${detail._id}`}> */}
@@ -342,14 +533,14 @@ const handleDelete = async (id) => {
 
                                     <FontAwesomeIcon icon={faEye} />
                                 </Link>
-</td>
-<td>
-                                                <FontAwesomeIcon
-                                                    icon={faTrash}
-                                                    className="text-danger"
-                                                    onClick={() => handleDelete(detail._id)}
-                                                    style={{ cursor: 'pointer' }}
-                                                />
+                            </td>
+                            <td>
+                                <FontAwesomeIcon
+                                    icon={faTrash}
+                                    className="text-danger"
+                                    onClick={() => handleDelete(detail._id)}
+                                    style={{ cursor: 'pointer' }}
+                                />
                             </td>
                         </tr>
                     ))}
