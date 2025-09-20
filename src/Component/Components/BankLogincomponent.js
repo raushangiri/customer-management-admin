@@ -86,7 +86,7 @@ const BankLogincomponent = () => {
 
     // Fetch bank names from the API
     useEffect(() => {
-        const loanType = "Auto Loan"; 
+        const loanType = "Auto Loan";
         axios.post(`${baseurl}/getBankNames`, { Loan_Type: loanType })
             .then(response => {
                 if (response.data.success) {
@@ -130,7 +130,7 @@ const BankLogincomponent = () => {
         if (bankName && formData.type_of_loan) {
             try {
                 const response = await axios.post(`${baseurl}/getrmDetails`, {
-                    loan_type: formData.type_of_loan,  
+                    loan_type: formData.type_of_loan,
                     bank_name: bankName
                 });
                 if (response.data.bankDetail) {
@@ -141,33 +141,101 @@ const BankLogincomponent = () => {
             }
         }
     };
-    const handleSubmitForm = async () => {
-        const payload = {
-            userId: userId,
-            file_number: formData.file_number,
-            bank_login_status: loginStatus,
-            call_status: selectedStatus,
-            reason_for_notlogin: selectedReason,
-            loan_type: formData.type_of_loan,  
-            bank_name: selectedBank,
-            rm1_name: bankDetail['rm1_name'],
-            rm1_contact_number: bankDetail["rm1_contact_number"],
-            email_1: bankDetail["email_1"],
-            email_2: email2,
-            document_status: documentStatus,
-            remarks: remarks,
-        };
+    // const handleSubmitForm = async () => {
+    //     const payload = {
+    //         userId: userId,
+    //         file_number: formData.file_number,
+    //         bank_login_status: loginStatus,
+    //         call_status: selectedStatus,
+    //         reason_for_notlogin: selectedReason,
+    //         loan_type: formData.type_of_loan,
+    //         bank_name: selectedBank,
+    //         rm1_name: bankDetail['rm1_name'],
+    //         rm1_contact_number: bankDetail["rm1_contact_number"],
+    //         email_1: bankDetail["email_1"],
+    //         email_2: email2,
+    //         document_status: documentStatus,
+    //         remarks: remarks,
+    //     };
 
-        try {
-            const response = await axios.post(`${baseurl}/createBankDetail`, payload);
-            if (response.data.message) {
-                alert("Bank details saved successfully!");
-            }
-        } catch (error) {
-            alert(error.response?.data?.error || "Error saving bank details");
-        }
+    //     try {
+    //         const response = await axios.post(`${baseurl}/createBankDetail`, payload);
+    //         if (response.data.message) {
+    //             alert("Bank details saved successfully!");
+    //         }
+    //     } catch (error) {
+    //         alert(error.response?.data?.error || "Error saving bank details");
+    //     }
+    // };
+
+    const handleSubmitForm = async () => {
+    // Create payload for createBankDetail API
+    const createPayload = {
+        userId: userId,
+        file_number: formData.file_number,
+        bank_login_status: loginStatus,
+        call_status: selectedStatus,
+        reason_for_notlogin: selectedReason,
+        loan_type: formData.type_of_loan,
+        bank_name: selectedBank,
+        rm1_name: bankDetail['rm1_name'],
+        rm1_contact_number: bankDetail["rm1_contact_number"],
+        rm2_name: bankDetail['rm2_name'] || '',
+        rm2_contact_number: bankDetail['rm2_contact_number'] || '',
+        email_1: bankDetail["email_1"],
+        email_2: email2,
+        email_3: bankDetail['email_3'] || '',
+        document_status: documentStatus,
+        remarks: remarks,
     };
 
+    try {
+        // Call createBankDetail API
+        const createResponse = await axios.post(`${baseurl}/createBankDetail`, createPayload);
+        const bankRecord = createResponse.data.bankDetail;
+
+        if (!bankRecord) {
+            alert("Bank record not returned from API.");
+            return;
+        }
+
+        // Check if any RM info is different than existing values
+        const rmChanged =
+            bankRecord.rm1_name !== createPayload.rm1_name ||
+            bankRecord.rm1_contact_number !== createPayload.rm1_contact_number ||
+            bankRecord.rm2_name !== createPayload.rm2_name ||
+            bankRecord.rm2_contact_number !== createPayload.rm2_contact_number ||
+            bankRecord.email_1 !== createPayload.email_1 ||
+            bankRecord.email_2 !== createPayload.email_2 ||
+            bankRecord.email_3 !== createPayload.email_3;
+
+        if (rmChanged) {
+            const updatePayload = {
+                id: bankDetail["_id"],
+                rm1_name: createPayload.rm1_name,
+                rm1_contact_number: createPayload.rm1_contact_number,
+                rm2_name: createPayload.rm2_name,
+                rm2_contact_number: createPayload.rm2_contact_number,
+                email_1: createPayload.email_1,
+                email_2: createPayload.email_2,
+                email_3: createPayload.email_3
+            };
+
+            // Call updatebankmaster API only if values changed
+            const updateResponse = await axios.put(`${baseurl}/updatebankmaster/${bankRecord._id}`, updatePayload);
+            if (updateResponse.data.message) {
+                console.log("Bank RM information updated successfully!");
+            }
+        }
+
+        alert("Bank details processed successfully!");
+    } catch (error) {
+        console.error(error);
+        alert(error.response?.data?.error || "Error processing bank details");
+    }
+};
+
+    console.log(bankDetail._id, "bankDetail");
     const filteredReasons = statuses.find(status => status.login_status === selectedStatus)?.reasons || [];
 
 
@@ -483,9 +551,16 @@ const BankLogincomponent = () => {
                 </>
             )}
 
-            <button type="submit" className="btn btn-primary mt-3" onClick={handleSubmitForm}>
-                Submit
-            </button>
+            <div className="d-flex justify-content-center mt-3 gap-3">
+                <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={handleSubmitForm}
+                >
+                    Submit
+                </button>
+            </div>
+
 
             <hr className='mt-4'></hr>
             <h3 className='mb-5'>Bank login disposition history</h3>
