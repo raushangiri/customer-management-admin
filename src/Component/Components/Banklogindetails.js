@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOverview } from '../ContentHook/OverviewContext';
 import axios from 'axios';
-import { useNavigate,useParams } from 'react-router-dom'; // Import useNavigate
+import { useNavigate, useParams } from 'react-router-dom'; // Import useNavigate
 
 const Banklogindetails = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -14,6 +14,9 @@ const Banklogindetails = () => {
   // const [bankDetails, setBankDetails] = useState([]);
   const [selectedBankDetails, setSelectedBankDetails] = useState([]);
   const { _id } = useParams();
+  const userId = localStorage.getItem('userId');
+    const userRole = localStorage.getItem('userRole');
+
   const [bankDetails, setBankDetails] = useState([
     {
       _id: 1,
@@ -61,26 +64,6 @@ const Banklogindetails = () => {
     }
   }, [formData.file_number]);
 
-  console.log(references,"references")
-
-  // Fetch bank login details
-  // useEffect(() => {
-  //   const fetchBankDetails = async () => {
-  //     try {
-  //       const response = await axios.get(`${baseurl}/getbanklogindetails/${formData.file_number}`);
-  //       setBankDetail(response.data);
-  //       setEmail2(response.data.email2 || '');
-  //       setRemarks(response.data.remarks || '');
-  //     } catch (error) {
-  //       console.error('Error fetching bank details:', error);
-  //     }
-  //   };
-  //   if (formData.file_number) {
-  //     fetchBankDetails();
-  //   }
-  // }, [formData.file_number]);
-
-
   useEffect(() => {
     const fetchBankDetails = async () => {
       try {
@@ -95,8 +78,8 @@ const Banklogindetails = () => {
             bank_name: bankData.bank_name || '',
             rm1_name: bankData.rm1_name || '',
             rm1_contact_number: bankData.rm1_contact_number || '',
-            emails: bankData.email_1 ? [bankData.email_1] : [], // Ensure it's always an array
-            ccEmails: bankData.email_2 ? [bankData.email_2] : [], // Ensure it's always an array
+            emails: bankData.email_1 ? [bankData.email_1] : [], 
+            ccEmails: bankData.email_2 ? [bankData.email_2] : [],
             remarks: bankData.remarks || '',
             document_status: bankData.document_status || '',
           });
@@ -110,9 +93,6 @@ const Banklogindetails = () => {
       fetchBankDetails();
     }
   }, [formData.file_number, baseurl]);
-
-
-  // Handle changes in inputs
   const handleInputChange = (field, value) => {
     setBankDetail((prevDetail) => ({ ...prevDetail, [field]: value }));
   };
@@ -139,11 +119,6 @@ const Banklogindetails = () => {
       return { ...prevDetail, [emailType]: updatedEmails };
     });
   };
-
-
-
-
-
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
@@ -155,7 +130,6 @@ const Banklogindetails = () => {
     };
     fetchDocuments();
   }, [formData.file_number]);
-
   const fetchRMDetails = async () => {
     try {
       const response = await axios.get(`${baseurl}/getbanklogindetailsbyid/${_id}`);
@@ -165,10 +139,7 @@ const Banklogindetails = () => {
     }
   };
   useEffect(() => {
-    
-  
-      fetchRMDetails();
-  
+    fetchRMDetails();
   }, []);
 
 
@@ -195,235 +166,103 @@ const Banklogindetails = () => {
   };
   const [loading, setLoading] = useState(false);
 
-//   const sendEmail = async () => {
-//     if (!personalDetails) {
-//       alert('Personal details or recipient email not available.');
-//       return;
-//     }
-//     const documentList = documents.map((doc) => ({
-//       url: doc.downloadUrl,
-//       name: doc.document_name
-//     }));
-// let ccemail=bankDetail.ccEmails;
-//     const emailData = {
-//       email: bankDetail.emails,
-//       cc: [...ccemail,"jbjassociate@gmail.com"],
-//       subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
-//       text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
-//         `File Number: ${personalDetails.file_number || 'N/A'}\n` +
-//         `Name: ${personalDetails.customerName || 'N/A'}\n` +
-//         `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
-//         `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
-//         `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
-//         `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
-//         `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
-//         `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
-//         `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
-//         `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
-//         `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
-//         `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
-//         `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
-//         `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
-//         `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
-//         `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
-//         `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
-//         `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
-//         `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
-//         `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
-//         `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
-//         `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
-//         `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
-//         `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
-//         `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
-//         `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
-//         `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
-//         `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
-//         `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
-//         `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
-//         `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
-//         `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
-//         `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n`+
-//         `Note: ${personalDetails.note || 'N/A'}\n`,
-//         documents: documentList
-//     };
+console.log(bankDetail.bank_name,"bankDetail");  
 
-//     try {
-//       setLoading(true);
-//       await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
-//       alert('Email sent successfully!');
-//     } catch (error) {
-//       console.error('Error sending email:', error);
-//       alert('Failed to send email.');
-//     }
-//     finally {
-//       setLoading(false);
-//     }
-//   };
+  const sendEmail = async () => {
+    if (!personalDetails) {
+      alert('Personal details or recipient email not available.');
+      return;
+    }
+    const extractFileName = (url, index) => {
+      const fileNameWithExtension = url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'));
+      const dotIndex = fileNameWithExtension.lastIndexOf('.');
+      const fileName = fileNameWithExtension.substring(0, dotIndex);
+      const extension = fileNameWithExtension.substring(dotIndex);
+      return `${fileName}_${index}${extension}`;
+    };
+    const documentUrls = documents.map((doc) => doc.downloadUrl);
+    const documentNames = documents.map((doc, index) => extractFileName(doc.downloadUrl, index));
+    const referenceDetails = references.map((ref, index) => (
+      `\n\nReference ${index + 1}:\n` +
+      `Name: ${ref.reference_name || 'N/A'}\n` +
+      `Mobile Number: ${ref.reference_mobile_number || 'N/A'}\n` +
+      `Occupation Type: ${ref.reference_occupation_type || 'N/A'}\n` +
+      `Nature of Business: ${ref.reference_nature_of_business || 'N/A'}\n` +
+      `Company Name: ${ref.company_name || 'N/A'}\n` +
+      `Address: ${ref.reference_address || 'N/A'}`
+    )).join('\n');
+    let ccemail = bankDetail.ccEmails || [];
+    const emailData = {
+      email: bankDetail.emails,
+      cc: [...ccemail, "jbjassociate@gmail.com"],
+      subject: `Loan application from JBJ fintech for customer ${personalDetails.name}`,
+      text: `Here are the personal details for customer ${personalDetails.name}:\n\n` +
+        `File Number: ${personalDetails.file_number || 'N/A'}\n` +
+        `Name: ${personalDetails.name || 'N/A'}\n` +
+        `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
+        `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
+        `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
+        `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
+        `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
+        `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
+        `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
+        `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
+        `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
+        `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
+        `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
+        `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
+        `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
+        `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
+        `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+        `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+        `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
+        `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
+        `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
+        `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
+        `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
+        `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
+        `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
+        `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
+        `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
+        `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
+        `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
+        `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
+        `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
+        `Note: ${personalDetails.note || 'N/A'}\n\n` +
+        `References:\n${referenceDetails}`,
+      documentUrls: documentUrls,
+      documentNames: documentNames,
+      _id: _id
+    };
 
-// const sendEmail = async () => {
-//   if (!personalDetails) {
-//     alert('Personal details or recipient email not available.');
-//     return;
-//   }
-
-//   // Function to extract file name with extension and append unique identifier if necessary
-//   const extractFileName = (url, index) => {
-//     // Extract file name with extension
-//     const fileNameWithExtension = url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'));
-    
-//     // Separate file name and extension
-//     const dotIndex = fileNameWithExtension.lastIndexOf('.');
-//     const fileName = fileNameWithExtension.substring(0, dotIndex);
-//     const extension = fileNameWithExtension.substring(dotIndex);
-    
-//     // Return file name with index and extension intact
-//     return `${fileName}_${index}${extension}`;
-//   };
-
-//   // Extracting document URLs and document names with unique identifiers
-//   const documentUrls = documents.map((doc) => doc.downloadUrl);
-//   const documentNames = documents.map((doc, index) => extractFileName(doc.downloadUrl, index));
-
-//   let ccemail = bankDetail.ccEmails || [];
-//   const emailData = {
-//     email: bankDetail.emails,
-//     cc: [...ccemail, "jbjassociate@gmail.com"],
-//     subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
-//     text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
-//       `File Number: ${personalDetails.file_number || 'N/A'}\n` +
-//       `Name: ${personalDetails.customerName || 'N/A'}\n` +
-//       `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
-//       `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
-//       `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
-//       `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
-//       `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
-//       `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
-//       `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
-//       `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
-//       `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
-//       `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
-//       `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
-//       `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
-//       `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
-//       `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
-//       `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
-//       `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
-//       `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
-//       `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
-//       `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
-//       `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
-//       `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
-//       `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
-//       `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
-//       `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
-//       `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
-//       `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
-//       `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
-//       `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
-//       `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
-//       `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
-//       `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
-//       `Note: ${personalDetails.note || 'N/A'}\n`,
-//     documentUrls: documentUrls,  // Sending document URLs
-//     documentNames: documentNames // Sending document names with unique identifiers
-//   };
-
-//   try {
-//     setLoading(true);
-//     await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
-//     alert('Email sent successfully!');
-//   } catch (error) {
-//     console.error('Error sending email:', error);
-//     alert('Failed to send email.');
-//   } finally {
-//     setLoading(false);
-//   }
-// };
-const sendEmail = async () => {
-  if (!personalDetails) {
-    alert('Personal details or recipient email not available.');
-    return;
-  }
-
-  // Function to extract file name with extension and append unique identifier if necessary
-  const extractFileName = (url, index) => {
-    const fileNameWithExtension = url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'));
-    const dotIndex = fileNameWithExtension.lastIndexOf('.');
-    const fileName = fileNameWithExtension.substring(0, dotIndex);
-    const extension = fileNameWithExtension.substring(dotIndex);
-    return `${fileName}_${index}${extension}`;
-  };
-
-  // Extracting document URLs and document names with unique identifiers
-  const documentUrls = documents.map((doc) => doc.downloadUrl);
-  const documentNames = documents.map((doc, index) => extractFileName(doc.downloadUrl, index));
-
-  // Prepare reference details as a formatted string
-  const referenceDetails = references.map((ref, index) => (
-    `\n\nReference ${index + 1}:\n` +
-    `Name: ${ref.reference_name || 'N/A'}\n` +
-    `Mobile Number: ${ref.reference_mobile_number || 'N/A'}\n` +
-    `Occupation Type: ${ref.reference_occupation_type || 'N/A'}\n` +
-    `Nature of Business: ${ref.reference_nature_of_business || 'N/A'}\n` +
-    `Company Name: ${ref.company_name || 'N/A'}\n` +
-    `Address: ${ref.reference_address || 'N/A'}`
-  )).join('\n'); // Concatenate all references
-
-  let ccemail = bankDetail.ccEmails || [];
-  const emailData = {
-    email: bankDetail.emails,
-    cc: [...ccemail, "jbjassociate@gmail.com"],
-    subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
-    text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
-      `File Number: ${personalDetails.file_number || 'N/A'}\n` +
-      `Name: ${personalDetails.customerName || 'N/A'}\n` +
-      `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
-      `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
-      `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
-      `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
-      `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
-      `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
-      `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
-      `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
-      `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
-      `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
-      `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
-      `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
-      `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
-      `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
-      `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
-      `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
-      `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
-      `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
-      `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
-      `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
-      `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
-      `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
-      `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
-      `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
-      `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
-      `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
-      `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
-      `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
-      `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
-      `Note: ${personalDetails.note || 'N/A'}\n\n` +
-      `References:\n${referenceDetails}`, // Include the reference details in the email
-    documentUrls: documentUrls, // Sending document URLs
-    documentNames: documentNames,
-    _id:_id // Sending document names with unique identifiers
-  };
-
-  try {
-    setLoading(true);
-    await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
-    alert('Email sent successfully!');
-  } catch (error) {
-    console.error('Error sending email:', error);
-    alert('Failed to send email.');
-  } finally {
-    setLoading(false);
-  }
+  const dispositionPayload = {
+  userId,
+  role: userRole,
+  call_status: "Connected",
+  is_interested: "Interested",
+  disposition: "bank_login_underprocess",
+  selected_documents: [], 
+  expected_document_date: new Date(),
+  not_interested_reason: "NA",
+  remarks: `Email shared with ${bankDetail.bank_name} RM`,
+  file_status: "bank_login_underprocess",
+  file_number: personalDetails.file_number,
+  type_of_loan: personalDetails.type_of_loan
 };
+
+
+    try {
+      setLoading(true);
+      await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
+      await axios.post(`${baseurl}/createdesposition`, dispositionPayload);
+      alert('Email sent successfully!');
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Failed to send email.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
 
@@ -558,60 +397,7 @@ const sendEmail = async () => {
         </div>
       </div>
 
-      {/* RM Details Section */}
-      {/* <div className="card mt-2">
-        <div className="card-header">
-          <h5 className="mb-0">
-            <button className="btn btn-link" onClick={() => toggleSection(2)}>
-              RM Details
-            </button>
-          </h5>
-        </div>
-        <div className={`collapse ${activeIndex === 2 ? 'show' : ''}`}>
-          <div className="table-responsive">
-            <table className="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Select</th>
-                  <th>Bank Name</th>
-                  <th>RM Name</th>
-                  <th>RM Contact No</th>
-                  <th>Email 1</th>
-                  <th>Email 2</th>
-                  <th>Remarks</th>
-                  <th>Document Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bankDetails.map((detail, index) => (
-                  <tr key={detail._id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedBankDetails.includes(index)}
-                        onChange={() => handleSelectChange(index)}
-                      />
-                    </td>
-                    <td>{detail.bank_name}</td>
-                    <td>{detail.rm1_name}</td>
-                    <td>{detail.rm1_contact_number}</td>
-                    <td>{detail.email_1}</td>
-                    <td>{detail.email_2 || 'N/A'}</td>
-                    <td>{detail.remarks}</td>
-                    <td>{detail.document_status}</td>
-                    <td>
-                      <button className="btn btn-primary btn-sm" onClick={() => handleEdit(index)}>
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div> */}
+      
       <div className="collapse show">
         <div className="table-responsive">
           <table className="table table-bordered">
@@ -697,36 +483,36 @@ const sendEmail = async () => {
                 {/* Emails - CC (email_2) */}
 
                 <td>
-  {Array.isArray(bankDetail.ccEmails) && bankDetail.ccEmails.map((ccEmail, emailIndex) => (
-    <div key={emailIndex} className="input-group mb-2">
-      <input
-        type="email"
-        value={ccEmail}
-        onChange={(e) => handleEmailChange('ccEmails', emailIndex, e.target.value)}
-        className="form-control"
-        placeholder="Enter CC email"
-      />
-      {bankDetail.ccEmails.length > 1 && (
-        <button
-          type="button"
-          className="btn btn-danger"
-          onClick={() => handleRemoveEmail('ccEmails', emailIndex)}
-        >
-          Remove
-        </button>
-      )}
-    </div>
-  ))}
-  <button
-    type="button"
-    className="btn btn-secondary"
-    onClick={() => handleAddEmail('ccEmails')}
-  >
-    Add
-  </button>
-</td>
+                  {Array.isArray(bankDetail.ccEmails) && bankDetail.ccEmails.map((ccEmail, emailIndex) => (
+                    <div key={emailIndex} className="input-group mb-2">
+                      <input
+                        type="email"
+                        value={ccEmail}
+                        onChange={(e) => handleEmailChange('ccEmails', emailIndex, e.target.value)}
+                        className="form-control"
+                        placeholder="Enter CC email"
+                      />
+                      {bankDetail.ccEmails.length > 1 && (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => handleRemoveEmail('ccEmails', emailIndex)}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => handleAddEmail('ccEmails')}
+                  >
+                    Add
+                  </button>
+                </td>
 
-             
+
 
                 <td>
                   <input
@@ -763,3 +549,205 @@ const sendEmail = async () => {
 };
 
 export default Banklogindetails;
+
+
+
+//   const sendEmail = async () => {
+  //     if (!personalDetails) {
+  //       alert('Personal details or recipient email not available.');
+  //       return;
+  //     }
+  //     const documentList = documents.map((doc) => ({
+  //       url: doc.downloadUrl,
+  //       name: doc.document_name
+  //     }));
+  // let ccemail=bankDetail.ccEmails;
+  //     const emailData = {
+  //       email: bankDetail.emails,
+  //       cc: [...ccemail,"jbjassociate@gmail.com"],
+  //       subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
+  //       text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
+  //         `File Number: ${personalDetails.file_number || 'N/A'}\n` +
+  //         `Name: ${personalDetails.customerName || 'N/A'}\n` +
+  //         `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
+  //         `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
+  //         `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
+  //         `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
+  //         `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
+  //         `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
+  //         `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
+  //         `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
+  //         `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
+  //         `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
+  //         `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
+  //         `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
+  //         `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
+  //         `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
+  //         `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+  //         `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+  //         `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
+  //         `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
+  //         `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
+  //         `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
+  //         `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
+  //         `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
+  //         `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
+  //         `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
+  //         `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
+  //         `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
+  //         `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
+  //         `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
+  //         `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
+  //         `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+  //         `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n`+
+  //         `Note: ${personalDetails.note || 'N/A'}\n`,
+  //         documents: documentList
+  //     };
+
+  //     try {
+  //       setLoading(true);
+  //       await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
+  //       alert('Email sent successfully!');
+  //     } catch (error) {
+  //       console.error('Error sending email:', error);
+  //       alert('Failed to send email.');
+  //     }
+  //     finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  // const sendEmail = async () => {
+  //   if (!personalDetails) {
+  //     alert('Personal details or recipient email not available.');
+  //     return;
+  //   }
+
+  //   // Function to extract file name with extension and append unique identifier if necessary
+  //   const extractFileName = (url, index) => {
+  //     // Extract file name with extension
+  //     const fileNameWithExtension = url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'));
+
+  //     // Separate file name and extension
+  //     const dotIndex = fileNameWithExtension.lastIndexOf('.');
+  //     const fileName = fileNameWithExtension.substring(0, dotIndex);
+  //     const extension = fileNameWithExtension.substring(dotIndex);
+
+  //     // Return file name with index and extension intact
+  //     return `${fileName}_${index}${extension}`;
+  //   };
+
+  //   // Extracting document URLs and document names with unique identifiers
+  //   const documentUrls = documents.map((doc) => doc.downloadUrl);
+  //   const documentNames = documents.map((doc, index) => extractFileName(doc.downloadUrl, index));
+
+  //   let ccemail = bankDetail.ccEmails || [];
+  //   const emailData = {
+  //     email: bankDetail.emails,
+  //     cc: [...ccemail, "jbjassociate@gmail.com"],
+  //     subject: `Loan application from JBJ fintech for customer ${personalDetails.customerName}`,
+  //     text: `Here are the personal details for customer ${personalDetails.customerName}:\n\n` +
+  //       `File Number: ${personalDetails.file_number || 'N/A'}\n` +
+  //       `Name: ${personalDetails.customerName || 'N/A'}\n` +
+  //       `Mobile Number: ${personalDetails.mobile_number || 'N/A'}\n` +
+  //       `Alternate Number: ${personalDetails.alternate_number || 'N/A'}\n` +
+  //       `Date of Birth: ${personalDetails.date_of_birth || 'N/A'}\n` +
+  //       `Father's Name: ${personalDetails.father_name || 'N/A'}\n` +
+  //       `Mother's Name: ${personalDetails.mother_name || 'N/A'}\n` +
+  //       `Spouse Name: ${personalDetails.spouse_name || 'N/A'}\n` +
+  //       `Marital Status: ${personalDetails.marital_status || 'N/A'}\n` +
+  //       `Occupation Type: ${personalDetails.occupation_type || 'N/A'}\n` +
+  //       `Nature of Business: ${personalDetails.nature_of_business || 'N/A'}\n` +
+  //       `Service Type: ${personalDetails.service_type || 'N/A'}\n` +
+  //       `Other Income: ${personalDetails.other_income || 'N/A'}\n` +
+  //       `GST and ITR Income: ${personalDetails.gst_and_itr_income || 'N/A'}\n` +
+  //       `GST/ITR Filed: ${personalDetails.gst_itr_filed || 'N/A'}\n` +
+  //       `Inhand Salary: ${personalDetails.inhand_salary || 'N/A'}\n` +
+  //       `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+  //       `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+  //       `Total Time in Delhi: ${personalDetails.total_time_in_delhi || 'N/A'}\n` +
+  //       `Loan Category: ${personalDetails.loan_category || 'N/A'}\n` +
+  //       `Type of Loan: ${personalDetails.type_of_loan || 'N/A'}\n` +
+  //       `Required Amount: ${personalDetails.required_amount || 'N/A'}\n` +
+  //       `Permanent Address: ${personalDetails.permanent_address || 'N/A'}\n` +
+  //       `Permanent Address Landmark: ${personalDetails.permanent_address_landmark || 'N/A'}\n` +
+  //       `Current Address: ${personalDetails.current_address || 'N/A'}\n` +
+  //       `Office Name: ${personalDetails.office_name || 'N/A'}\n` +
+  //       `Office Address: ${personalDetails.office_address || 'N/A'}\n` +
+  //       `Office Address Landmark: ${personalDetails.office_address_landmark || 'N/A'}\n` +
+  //       `Personal Email ID: ${personalDetails.personal_email_id || 'N/A'}\n` +
+  //       `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
+  //       `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
+  //       `Years at Current Residence: ${personalDetails.years_at_current_residence || 'N/A'}\n` +
+  //       `Years at Current Organization: ${personalDetails.years_at_current_organization || 'N/A'}\n` +
+  //       `Note: ${personalDetails.note || 'N/A'}\n`,
+  //     documentUrls: documentUrls,  // Sending document URLs
+  //     documentNames: documentNames // Sending document names with unique identifiers
+  //   };
+
+  //   try {
+  //     setLoading(true);
+  //     await axios.post(`${baseurl}/sendEmailWithAttachment`, emailData);
+  //     alert('Email sent successfully!');
+  //   } catch (error) {
+  //     console.error('Error sending email:', error);
+  //     alert('Failed to send email.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  {/* RM Details Section */}
+      {/* <div className="card mt-2">
+        <div className="card-header">
+          <h5 className="mb-0">
+            <button className="btn btn-link" onClick={() => toggleSection(2)}>
+              RM Details
+            </button>
+          </h5>
+        </div>
+        <div className={`collapse ${activeIndex === 2 ? 'show' : ''}`}>
+          <div className="table-responsive">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Select</th>
+                  <th>Bank Name</th>
+                  <th>RM Name</th>
+                  <th>RM Contact No</th>
+                  <th>Email 1</th>
+                  <th>Email 2</th>
+                  <th>Remarks</th>
+                  <th>Document Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bankDetails.map((detail, index) => (
+                  <tr key={detail._id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedBankDetails.includes(index)}
+                        onChange={() => handleSelectChange(index)}
+                      />
+                    </td>
+                    <td>{detail.bank_name}</td>
+                    <td>{detail.rm1_name}</td>
+                    <td>{detail.rm1_contact_number}</td>
+                    <td>{detail.email_1}</td>
+                    <td>{detail.email_2 || 'N/A'}</td>
+                    <td>{detail.remarks}</td>
+                    <td>{detail.document_status}</td>
+                    <td>
+                      <button className="btn btn-primary btn-sm" onClick={() => handleEdit(index)}>
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div> */}

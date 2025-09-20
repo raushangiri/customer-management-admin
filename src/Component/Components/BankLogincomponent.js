@@ -568,6 +568,7 @@ const BankLogincomponent = () => {
                 <thead className="thead-dark">
                     <tr>
                         <th>User ID</th>
+                        <th>Date & Time</th>
                         <th>Bank Login Status</th>
                         <th>Loan Type</th>
                         <th>Bank Name</th>
@@ -583,6 +584,24 @@ const BankLogincomponent = () => {
                     {bankLoginDetails.map((detail) => (
                         <tr key={detail._id}>
                             <td>{detail.userId}</td>
+                            {/* <td>{detail.createdAt}</td> */}
+                             {/* <td>
+  {(() => {
+    const dateField = detail.createdAt || "NA";
+    return detail[dateField]
+      ? new Date(detail[dateField]).toLocaleDateString()
+      : "";
+  })()}
+</td> */}
+<td>
+  {detail.createdAt && (
+    <>
+      <div>{new Date(detail.createdAt).toLocaleDateString()}</div>
+      <div>{new Date(detail.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+    </>
+  )}
+</td>
+
                             <td>{detail.bank_login_status}</td>
                             <td>{detail.loan_type}</td>
                             <td>{detail.bank_name}</td>
