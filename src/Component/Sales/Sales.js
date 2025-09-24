@@ -9,6 +9,7 @@ import BankLogin from '../Components/BankLogin';
 import OverviewDetails from '../Components/OverviewDetails';
 import Disposition from '../Components/Disposition';
 import Attachmentview from '../Components/Attachmentview';
+import Applicant_coapplicant from '../Components/Applicant_coapplicant';
 
 const SalesForm = () => {
   const [activeTab, setActiveTab] = useState('Previous Loan Details');
@@ -68,7 +69,7 @@ const SalesForm = () => {
          <OverviewDetails/>
         )}
         {activeTab === 'Personal details' && (
-          <PersonalDetails/>
+          <Applicant_coapplicant/>
         )}
 
 {activeTab === 'attachments' && (
