@@ -4,14 +4,14 @@ import { useOverview } from '../ContentHook/OverviewContext';
 
 const PersonalDetails = () => {
     const { mobileNumber, setMobileNumber, formData, setFormData, fetchFileData, handleSubmit } = useOverview();
-
-    // const [selectedLoanType, setSelectedLoanType] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [isInterested, setIsInterested] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [notInterestedReason, setNotInterestedReason] = useState('');
     const [remarks, setRemarks] = useState('');
     const [selectedLoanType, setSelectedLoanType] = useState('');
+
+            console.log('Submitting personal form');
 
     const loanMasterData = {
         'no information': ['no information'],
@@ -39,11 +39,7 @@ const PersonalDetails = () => {
     };
     const handleInterestChange = (e) => {
         const value = e.target.value;
-
-        // Update formData based on selected value
         setFormData({ ...formData, is_interested: value });
-
-        // Show modal if "NotInterested" is selected
         if (value === 'NotInterested') {
             setShowModal(true);
         } else {
@@ -53,15 +49,12 @@ const PersonalDetails = () => {
 
     const handleModalSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission inside the modal
-        // console.log('Reason:', notInterestedReason);
-        // console.log('Remarks:', remarks);
         setShowModal(false);
     };
 
     const handleLoanTypeChange = (e) => {
         setSelectedLoanType(e.target.value);
-        setSelectedCategory(''); // Reset category when loan type changes
+        setSelectedCategory(''); 
     };
 
     useEffect(() => {
@@ -69,29 +62,21 @@ const PersonalDetails = () => {
             fetchFileData(mobileNumber);
         }
     }, [mobileNumber]);
-
-    // Log formData whenever it updates
     useEffect(() => {
         console.log(formData.is_interested, 'formData');
     }, [formData]);
 
 
-    const [loading, setLoading] = useState(false);    // State to track loading
-
+    const [loading, setLoading] = useState(false); 
     const onSubmit = async (event) => {
         event.preventDefault();
-        const formType = 'personal'; // Assuming you're submitting personal details
-        setLoading(true); // Start loader when form submission begins
-
+        const formType = 'personal'; 
+        setLoading(true);        
         try {
-            // Call handleSubmit from context and wait for it to complete
             await handleSubmit(formType);
-            // Handle success if needed (e.g., display success message)
         } catch (error) {
-            // Handle error if the form submission fails
             console.error('Error submitting form:', error);
         } finally {
-            // Stop loader once form submission is done
             setLoading(false);
         }
     };
@@ -109,32 +94,10 @@ const PersonalDetails = () => {
                     </div>
                 )}
                 <form onSubmit={onSubmit}>
-                    <h4 className='text-end'><Link to="https://emicalculator.net/" target="_blank"> Loan EMI calculator</Link></h4>
-                    <div className="mb-3 row">
 
-                        {/* <div className="col-md-6">
-                            <label htmlFor="type_of_loan" className="form-label fw-bold">Type of Loan</label>
-                            <select
-                                className="form-select"
-                                id="type_of_loan"
-                                value={formData.type_of_loan}
-                                onChange={(e) => {
-                                    const selectedType = e.target.value;
-                                    setFormData({
-                                        ...formData,
-                                        type_of_loan: selectedType,
-                                        selected_category: '' // Reset selected category when loan type changes
-                                    });
-                                }}
-                            >
-                                <option value="">Select loan type</option>
-                                {Object.keys(loanMasterData).map((loanType) => (
-                                    <option key={loanType} value={loanType}>
-                                        {loanType}
-                                    </option>
-                                ))}
-                            </select>
-                        </div> */}
+                    <h4 className='text-end'><Link to="https://emicalculator.net/" target="_blank"> Loan EMI calculator</Link></h4>
+
+                    <div className="mb-3 row">
                         <div className="col-md-6">
                             <label htmlFor="type_of_loan" className="form-label fw-bold">Type of Loan</label>
                             <select
@@ -146,7 +109,7 @@ const PersonalDetails = () => {
                                     setFormData({
                                         ...formData,
                                         type_of_loan: selectedType,
-                                        selected_category: '' // Reset selected category or other related fields when loan type changes
+                                        selected_category: '' 
                                     });
                                 }}
                             >
@@ -167,7 +130,7 @@ const PersonalDetails = () => {
                                 id="loan_category"
                                 value={formData.loan_category}
                                 onChange={(e) => setFormData({ ...formData, loan_category: e.target.value })}
-                                disabled={!formData.type_of_loan} // Disable if no loan type is selected
+                                disabled={!formData.type_of_loan} 
                             >
                                 <option value="">Select category</option>
                                 {formData.type_of_loan && loanMasterData[formData.type_of_loan]?.map((category) => (
@@ -371,27 +334,7 @@ const PersonalDetails = () => {
                                 onChange={(e) => setFormData({ ...formData, nature_of_business: e.target.value })}
                                 placeholder="Enter Nature of Business / Designation"
                             />
-                            {/* <select className="form-select" id="nature_of_business"
-                                value={formData.nature_of_business}
-                                onChange={(e) => setFormData({ ...formData, nature_of_business: e.target.value })}
-                            >
-                                <option value="">Select nature</option>
-                                <option value="manufacturing">Manufacturing</option>
-                                <option value="Trading">Trading</option>
-                                <option value="Retail">Retail</option>
-                                <option value="Wholesale">Wholesale</option>
-                                <option value="Information Technology">Information Technology</option>
-                                <option value="Finance and Banking">Finance and Banking</option>
-                                <option value="Real Estate and Construction">Real Estate and Construction</option>
-                                <option value="Hospitality">Hospitality</option>
-                                <option value="Healthcare">Healthcare</option>
-                                <option value="Education and Training">Education and Training</option>
-                                <option value="Transportation and Logistics">Transportation and Logistics</option>
-                                <option value="Agriculture and Farming">Agriculture and Farming</option>
-                                <option value="Import/Export">Import/Export</option>
-                                <option value="Media and Entertainment">Media and Entertainment</option>
-                                <option value="Other">Other</option>
-                            </select> */}
+                         
                         </div>
 
                         <div className="col-md-6">
@@ -414,14 +357,7 @@ const PersonalDetails = () => {
 
                         <div className="col-md-6">
                             <label htmlFor="occupation_type" className="form-label fw-bold">Occupation Type</label>
-                            {/* <input
-    type="text"
-    className="form-control"
-    id="occupation_type"
-    value={formData.occupation_type}
-    onChange={(e) => setFormData({ ...formData, occupation_type: e.target.value })}
-    placeholder="Enter Occupation Type"
-  /> */}
+                           
                             <select className="form-select" id="occupation_type"
                                 value={formData.occupation_type}
                                 onChange={(e) => setFormData({ ...formData, occupation_type: e.target.value })}
@@ -440,60 +376,6 @@ const PersonalDetails = () => {
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-
-                      
-
-
-
-
-
-
-
-                       
-                       
-                        {/* <div className="col-md-6">
-                            <label htmlFor="service_type" className="form-label fw-bold">Service Type</label>
-                            <select className="form-select" id="service_type"
-                                value={formData.service_type}
-                                onChange={(e) => setFormData({ ...formData, service_type: e.target.value })}
-                            >
-                                <option value="">Select type</option>
-                                <option value="it_services">9540384205</option>
-                                <option value="financial_services">Financial Services</option>
-                                <option value="legal_services">Legal Services</option>
-                                <option value="healthcare_services">Healthcare Services</option>
-                                <option value="educational_services">Educational Services</option>
-                                <option value="transportation_services">Transportation Services</option>
-                                <option value="hospitality_services">Hospitality Services</option>
-                                <option value="consultancy_services">Consultancy Services</option>
-                                <option value="retail_services">Retail Services</option>
-                                <option value="utility_services">Utility Services (Electricity, Water, etc.)</option>
-                                <option value="maintenance_repair_services">Maintenance and Repair Services</option>
-                                <option value="marketing_advertising_services">Marketing and Advertising Services</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div> */}
-
-                     
-
-
-
-
-
-
-
-                       
-
-
-
-
-
-
-
-
-
-
-
 
                       
                         <div className="col-md-6">
@@ -543,6 +425,18 @@ const PersonalDetails = () => {
                                 value={formData.note}
                                 onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                                 className="form-control" id="note" placeholder="Enter Note" />
+                        </div>
+                        <div className="col-md-6">
+                            <label htmlFor="is_coapplicant" className="form-label fw-bold">Is Co-applicant ?</label>
+                            <select className="form-select" id="is_coapplicant"
+                                name='is_coapplicant'
+                                value={formData.is_coapplicant}
+                                onChange={(e) => setFormData({ ...formData, is_coapplicant: e.target.value })}
+                            >
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
                         </div>
                     </div>
 

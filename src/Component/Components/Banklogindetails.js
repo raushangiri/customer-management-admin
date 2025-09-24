@@ -9,6 +9,8 @@ const Banklogindetails = () => {
   const baseurl = process.env.REACT_APP_API_BASE_URL;
   const { formData } = useOverview();
   const [personalDetails, setPersonalDetails] = useState(null);
+  const [coapplicantOneDetails, setCoapplicantOneDetails] = useState(null);
+  const [coapplicantTwoDetails, setCoapplicantTwoDetails] = useState(null);
   const [documents, setDocuments] = useState([]);
   const [error, setError] = useState(null);
   // const [bankDetails, setBankDetails] = useState([]);
@@ -50,6 +52,22 @@ const Banklogindetails = () => {
         console.error('Error fetching personal details:', error);
       }
     };
+    const fetchcoapplicantOneData = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getcoapplicantonedetails/${formData.file_number}`);
+        setCoapplicantOneDetails(response.data.data);
+      } catch (error) {
+        console.error('Error fetching co-applicant one details:', error);
+      }
+    };
+      const fetchcoapplicantTwoData = async () => {
+      try {
+        const response = await axios.get(`${baseurl}/getcoapplicanttwopersonadetails/${formData.file_number}`);
+        setCoapplicantTwoDetails(response.data.data);
+      } catch (error) {
+        console.error('Error while fetching details:', error);
+      }
+    };
     const fetchReferences = async () => {
       try {
         const response = await axios.get(`${baseurl}/getreferencedetail/${formData.file_number}`);
@@ -61,6 +79,8 @@ const Banklogindetails = () => {
     if (formData.file_number) {
       fetchPersonalDetails();
       fetchReferences();
+      fetchcoapplicantOneData();
+      fetchcoapplicantTwoData();
     }
   }, [formData.file_number]);
 
@@ -165,8 +185,87 @@ const Banklogindetails = () => {
     }
   };
   const [loading, setLoading] = useState(false);
+console.log("coapplicantOneDetails", coapplicantOneDetails);
+// Format Co-Applicant One (if exists)
+const coapplicantOneText = coapplicantOneDetails
+  ? `\n\n--- Co-Applicant One Details ---\n` +
+   `Name: ${coapplicantOneDetails.coapplicant_one_name || 'N/A'}\n` +
+`Customer Name: ${coapplicantOneDetails.coapplicant_one_customerName || 'N/A'}\n` +
+`Mobile Number: ${coapplicantOneDetails.coapplicant_one_mobile_number || 'N/A'}\n` +
+`Alternate Number: ${coapplicantOneDetails.coapplicant_one_alternate_number || 'N/A'}\n` +
+`Date of Birth: ${coapplicantOneDetails.coapplicant_one_date_of_birth || 'N/A'}\n` +
+`Father's Name: ${coapplicantOneDetails.coapplicant_one_father_name || 'N/A'}\n` +
+`Mother's Name: ${coapplicantOneDetails.coapplicant_one_mother_name || 'N/A'}\n` +
+`Spouse Name: ${coapplicantOneDetails.coapplicant_one_spouse_name || 'N/A'}\n` +
+`Marital Status: ${coapplicantOneDetails.coapplicant_one_marital_status || 'N/A'}\n` +
+`Occupation Type: ${coapplicantOneDetails.coapplicant_one_occupation_type || 'N/A'}\n` +
+`Nature of Business: ${coapplicantOneDetails.coapplicant_one_nature_of_business || 'N/A'}\n` +
+`Service Type: ${coapplicantOneDetails.coapplicant_one_service_type || 'N/A'}\n` +
+`Other Income: ${coapplicantOneDetails.coapplicant_one_other_income || 'N/A'}\n` +
+`GST and ITR Income: ${coapplicantOneDetails.coapplicant_one_gst_and_itr_income || 'N/A'}\n` +
+`GST/ITR Filed: ${coapplicantOneDetails.coapplicant_one_gst_itr_filed || 'N/A'}\n` +
+`Inhand Salary: ${coapplicantOneDetails.coapplicant_one_inhand_salary || 'N/A'}\n` +
+`Years at Current Organization: ${coapplicantOneDetails.coapplicant_one_years_at_current_organization || 'N/A'}\n` +
+`Years at Current Residence: ${coapplicantOneDetails.coapplicant_one_years_at_current_residence || 'N/A'}\n` +
+`Total Time in Delhi: ${coapplicantOneDetails.coapplicant_one_total_time_in_delhi || 'N/A'}\n` +
+`Loan Category: ${coapplicantOneDetails.coapplicant_one_loan_category || 'N/A'}\n` +
+`Type of Loan: ${coapplicantOneDetails.coapplicant_one_type_of_loan || 'N/A'}\n` +
+`Required Amount: ${coapplicantOneDetails.coapplicant_one_required_amount || 'N/A'}\n` +
+`Permanent Address: ${coapplicantOneDetails.coapplicant_one_permanent_address || 'N/A'}\n` +
+`Permanent Address Landmark: ${coapplicantOneDetails.coapplicant_one_permanent_address_landmark || 'N/A'}\n` +
+`Current Address: ${coapplicantOneDetails.coapplicant_one_current_address || 'N/A'}\n` +
+`Office Name: ${coapplicantOneDetails.coapplicant_one_office_name || 'N/A'}\n` +
+`Office Address: ${coapplicantOneDetails.coapplicant_one_office_address || 'N/A'}\n` +
+`Office Address Landmark: ${coapplicantOneDetails.coapplicant_one_office_address_landmark || 'N/A'}\n` +
+`Personal Email ID: ${coapplicantOneDetails.coapplicant_one_personal_email_id || 'N/A'}\n` +
+`Official Email ID: ${coapplicantOneDetails.coapplicant_one_official_email_id || 'N/A'}\n` +
+`Type of Resident: ${coapplicantOneDetails.coapplicant_one_type_of_resident || 'N/A'}\n` +
+`Note: ${coapplicantOneDetails.coapplicant_one_note || 'N/A'}\n`
 
-console.log(bankDetail.bank_name,"bankDetail");  
+  : "";
+
+// Format Co-Applicant Two (if exists)
+const coapplicantTwoText = coapplicantTwoDetails
+  ? `\n\n--- Co-Applicant Two Details ---\n` +
+   `Name: ${coapplicantTwoDetails.coapplicant_two_name || 'N/A'}\n` +
+`Customer Name: ${coapplicantTwoDetails.coapplicant_two_customerName || 'N/A'}\n` +
+`Mobile Number: ${coapplicantTwoDetails.coapplicant_two_mobile_number || 'N/A'}\n` +
+`Alternate Number: ${coapplicantTwoDetails.coapplicant_two_alternate_number || 'N/A'}\n` +
+`Date of Birth: ${coapplicantTwoDetails.coapplicant_two_date_of_birth || 'N/A'}\n` +
+`Father's Name: ${coapplicantTwoDetails.coapplicant_two_father_name || 'N/A'}\n` +
+`Mother's Name: ${coapplicantTwoDetails.coapplicant_two_mother_name || 'N/A'}\n` +
+`Spouse Name: ${coapplicantTwoDetails.coapplicant_two_spouse_name || 'N/A'}\n` +
+`Marital Status: ${coapplicantTwoDetails.coapplicant_two_marital_status || 'N/A'}\n` +
+`Occupation Type: ${coapplicantTwoDetails.coapplicant_two_occupation_type || 'N/A'}\n` +
+`Nature of Business: ${coapplicantTwoDetails.coapplicant_two_nature_of_business || 'N/A'}\n` +
+`Service Type: ${coapplicantTwoDetails.coapplicant_two_service_type || 'N/A'}\n` +
+`Other Income: ${coapplicantTwoDetails.coapplicant_two_other_income || 'N/A'}\n` +
+`GST and ITR Income: ${coapplicantTwoDetails.coapplicant_two_gst_and_itr_income || 'N/A'}\n` +
+`GST/ITR Filed: ${coapplicantTwoDetails.coapplicant_two_gst_itr_filed || 'N/A'}\n` +
+`Inhand Salary: ${coapplicantTwoDetails.coapplicant_two_inhand_salary || 'N/A'}\n` +
+`Years at Current Organization: ${coapplicantTwoDetails.coapplicant_two_years_at_current_organization || 'N/A'}\n` +
+`Years at Current Residence: ${coapplicantTwoDetails.coapplicant_two_years_at_current_residence || 'N/A'}\n` +
+`Total Time in Delhi: ${coapplicantTwoDetails.coapplicant_two_total_time_in_delhi || 'N/A'}\n` +
+`Loan Category: ${coapplicantTwoDetails.coapplicant_two_loan_category || 'N/A'}\n` +
+`Type of Loan: ${coapplicantTwoDetails.coapplicant_two_type_of_loan || 'N/A'}\n` +
+`Required Amount: ${coapplicantTwoDetails.coapplicant_two_required_amount || 'N/A'}\n` +
+`Permanent Address: ${coapplicantTwoDetails.coapplicant_two_permanent_address || 'N/A'}\n` +
+`Permanent Address Landmark: ${coapplicantTwoDetails.coapplicant_two_permanent_address_landmark || 'N/A'}\n` +
+`Current Address: ${coapplicantTwoDetails.coapplicant_two_current_address || 'N/A'}\n` +
+`Office Name: ${coapplicantTwoDetails.coapplicant_two_office_name || 'N/A'}\n` +
+`Office Address: ${coapplicantTwoDetails.coapplicant_two_office_address || 'N/A'}\n` +
+`Office Address Landmark: ${coapplicantTwoDetails.coapplicant_two_office_address_landmark || 'N/A'}\n` +
+`Personal Email ID: ${coapplicantTwoDetails.coapplicant_two_personal_email_id || 'N/A'}\n` +
+`Official Email ID: ${coapplicantTwoDetails.coapplicant_two_official_email_id || 'N/A'}\n` +
+`Type of Resident: ${coapplicantTwoDetails.coapplicant_two_type_of_resident || 'N/A'}\n` +
+`Note: ${coapplicantTwoDetails.coapplicant_two_note || 'N/A'}\n`
+
+  : "";
+
+
+
+
+
 
   const sendEmail = async () => {
     if (!personalDetails) {
@@ -229,7 +328,16 @@ console.log(bankDetail.bank_name,"bankDetail");
         `Official Email ID: ${personalDetails.official_email_id || 'N/A'}\n` +
         `Type of Resident: ${personalDetails.type_of_resident || 'N/A'}\n` +
         `Note: ${personalDetails.note || 'N/A'}\n\n` +
-        `References:\n${referenceDetails}`,
+        `References:\n${referenceDetails}`+
+         (personalDetails.is_coapplicant === "yes"
+      ? `\n\nCo-Applicant One Details:\n${coapplicantOneText}\n\nCo-Applicant Two Details:\n${coapplicantTwoText}`
+      : ""
+    ) +
+        `\n\nPlease find the attached documents for further processing.\n\n` +
+        `Best regards,\nJBJ Fintech`,
+///////////////Co applicant one details ////////////////
+
+
       documentUrls: documentUrls,
       documentNames: documentNames,
       _id: _id

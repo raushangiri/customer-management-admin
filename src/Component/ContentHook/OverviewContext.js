@@ -61,7 +61,70 @@ reference_occupation_type: '',
 reference_nature_of_business: '',
 company_name: '',
 reference_address: '',
-note:''
+note:'',
+is_coapplicant: '',
+coapplicant_one_type_of_loan: '',
+coapplicant_one_loan_category: '',
+coapplicant_one_required_amount: '',
+coapplicant_one_mobile_number: '',
+coapplicant_one_name: '',
+coapplicant_one_occupation_type: '',
+coapplicant_one_nature_of_business: '',
+coapplicant_one_service_type: '',
+coapplicant_one_type_of_resident: '',
+coapplicant_one_permanent_address: '',
+coapplicant_one_permanent_address_landmark: '',
+coapplicant_one_official_email_id: '',
+coapplicant_one_personal_email_id: '',
+coapplicant_one_office_name: '',
+coapplicant_one_date_of_birth: '',
+coapplicant_one_alternate_number: '',
+coapplicant_one_mother_name: '',
+coapplicant_one_father_name: '',
+coapplicant_one_marital_status: '',
+coapplicant_one_spouse_name: '',
+coapplicant_one_current_address: '',
+coapplicant_one_years_at_current_residence: '',
+coapplicant_one_total_time_in_delhi: '',
+coapplicant_one_office_address: '',
+coapplicant_one_office_address_landmark: '',
+coapplicant_one_years_at_current_organization: '',
+coapplicant_one_gst_itr_filed: '',
+coapplicant_one_gst_and_itr_income: '',
+coapplicant_one_inhand_salary: '',
+coapplicant_one_other_income: '',
+coapplicant_one_note:'',
+coapplicant_two_type_of_loan: '',
+coapplicant_two_loan_category: '',
+coapplicant_two_required_amount: '',
+coapplicant_two_mobile_number: '',
+coapplicant_two_name: '',
+coapplicant_two_occupation_type: '',  
+coapplicant_two_nature_of_business: '',
+coapplicant_two_service_type: '',
+coapplicant_two_type_of_resident: '',
+coapplicant_two_permanent_address: '',
+coapplicant_two_permanent_address_landmark: '',
+coapplicant_two_official_email_id: '',
+coapplicant_two_personal_email_id: '',
+coapplicant_two_office_name: '',
+coapplicant_two_date_of_birth: '',
+coapplicant_two_alternate_number: '',
+coapplicant_two_mother_name: '',
+coapplicant_two_father_name: '',
+coapplicant_two_marital_status: '',
+coapplicant_two_spouse_name: '',
+coapplicant_two_current_address: '',
+coapplicant_two_years_at_current_residence: '',
+coapplicant_two_total_time_in_delhi: '',
+coapplicant_two_office_address: '',
+coapplicant_two_office_address_landmark: '',
+coapplicant_two_years_at_current_organization: '',
+coapplicant_two_gst_itr_filed: '',
+coapplicant_two_gst_and_itr_income: '',
+coapplicant_two_inhand_salary: '',
+coapplicant_two_other_income: '',
+coapplicant_two_note:''
   });
 
   // Function to reset formData
@@ -111,6 +174,69 @@ note:''
       inhand_salary: '',
       other_income: '',
       note:'',
+      is_coapplicant: '',
+coapplicant_one_type_of_loan: '',
+coapplicant_one_loan_category: '',
+coapplicant_one_required_amount: '',
+coapplicant_one_mobile_number: '',
+coapplicant_one_name: '',
+coapplicant_one_occupation_type: '',
+coapplicant_one_nature_of_business: '',
+coapplicant_one_service_type: '',
+coapplicant_one_type_of_resident: '',
+coapplicant_one_permanent_address: '',
+coapplicant_one_permanent_address_landmark: '',
+coapplicant_one_official_email_id: '',
+coapplicant_one_personal_email_id: '',
+coapplicant_one_office_name: '',
+coapplicant_one_date_of_birth: '',
+coapplicant_one_alternate_number: '',
+coapplicant_one_mother_name: '',
+coapplicant_one_father_name: '',
+coapplicant_one_marital_status: '',
+coapplicant_one_spouse_name: '',
+coapplicant_one_current_address: '',
+coapplicant_one_years_at_current_residence: '',
+coapplicant_one_total_time_in_delhi: '',
+coapplicant_one_office_address: '',
+coapplicant_one_office_address_landmark: '',
+coapplicant_one_years_at_current_organization: '',
+coapplicant_one_gst_itr_filed: '',
+coapplicant_one_gst_and_itr_income: '',
+coapplicant_one_inhand_salary: '',
+coapplicant_one_other_income: '',
+coapplicant_one_note:'',
+coapplicant_two_type_of_loan: '',
+coapplicant_two_loan_category: '',
+coapplicant_two_required_amount: '',
+coapplicant_two_mobile_number: '',
+coapplicant_two_name: '',
+coapplicant_two_occupation_type: '',  
+coapplicant_two_nature_of_business: '',
+coapplicant_two_service_type: '',
+coapplicant_two_type_of_resident: '',
+coapplicant_two_permanent_address: '',
+coapplicant_two_permanent_address_landmark: '',
+coapplicant_two_official_email_id: '',
+coapplicant_two_personal_email_id: '',
+coapplicant_two_office_name: '',
+coapplicant_two_date_of_birth: '',
+coapplicant_two_alternate_number: '',
+coapplicant_two_mother_name: '',
+coapplicant_two_father_name: '',
+coapplicant_two_marital_status: '',
+coapplicant_two_spouse_name: '',
+coapplicant_two_current_address: '',
+coapplicant_two_years_at_current_residence: '',
+coapplicant_two_total_time_in_delhi: '',
+coapplicant_two_office_address: '',
+coapplicant_two_office_address_landmark: '',
+coapplicant_two_years_at_current_organization: '',
+coapplicant_two_gst_itr_filed: '',
+coapplicant_two_gst_and_itr_income: '',
+coapplicant_two_inhand_salary: '',
+coapplicant_two_other_income: '',
+coapplicant_two_note:'',
       reference_name: '',
 reference_mobile_number: '',
 reference_occupation_type: '',
@@ -152,6 +278,10 @@ reference_address: '',
       // Fetch personal data using the fetched file number
       fetchpersonalData(data.file_number);
       fetchreferenceData(data.file_number);
+      fetchcoapplicantOnePersonalData(data.file_number);
+      fetchcoapplicantTwoPersonalData(data.file_number);
+
+      setError1(''); // Clear any previous error message
     } catch (error) {
       console.error('Error fetching file data:', error);
     }
@@ -195,7 +325,97 @@ reference_address: '',
         gst_and_itr_income: data.gst_and_itr_income || '',
         inhand_salary: data.inhand_salary || '',
         other_income: data.other_income || '',
-        note:data.note||''
+        note:data.note||'',
+        is_coapplicant: data.is_coapplicant || ''
+      }));
+    } catch (error) {
+      console.error('Error fetching personal data:', error);
+    }
+  };
+
+  const fetchcoapplicantOnePersonalData = async (file_number) => {
+    try {
+      const response = await axios.get(`${baseurl}/getcoapplicantonedetails/${file_number}`);
+      const data = response.data.data;
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        coapplicant_one_type_of_loan: data.coapplicant_one_type_of_loan || '',
+        coapplicant_one_loan_category: data.coapplicant_one_loan_category || '',
+        coapplicant_one_required_amount: data.coapplicant_one_required_amount || '',
+        coapplicant_one_mobile_number: data.coapplicant_one_mobile_number || '',
+        coapplicant_one_name: data.coapplicant_one_name || '',
+        coapplicant_one_occupation_type: data.coapplicant_one_occupation_type || '',
+        coapplicant_one_nature_of_business: data.coapplicant_one_nature_of_business || '',
+        coapplicant_one_service_type: data.coapplicant_one_service_type || '',
+        coapplicant_one_type_of_resident: data.coapplicant_one_type_of_resident || '',
+        coapplicant_one_permanent_address: data.coapplicant_one_permanent_address || '',
+        coapplicant_one_permanent_address_landmark: data.coapplicant_one_permanent_address_landmark || '',
+        coapplicant_one_official_email_id: data.coapplicant_one_official_email_id || '',
+        coapplicant_one_personal_email_id: data.coapplicant_one_personal_email_id || '',
+        coapplicant_one_office_name: data.coapplicant_one_office_name || '',
+        coapplicant_one_date_of_birth: data.coapplicant_one_date_of_birth || '',
+        coapplicant_one_alternate_number: data.coapplicant_one_alternate_number || '',
+        coapplicant_one_mother_name: data.coapplicant_one_mother_name || '',
+        coapplicant_one_father_name: data.coapplicant_one_father_name || '',
+        coapplicant_one_marital_status: data.coapplicant_one_marital_status || '',
+        coapplicant_one_spouse_name: data.coapplicant_one_spouse_name || '',
+        coapplicant_one_current_address: data.coapplicant_one_current_address || '',
+        coapplicant_one_years_at_current_residence: data.coapplicant_one_years_at_current_residence || '',
+        coapplicant_one_total_time_in_delhi: data.coapplicant_one_total_time_in_delhi || '',
+        coapplicant_one_office_address: data.coapplicant_one_office_address || '',
+        coapplicant_one_office_address_landmark: data.coapplicant_one_office_address_landmark || '',
+        coapplicant_one_years_at_current_organization: data.coapplicant_one_years_at_current_organization || '',
+        coapplicant_one_gst_itr_filed: data.coapplicant_one_gst_itr_filed || '',
+        coapplicant_one_gst_and_itr_income: data.coapplicant_one_gst_and_itr_income || '',
+        coapplicant_one_inhand_salary: data.coapplicant_one_inhand_salary || '',
+        coapplicant_one_other_income: data.coapplicant_one_other_income || '',
+        coapplicant_one_note: data.coapplicant_one_note || '',
+
+      }));
+    } catch (error) {
+      console.error('Error fetching personal data:', error);
+    }
+  };
+
+  const fetchcoapplicantTwoPersonalData = async (file_number) => {
+    try {
+      const response = await axios.get(`${baseurl}/getcoapplicanttwopersonadetails/${file_number}`);
+      const data = response.data.data;
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        coapplicant_two_type_of_loan: data.coapplicant_two_type_of_loan || '',
+        coapplicant_two_loan_category: data.coapplicant_two_loan_category || '',
+        coapplicant_two_required_amount: data.coapplicant_two_required_amount || '',
+        coapplicant_two_mobile_number: data.coapplicant_two_mobile_number || '',
+        coapplicant_two_name: data.coapplicant_two_name || '',
+        coapplicant_two_occupation_type: data.coapplicant_two_occupation_type || '',
+        coapplicant_two_nature_of_business: data.coapplicant_two_nature_of_business || '',
+        coapplicant_two_service_type: data.coapplicant_two_service_type || '',
+        coapplicant_two_type_of_resident: data.coapplicant_two_type_of_resident || '',
+        coapplicant_two_permanent_address: data.coapplicant_two_permanent_address || '',
+        coapplicant_two_permanent_address_landmark: data.coapplicant_two_permanent_address_landmark || '',
+        coapplicant_two_official_email_id: data.coapplicant_two_official_email_id || '',
+        coapplicant_two_personal_email_id: data.coapplicant_two_personal_email_id || '',
+        coapplicant_two_office_name: data.coapplicant_two_office_name || '',
+        coapplicant_two_date_of_birth: data.coapplicant_two_date_of_birth || '',
+        coapplicant_two_alternate_number: data.coapplicant_two_alternate_number || '',
+        coapplicant_two_mother_name: data.coapplicant_two_mother_name || '',
+        coapplicant_two_father_name: data.coapplicant_two_father_name || '',
+        coapplicant_two_marital_status: data.coapplicant_two_marital_status || '',
+        coapplicant_two_spouse_name: data.coapplicant_two_spouse_name || '',
+        coapplicant_two_current_address: data.coapplicant_two_current_address || '',
+        coapplicant_two_years_at_current_residence: data.coapplicant_two_years_at_current_residence || '',
+        coapplicant_two_total_time_in_delhi: data.coapplicant_two_total_time_in_delhi || '',
+        coapplicant_two_office_address: data.coapplicant_two_office_address || '',
+        coapplicant_two_office_address_landmark: data.coapplicant_two_office_address_landmark || '',
+        coapplicant_two_years_at_current_organization: data.coapplicant_two_years_at_current_organization || '',
+        coapplicant_two_gst_itr_filed: data.coapplicant_two_gst_itr_filed || '',
+        coapplicant_two_gst_and_itr_income: data.coapplicant_two_gst_and_itr_income || '',
+        coapplicant_two_inhand_salary: data.coapplicant_two_inhand_salary || '',
+        coapplicant_two_other_income: data.coapplicant_two_other_income || '',
+        coapplicant_two_note: data.coapplicant_two_note || '',
+
       }));
     } catch (error) {
       console.error('Error fetching personal data:', error);
@@ -224,15 +444,27 @@ reference_address: '',
   const handleSubmit = async (formType) => {
     try {
       if (formType === 'overview') {
-        // Update overview data
+        
         await axios.post(`${baseurl}/createpersonaldetails/${formData.file_number}`, formData);
-      } else if (formType === 'personal') {
+      } 
+      else if (formType === 'personal') {
         
         // Update personal data
         await axios.post(`${baseurl}/createpersonaldetails/${formData.file_number}`, formData);
       
         resetFormData();
-      }
+      } 
+ else if (formType === 'coapplicant1') {
+
+        await axios.post(`${baseurl}/createcoapplicantonepersonadetails/${formData.file_number}`, formData);
+        resetFormData();
+      } 
+
+      else if (formType === 'coapplicant2') {
+
+        await axios.post(`${baseurl}/createcoapplicanttwopersonadetails/${formData.file_number}`, formData);
+        resetFormData();
+      } 
       else if (formType === 'reference') {
         // Update personal data
         await axios.post(`${baseurl}/createreferencedetail/${formData.file_number}`, formData);
@@ -255,7 +487,10 @@ reference_address: '',
       setFormData,error1 ,
      fetchFileData,
      fetchpersonalData,
-     fetchreferenceData 
+     fetchreferenceData,
+     fetchcoapplicantOnePersonalData,
+     fetchcoapplicantTwoPersonalData,
+    
      
      }}>
       {children}

@@ -21,11 +21,13 @@ export const LoanProvider = ({ children }) => {
       const overviewResponse = await axios.get(`https://api.com/overview/${mobileNumber}`);
       const personalResponse = await axios.get(`https://api.com/personal/${mobileNumber}`);
       const referenceResponse = await axios.get(`https://api.com/reference/${mobileNumber}`);
+      const coapplicant_oneResponse = await axios.get(`https://api.com/coapplicant_one/${mobileNumber}`);
 
       // Set the responses to the state
       setOverviewData(overviewResponse.data);
       setPersonalData(personalResponse.data);
       setReferenceData(referenceResponse.data);
+      setCoapplicantOneData(coapplicant_oneResponse.data);
     } catch (err) {
       setError(err.message || 'Something went wrong');
     } finally {

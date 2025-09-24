@@ -11,6 +11,7 @@ export const UserFormProvider = ({ children }) => {
   // State to manage data from both schemas
   const [personalData, setPersonalData] = useState({});
   const [fileData, setFileData] = useState({});
+  const [coapplicantOneData, setCoapplicantOneData] = useState({});
 
   const baseurl = process.env.REACT_APP_API_BASE_URL;
 
@@ -23,6 +24,27 @@ export const UserFormProvider = ({ children }) => {
     } catch (error) {
       console.error('Error fetching personal data:', error);
       setPersonalData({});
+    }
+  }, [baseurl]);
+  // const fetchcoapplicantOneData = useCallback(async (mobileNumber) => {
+  //   try {
+  //     const response = await axios.get(`${baseurl}/api/coapplicant_one?mobileNumber=${mobileNumber}`);
+
+  //     setCoapplicantOneData(response.data || {});
+  //   } catch (error) {
+  //     console.error('Error fetching coapplicant one data:', error);
+  //     setCoapplicantOneData({});
+  //   }
+  // }, [baseurl]);
+
+  const fetchCoapplicantOneData = useCallback(async (mobileNumber) => {
+    try {
+      const response = await axios.get(`${baseurl}/api/coapplicant_one?mobileNumber=${mobileNumber}`);
+
+      setCoapplicantOneData(response.data || {});
+    } catch (error) {
+      console.error('Error fetching coapplicant one data:', error);
+      setCoapplicantOneData({});
     }
   }, [baseurl]);
 
@@ -74,6 +96,7 @@ export const UserFormProvider = ({ children }) => {
         handleFileNumberBlur,
         setPersonalData,
         setFileData,
+        coapplicantOneData
       }}
     >
       {children}

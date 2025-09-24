@@ -10,6 +10,7 @@ import OverviewDetails from '../Components/OverviewDetails';
 import Disposition from '../Components/Disposition';
 import LoanApproval from '../Components/LoanApproval';
 import BankLogincomponent from './BankLogincomponent';
+import Applicant_coapplicant from './Applicant_coapplicant';
 
 const Adminsearch = () => {
     const [activeTab, setActiveTab] = useState('Previous Loan Details');
@@ -106,7 +107,8 @@ const Adminsearch = () => {
                     <OverviewDetails />
                 )}
                 {activeTab === 'Personal details' && (
-                    <PersonalDetails />
+                    // <PersonalDetails />
+                    <Applicant_coapplicant />
                 )}
                 {activeTab === 'references' && (
                     <ReferenceDetails />
