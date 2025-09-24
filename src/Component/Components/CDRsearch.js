@@ -9,6 +9,7 @@ import BankLogin from '../Components/BankLogin';
 import UploadbankStatement from '../Components/UploadbankStatement';
 import Cdr_files from '../Components/Cdr_files';
 import FileOverviewdetails from '../Components/FileOverviewdetails';
+import Applicant_coapplicant from './Applicant_coapplicant';
 
 const CDRsearch = () => {
     const [activeTab, setActiveTab] = useState('Previous Loan Details');
@@ -81,7 +82,7 @@ const CDRsearch = () => {
                 <OverviewDetails />
             )}
              {activeTab === 'Personal details' && (
-         <PersonalDetails/>
+         <Applicant_coapplicant/>
         )}
         {activeTab === 'references' && (
           <ReferenceDetails/>

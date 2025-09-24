@@ -10,6 +10,7 @@ import BankLogin from '../Components/BankLogin';
 import UploadbankStatement from '../Components/UploadbankStatement';
 import Cdr_files from '../Components/Cdr_files';
 import FileOverviewdetails from '../Components/FileOverviewdetails';
+import Applicant_coapplicant from '../Components/Applicant_coapplicant';
 
 const Cdr = () => {
 
@@ -100,7 +101,7 @@ const Cdr = () => {
         <FileOverviewdetails/>
         )}
         {activeTab === 'Personal details' && (
-         <PersonalDetails/>
+         <Applicant_coapplicant/>
         )}
         {activeTab === 'references' && (
           <ReferenceDetails/>

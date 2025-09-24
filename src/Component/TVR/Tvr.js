@@ -129,6 +129,7 @@ import OverviewDetails from '../Components/OverviewDetails';
 import Disposition from '../Components/Disposition';
 import Tvr_files from '../Components/Tvr_files';
 import FileOverviewdetails from '../Components/FileOverviewdetails';
+import Applicant_coapplicant from '../Components/Applicant_coapplicant';
 
 const Tvr = () => {
   const [activeTab, setActiveTab] = useState('tvr_file');
@@ -216,7 +217,7 @@ const Tvr = () => {
           <FileOverviewdetails/>
         )}
 
-        {activeTab === 'Personal details' && <PersonalDetails />}
+        {activeTab === 'Personal details' && <Applicant_coapplicant />}
 
         {activeTab === 'references' && <ReferenceDetails />}
 
