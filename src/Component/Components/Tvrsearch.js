@@ -7,6 +7,7 @@ import OverviewDetails from '../Components/OverviewDetails';
 import Disposition from '../Components/Disposition';
 import Tvr_files from '../Components/Tvr_files';
 import FileOverviewdetails from '../Components/FileOverviewdetails';
+import Applicant_coapplicant from './Applicant_coapplicant';
 
 const Tvrsearch = () => {
     const [activeTab, setActiveTab] = useState('tvr_file');
@@ -93,9 +94,9 @@ const Tvrsearch = () => {
             // <OverviewDetails mobileNumber={selectedMobileNumber} /> // Pass mobile number to OverviewDetails
             <FileOverviewdetails/>
           )}
-  
-          {activeTab === 'Personal details' && <PersonalDetails />}
-  
+
+          {activeTab === 'Personal details' && <Applicant_coapplicant />}
+
           {activeTab === 'references' && <ReferenceDetails />}
   
           {activeTab === 'loan details' && <LoanDetails />}

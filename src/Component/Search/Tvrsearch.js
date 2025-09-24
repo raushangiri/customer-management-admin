@@ -9,7 +9,7 @@ import BankLogin from '../Components/BankLogin';
 import OverviewDetails from '../Components/OverviewDetails';
 import Disposition from '../Components/Disposition';
 import LoanApproval from '../Components/LoanApproval';
-
+import Applicant_coapplicant from '../Components/Applicant_coapplicant';
 const Tvrsearch = () => {
 
 
@@ -75,7 +75,7 @@ const Tvrsearch = () => {
                     <OverviewDetails />
                 )}
                 {activeTab === 'Personal details' && (
-                    <PersonalDetails />
+                    <Applicant_coapplicant />
                 )}
                 {activeTab === 'references' && (
                     <ReferenceDetails />
