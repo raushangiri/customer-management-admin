@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import AUXRibbon from './Auxcomponent';
 
 const Sales_dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
@@ -80,7 +81,7 @@ const Sales_dashboard = () => {
   return (
     <>
       <p>Welcome {dashboardData.username}</p>
-      
+      <AUXRibbon />
       {/* Date filters */}
       <div className="row mb-3">
         <div className="col-sm-4">

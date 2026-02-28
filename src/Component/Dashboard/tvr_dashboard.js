@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from "../Navbar/Navbar";
 import axios from 'axios';
+import AUXRibbon from './Auxcomponent';
 
 const TVRDashboard = () => {
   const [startDate, setStartDate] = useState('');
@@ -63,7 +64,7 @@ const TVRDashboard = () => {
       
       <div className="container">
         <h2>Welcome back {dashboardData.username}</h2>
-
+        <AUXRibbon />
         {/* Date Selection */}
         <div className="mb-4">
         <div className="row mb-3">

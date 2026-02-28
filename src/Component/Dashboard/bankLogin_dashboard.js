@@ -80,6 +80,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import AUXRibbon from './Auxcomponent';
 // import Navbar from "../Navbar/Navbar"; // Uncomment if you want to use Navbar
 
 const Banklogindashboard = () => {
@@ -138,7 +139,7 @@ const Banklogindashboard = () => {
       {/* <Navbar /> Uncomment if you want to use Navbar */}
       <div className="container">
         <h2>Welcome {dashboardData.username}</h2>
-
+        <AUXRibbon />
         {/* Date Selection */}
         <div className="mb-4">
           <div className="row mb-3">

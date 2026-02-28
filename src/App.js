@@ -48,6 +48,8 @@ import Salessearch from './Component/Components/Salessearch';
 import CDRsearch from './Component/Components/CDRsearch';
 import Bankloginsearch from './Component/Components/Bankloginsearch';
 import Chat from './Component/Chat/Chat';
+import AuxRibbon from './Component/Dashboard/Auxcomponent';
+import Availableuserlist from './Component/Create-user/Availableuserlist';
 // import TeamleaderHistory from './Component/History/Teamleaderhistory';
 
 function App() {
@@ -128,12 +130,14 @@ function Main() {
         <Route path="/bankloginteamperformance" element={<Bankloginteamperformance/>} />
         <Route path="/viewbankstatement/:_id" element={<Viewuploadedbankstatement/>} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/AuxRibbon" element={<AuxRibbon />} />
+         <Route path="*" element={<h1>404 Not Found</h1>} />
+         <Route path="/availableuser" element={<Availableuserlist />} />
+         
+     
 
 
-        
-        
-        
-       
+
         </Routes>
       </div>
       </OverviewProvider>

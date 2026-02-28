@@ -97,6 +97,7 @@ const Sidebar = () => {
                   <li><NavLink to="/admincdrhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>CDR File History</NavLink></li>
                   <li><NavLink to="/adminbankloginhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>bank_login File History</NavLink></li>
                   <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Approval File History</NavLink></li>
+                  <li><NavLink to="/availableuser" className={({ isActive }) => isActive ? 'active-link' : ''}>Available Users</NavLink></li>
 
                 </ul>
               )}

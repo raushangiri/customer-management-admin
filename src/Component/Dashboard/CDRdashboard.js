@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import AUXRibbon from './Auxcomponent';
 // import Navbar from "../Navbar/Navbar"; // Uncomment if you want to use Navbar
 
 const CDRdashboard = () => {
@@ -53,9 +54,11 @@ const CDRdashboard = () => {
 
   return (
     <>
+    
       {/* <Navbar /> Uncomment if you want to use Navbar */}
       {/* <p>Welcome back Admin</p> Uncomment if you want to show a welcome message */}
       <div className="container">
+        <AUXRibbon />
         <h2>Welcome {dashboardData.username}</h2>
 
         {/* Date Selection */}
