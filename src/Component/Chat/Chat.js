@@ -76,8 +76,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import "./ChatScreen.css";
-
-const socket = io("http://localhost:3008");
+const reactbaseurl=process.env.REACT_APP_API_BASE_URL;
+const socket = io("http://136.115.50.188:3008");
 
 const currentUser = {
   _id: "66f0f941ce634e1306aa7690",
@@ -102,14 +102,14 @@ const ChatScreen = () => {
       try {
         // Fetch active users
         const userRes = await fetch(
-          "http://localhost:3008/api/v1/getActiveUsers"
+          `${reactbaseurl}/getActiveUsers`
         );
         const userData = await userRes.json();
         setUsers(userData.filter((u) => u._id !== currentUser._id));
 
         // Fetch group conversation
         const groupRes = await fetch(
-          "http://localhost:3008/api/v1/conversations/group"
+          `${reactbaseurl}/conversations/group`
         );
         const groupData = await groupRes.json();
 
@@ -161,14 +161,14 @@ const ChatScreen = () => {
         socket.emit("joinConversation", chat._id);
 
         const res = await fetch(
-          `http://localhost:3008/api/v1/conversations/${chat._id}/messages`
+          `${reactbaseurl}/conversations/${chat._id}/messages`
         );
         const data = await res.json();
         setMessages(data);
       } else {
         // Create or fetch individual conversation
         const res = await fetch(
-          "http://localhost:3008/api/v1/conversations",
+          `${reactbaseurl}/conversations`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -185,7 +185,7 @@ const ChatScreen = () => {
         socket.emit("joinConversation", convo._id);
 
         const msgRes = await fetch(
-          `http://localhost:3008/api/v1/conversations/${convo._id}/messages`
+          `${reactbaseurl}/conversations/${convo._id}/messages`
         );
         const msgData = await msgRes.json();
         setMessages(msgData);
