@@ -143,9 +143,12 @@ const handleLogin = async () => {
       setTimeout(() => {
         if (userRole === "sales") {
           navigate('/sales-dashboard');
-        } else if (userRole === "TVR") {
-          navigate('/tvr-dashboard');
-        } else if (userRole === "Bank login") {
+        } 
+        // else if (userRole === "TVR") {
+        //   navigate('/tvr-dashboard');
+        // } 
+        
+        else if (userRole === "Bank login") {
           navigate('/banklogin-dashboard');
         } else if (userRole === "CDR") {
           navigate('/CDRdashboard');
@@ -211,7 +214,7 @@ const handleLogin = async () => {
           <option value="admin">Admin</option>
           <option value="Team leader">Team Leader</option>
           <option value="sales">Sales Team</option>
-          <option value="TVR">TVR Team</option>
+          {/* <option value="TVR">TVR Team</option> */}
           <option value="CDR">CDR Team</option>
           <option value="Bank login">Bank login</option>
         </select>
