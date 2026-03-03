@@ -73,245 +73,252 @@
 
 // export default ChatScreen;
 
-import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
-import io from "socket.io-client";
+import React, { useState, useEffect, useRef } from "react";
+import { io } from "socket.io-client";
+import "./ChatScreen.css";
 
-const ENDPOINT = process.env.REACT_APP_API_BASE_URL;
-let socket, selectedChatCompare;
+const socket = io("http://localhost:3008");
 
-const ChatScreen = ({ currentUser }) => {
-  // currentUser should be the object from your User collection: { _id, name, role, etc }
+const currentUser = {
+  _id: "66f0f941ce634e1306aa7690",
+  name: "Deepak Verma",
+};
+
+const ChatScreen = () => {
+  const [users, setUsers] = useState([]);
+  const [groupChat, setGroupChat] = useState(null); // ✅ real group
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [conversationId, setConversationId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [contacts, setContacts] = useState([]);
-  const [selectedChat, setSelectedChat] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
-  const [groupName, setGroupName] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  
   const messagesEndRef = useRef(null);
 
-  // Initialize Socket
+  // ================================
+  // FETCH USERS + GROUP
+  // ================================
   useEffect(() => {
-    if (!currentUser) return;
-    socket = io(ENDPOINT);
-    socket.emit("setup", currentUser);
-    socket.on("message received", (newMessageReceived) => {
-      if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
-        // Handle notification logic here
-      } else {
-        setMessages((prev) => [...prev, newMessageReceived]);
-      }
-    });
-    return () => socket.disconnect();
-  }, [currentUser]);
-
-  // Fetch Contacts
-  useEffect(() => {
-    const fetchUsers = async () => {
+    const initData = async () => {
       try {
-        const { data } = await axios.get(`${ENDPOINT}/getusers`);
-        // Filter out current user from contact list
-        setContacts(data.filter(u => u._id !== currentUser?._id));
-      } catch (err) {
-        console.error("Error fetching users");
+        // Fetch active users
+        const userRes = await fetch(
+          "http://localhost:3008/api/v1/getActiveUsers"
+        );
+        const userData = await userRes.json();
+        setUsers(userData.filter((u) => u._id !== currentUser._id));
+
+        // Fetch group conversation
+        const groupRes = await fetch(
+          "http://localhost:3008/api/v1/conversations/group"
+        );
+        const groupData = await groupRes.json();
+
+        console.log("Fetched group:", groupData);
+
+        if (groupData && groupData._id) {
+          setGroupChat(groupData);
+        }
+      } catch (error) {
+        console.error("Error initializing chat:", error);
       }
     };
-    fetchUsers();
-  }, [currentUser]);
 
-  // Auto-scroll
+    initData();
+  }, []);
+
+  // ================================
+  // AUTO SCROLL
+  // ================================
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const accessChat = async (userId) => {
+  // ================================
+  // SOCKET LISTENER
+  // ================================
+  useEffect(() => {
+    socket.on("receiveMessage", (message) => {
+      if (message.conversationId === conversationId) {
+        setMessages((prev) => [...prev, message]);
+      }
+    });
+
+    return () => {
+      socket.off("receiveMessage");
+    };
+  }, [conversationId]);
+
+  // ================================
+  // OPEN CHAT
+  // ================================
+  const openChat = async (chat) => {
     try {
-      setLoading(true);
-      const { data } = await axios.post(`${ENDPOINT}/api/chat`, { 
-        userId, 
-        currentUserId: currentUser._id 
-      });
-      setSelectedChat(data);
-      selectedChatCompare = data;
-      
-      const res = await axios.get(`${ENDPOINT}/api/messages/${data._id}`);
-      setMessages(res.data);
-      socket.emit("join chat", data._id);
-      setLoading(false);
-    } catch (err) {
-      setLoading(false);
+      setSelectedChat(chat);
+      setMessages([]);
+
+      if (chat.type === "group") {
+        setConversationId(chat._id);
+        socket.emit("joinConversation", chat._id);
+
+        const res = await fetch(
+          `http://localhost:3008/api/v1/conversations/${chat._id}/messages`
+        );
+        const data = await res.json();
+        setMessages(data);
+      } else {
+        // Create or fetch individual conversation
+        const res = await fetch(
+          "http://localhost:3008/api/v1/conversations",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              senderId: currentUser._id,
+              receiverId: chat._id,
+            }),
+          }
+        );
+
+        const convo = await res.json();
+
+        setConversationId(convo._id);
+        socket.emit("joinConversation", convo._id);
+
+        const msgRes = await fetch(
+          `http://localhost:3008/api/v1/conversations/${convo._id}/messages`
+        );
+        const msgData = await msgRes.json();
+        setMessages(msgData);
+      }
+    } catch (error) {
+      console.error("Error opening chat:", error);
     }
   };
 
-  const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedChat) return;
-    try {
-      const { data } = await axios.post(`${ENDPOINT}/api/messages`, {
-        content: newMessage,
-        chatId: selectedChat._id,
-        currentUserId: currentUser._id
-      });
-      socket.emit("new message", data);
-      setMessages([...messages, data]);
-      setNewMessage("");
-    } catch (err) {
-      console.error("Error sending message");
-    }
+  // ================================
+  // SEND MESSAGE
+  // ================================
+  const sendMessage = () => {
+    if (!newMessage.trim() || !conversationId) return;
+
+    console.log("Sending conversationId:", conversationId);
+
+    socket.emit("sendMessage", {
+      conversationId,
+      senderId: currentUser._id,
+      text: newMessage,
+    });
+
+    setNewMessage("");
   };
 
-  const createGroup = async () => {
-    if (!groupName || selectedUsers.length < 2) return;
-    try {
-      const { data } = await axios.post(`${ENDPOINT}/api/chat/group`, {
-        name: groupName,
-        users: JSON.stringify(selectedUsers.map(u => u._id)),
-        currentUserId: currentUser._id
-      });
-      setSelectedChat(data);
-      setIsGroupModalOpen(false);
-    } catch (err) {
-      console.error("Error creating group");
-    }
-  };
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="flex h-screen w-full bg-slate-50 font-sans text-slate-900">
-      {/* Sidebar */}
-      <div className="w-80 border-r bg-white flex flex-col shadow-sm">
-        <div className="p-4 border-b flex justify-between items-center bg-indigo-600 text-white">
-          <h2 className="font-bold text-lg">Contacts</h2>
-          <button 
-            onClick={() => setIsGroupModalOpen(true)}
-            className="p-1 hover:bg-indigo-500 rounded transition-colors text-xs border border-indigo-300"
+    <div className="chat-container">
+      {/* SIDEBAR */}
+      <div className="chat-sidebar">
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search users..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        {/* GROUP CHAT */}
+        {groupChat && (
+          <div
+            className={`chat-item ${
+              selectedChat?._id === groupChat._id ? "active" : ""
+            }`}
+            onClick={() =>
+              openChat({
+                type: "group",
+                _id: groupChat._id,
+                name: groupChat.name || "Team Group",
+              })
+            }
           >
-            + Group
-          </button>
-        </div>
-        <div className="overflow-y-auto flex-1">
-          {contacts.map((user) => (
-            <div 
-              key={user._id} 
-              onClick={() => accessChat(user._id)}
-              className="p-4 border-b hover:bg-slate-50 cursor-pointer transition-all flex flex-col"
-            >
-              <span className="font-semibold text-slate-800">{user.name}</span>
-              <span className="text-xs text-slate-500 uppercase tracking-tight">{user.role} • {user.department?.join(', ')}</span>
-            </div>
-          ))}
-        </div>
+            👥 {groupChat.name || "Team Group"}
+          </div>
+        )}
+
+        <div className="personal-title">Personal Chats</div>
+
+        {filteredUsers.map((user) => (
+          <div
+            key={user._id}
+            className={`chat-item ${
+              selectedChat?._id === user._id ? "active" : ""
+            }`}
+            onClick={() =>
+              openChat({
+                type: "individual",
+                _id: user._id,
+                name: user.name,
+              })
+            }
+          >
+            👤 {user.name}
+          </div>
+        ))}
       </div>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      {/* CHAT AREA */}
+      <div className="chat-main">
         {selectedChat ? (
           <>
-            <div className="p-4 border-b bg-white flex items-center justify-between shadow-sm">
-              <div>
-                <h3 className="font-bold text-slate-800">
-                  {selectedChat.isGroupChat ? selectedChat.chatName : selectedChat.users.find(u => u._id !== currentUser._id).name}
-                </h3>
-                <p className="text-xs text-green-500 font-medium">Online</p>
-              </div>
-            </div>
+            <div className="chat-header">{selectedChat.name}</div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-100">
-              {loading ? (
-                <div className="flex justify-center items-center h-full text-slate-400">Loading messages...</div>
-              ) : (
-                messages.map((msg) => (
-                  <div 
-                    key={msg._id} 
-                    className={`flex ${msg.sender._id === currentUser._id ? "justify-end" : "justify-start"}`}
-                  >
-                    <div className={`max-w-[70%] p-3 rounded-2xl shadow-sm ${
-                      msg.sender._id === currentUser._id 
-                      ? "bg-indigo-600 text-white rounded-tr-none" 
-                      : "bg-white text-slate-800 rounded-tl-none border border-slate-200"
-                    }`}>
-                      {selectedChat.isGroupChat && msg.sender._id !== currentUser._id && (
-                        <div className="text-[10px] font-bold opacity-75 mb-1 uppercase tracking-wider">
-                          {msg.sender.name} ({msg.sender.role})
+            <div className="chat-messages">
+              {messages.map((msg) => (
+                <div
+                  key={msg._id}
+                  className={`chat-message ${
+                    msg.sender?._id === currentUser._id ? "me" : "other"
+                  }`}
+                >
+                  <div className="chat-bubble">
+                    {selectedChat.type === "group" &&
+                      msg.sender?._id !== currentUser._id && (
+                        <div className="sender-name">
+                          {msg.sender?.name}
                         </div>
                       )}
-                      <div className="text-sm leading-relaxed">{msg.content}</div>
-                      <div className={`text-[10px] mt-1 text-right ${msg.sender._id === currentUser._id ? "text-indigo-200" : "text-slate-400"}`}>
-                        {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </div>
+
+                    <div>{msg.text}</div>
+
+                    <div className="chat-time">
+                      {new Date(msg.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </div>
                   </div>
-                ))
-              )}
-              <div ref={messagesEndRef} />
+                </div>
+              ))}
+              <div ref={messagesEndRef}></div>
             </div>
 
-            <div className="p-4 bg-white border-t flex items-center gap-3">
+            <div className="chat-input">
               <input
-                className="flex-1 bg-slate-100 border-none rounded-full px-5 py-3 focus:ring-2 focus:ring-indigo-500 outline-none text-sm"
-                placeholder="Write something..."
+                type="text"
+                placeholder="Type a message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               />
-              <button 
-                onClick={sendMessage}
-                className="bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-indigo-700 transition-all shadow-md active:scale-95"
-              >
-                Send
-              </button>
+              <button onClick={sendMessage}>Send</button>
             </div>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
-            <div className="text-5xl mb-4">💬</div>
-            <p className="text-lg">Select a colleague to start chatting</p>
-          </div>
+          <div className="no-chat">Select a chat</div>
         )}
       </div>
-
-      {/* Group Chat Modal */}
-      {isGroupModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="p-5 border-b bg-slate-50">
-              <h2 className="text-xl font-bold">Create Group Chat</h2>
-            </div>
-            <div className="p-5 space-y-4">
-              <input 
-                placeholder="Group Name" 
-                className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                value={groupName}
-                onChange={(e) => setGroupName(e.target.value)}
-              />
-              <div className="max-h-48 overflow-y-auto border rounded-lg p-2 space-y-1">
-                <p className="text-xs font-bold text-slate-400 px-2 mb-2">SELECT MEMBERS</p>
-                {contacts.map(user => (
-                  <label key={user._id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded cursor-pointer transition-colors">
-                    <input 
-                      type="checkbox" 
-                      className="w-4 h-4 accent-indigo-600"
-                      onChange={(e) => {
-                        if (e.target.checked) setSelectedUsers([...selectedUsers, user]);
-                        else setSelectedUsers(selectedUsers.filter(u => u._id !== user._id));
-                      }}
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium">{user.name}</span>
-                      <span className="text-[10px] text-slate-400 uppercase">{user.role}</span>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div className="p-5 border-t bg-slate-50 flex justify-end gap-3">
-              <button onClick={() => setIsGroupModalOpen(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg transition-colors font-medium">Cancel</button>
-              <button onClick={createGroup} className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-bold shadow-sm">Create Group</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
