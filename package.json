@@ -22,15 +22,16 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
+    "socket.io-client": "^4.8.3",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
   },
-"scripts": {
-  "dev": "react-scripts start",
-  "build": "react-scripts build",
-  "start": "serve -s build -l 3000",
-  "pm2": "pm2 start npm --name \"react-app\" -- start"
-},
+  "scripts": {
+    "build": "react-scripts build",
+    "start": "react-scripts start",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",

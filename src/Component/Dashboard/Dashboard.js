@@ -114,22 +114,21 @@ const Dashboard = () => {
       </div>
     </div>
   </div>
-  <div className="col-sm-4 mb-3">
+  {/* <div className="col-sm-4 mb-3">
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">Total Pending TVR</h5>
         <p>Total Count: {dashboardData.tvrPending}</p>
-        {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
-  </div>
-  <div className="col-sm-4 mb-3">
+  </div> */}
+  {/* <div className="col-sm-4 mb-3">
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">Total Completed TVR</h5>
         <p>Total Count: {dashboardData.tvrCompleted}</p>
-        {/* <p> Total Amount: </p> */}
+      
 
       </div>
     </div>
@@ -139,11 +138,11 @@ const Dashboard = () => {
       <div className="card-body">
         <h5 className="card-title">Total Rejected TVR</h5>
         <p>Total Count: {dashboardData.tvrRejected}</p>
-        {/* <p> Total Amount: </p> */}
+  
 
       </div>
     </div>
-  </div>
+  </div> */}
   <div className="col-sm-4 mb-3">
     <div className="card">
       <div className="card-body">
