@@ -1,7 +1,7 @@
-import React, { useState,useEffect, useId } from 'react';
-import { NavLink, Link  } from 'react-router-dom';
+import React, { useState, useEffect, useId } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleChevronDown,faUser,faComment } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
+import { faCircleChevronDown, faUser, faComment } from '@fortawesome/free-solid-svg-icons'; // Import the correct icon
 import './Sidebar.css'; // Optional: For styling
 import logo from "../Auth/jbj-fintech-logo.webp";
 import axios from 'axios';
@@ -11,41 +11,14 @@ const Sidebar = () => {
   const [showSubMenuhistory, setShowSubMenuhistory] = useState(false);
   const [showSubMenuperformance, setShowSubMenuperformance] = useState(false);
 
-  
-  const [userdata, setUserdata]=useState({});
-  const userRole = localStorage.getItem('userRole'); 
-  const userId = localStorage.getItem('userId'); 
+
+  const [userdata, setUserdata] = useState({});
+  const userRole = localStorage.getItem('userRole');
+  const userId = localStorage.getItem('userId');
   const [error, setError] = useState(null);
   const baseurl = process.env.REACT_APP_API_BASE_URL;
-  const [loading, setLoading] = useState(true);
-
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`${baseurl}/getUserById/${userId}`);
-        if (response.data) {
-          setUserdata(response.data); // Update state with full user data
-        } else {
-          setError('No user data found.');
-        }
-      } catch (err) {
-        setError('Failed to fetch user data.');
-      } finally {
-        setLoading(false); // Stop loading after the request is complete
-      }
-    };
-
-    fetchUser();
-  }, [userId, baseurl]);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
+const [loading, setLoading] = useState(true);
+const [unreadCount, setUnreadCount] = useState(0);
 
   const toggleSubMenu = () => {
     setShowSubMenu(!showSubMenu);
@@ -54,29 +27,83 @@ const Sidebar = () => {
   const toggleSubMenufilehistory = () => {
     setShowSubMenuhistory(!showSubMenuhistory);
   };
+
   const toggleSubMenufileperformance = () => {
     setShowSubMenuperformance(!showSubMenuperformance);
   };
-  
+
+
+const fetchUnreadCount = async () => {
+  try {
+
+    const response = await axios.get(
+      `${baseurl}/messages/unread-count/${userId}`
+    );
+
+    if (response.data) {
+      setUnreadCount(response.data.unreadCount);
+    }
+
+  } catch (err) {
+    console.error("Unread count error:", err);
+  }
+};
+
+
+useEffect(() => {
+
+ const fetchUser = async () => {
+  try {
+    const response = await axios.get(`${baseurl}/getUserById/${userId}`);
+
+    if (response.data.success) {
+      setUserdata(response.data.data);
+    } else {
+      setError("No user data found.");
+    }
+
+  } catch (err) {
+    setError("Failed to fetch user data.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  fetchUser();
+  fetchUnreadCount();
+
+}, [userId, baseurl]);
+
+
+useEffect(() => {
+
+  const interval = setInterval(() => {
+    fetchUnreadCount();
+  }, 10000);
+
+  return () => clearInterval(interval);
+
+}, []);
+
   return (
     <div className="sidebar border border-primary overflow-auto"
-     style={{
-      flex: 1,
-      background: "linear-gradient(to bottom, #1e3c72, #2a5298)", // adjust colors
-      color: "white",
-    }}
+      style={{
+        flex: 1,
+        background: "linear-gradient(to bottom, #1e3c72, #2a5298)", // adjust colors
+        color: "white",
+      }}
     >
       {/* <img src={logo} alt='logo' style={{ width: '90%' }} className='img1' /> */}
-       <div className="text-center">
-      <img src={logo} alt="logo" style={{ width: "150px" }} className="mb-3" />
-      {/* <h4 className="fw-bold">JBJ Fintech</h4> */}
-      {/* <p className="mb-0">A Professional Way For Funding</p> */}
-    </div>
+      <div className="text-center">
+        <img src={logo} alt="logo" style={{ width: "150px" }} className="mb-3" />
+        {/* <h4 className="fw-bold">JBJ Fintech</h4> */}
+        {/* <p className="mb-0">A Professional Way For Funding</p> */}
+      </div>
       <ul>
-      <p>
-  <FontAwesomeIcon icon={faUser} className='mx-2'/>
-  <strong> Hi {userdata.data.name}</strong>
-</p><hr></hr>
+        <p>
+          <FontAwesomeIcon icon={faUser} className='mx-2' />
+          <strong>Hi {userdata?.name}</strong>
+        </p><hr></hr>
         {userRole === 'admin' && (
           <>
             <li>
@@ -86,8 +113,8 @@ const Sidebar = () => {
               <NavLink to="/Adminsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
             <li>
-            <div onClick={toggleSubMenufilehistory} className="submenu-title">
-            File History
+              <div onClick={toggleSubMenufilehistory} className="submenu-title">
+                File History
                 <FontAwesomeIcon icon={faCircleChevronDown} />
               </div>
               {showSubMenuhistory && (
@@ -106,7 +133,7 @@ const Sidebar = () => {
             <li>
               {/* <NavLink to="/Adminfilehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Team Performance</NavLink> */}
               <div onClick={toggleSubMenufileperformance} className="submenu-title">
-              Team Performance
+                Team Performance
                 <FontAwesomeIcon icon={faCircleChevronDown} />
               </div>
               {showSubMenuperformance && (
@@ -119,8 +146,8 @@ const Sidebar = () => {
 
                 </ul>
               )}
-              </li>
-              <li><NavLink to="/user-list" className={({ isActive }) => isActive ? 'active-link' : ''}>Manage Users</NavLink></li>
+            </li>
+            <li><NavLink to="/user-list" className={({ isActive }) => isActive ? 'active-link' : ''}>Manage Users</NavLink></li>
             {/* <li>
               <div onClick={toggleSubMenu} className="submenu-title">
                 Manage User
@@ -197,9 +224,9 @@ const Sidebar = () => {
         {userRole === 'Bank login' && (
           <>
             <li>
-              <NavLink  to="/banklogin-dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
+              <NavLink to="/banklogin-dashboard" className={({ isActive }) => isActive ? 'active-link' : ''}>Dashboard</NavLink>
             </li>
-            <li><NavLink  to="/bank-login-team" className={({ isActive }) => isActive ? 'active-link' : ''}>bank_login</NavLink></li>
+            <li><NavLink to="/bank-login-team" className={({ isActive }) => isActive ? 'active-link' : ''}>bank_login</NavLink></li>
             <li>
               <NavLink to="/Adminsearch" className={({ isActive }) => isActive ? 'active-link' : ''}>Search File Details</NavLink>
             </li>
@@ -208,7 +235,15 @@ const Sidebar = () => {
 
           </>
         )}
-  <li><NavLink to="/chat">Chat <FontAwesomeIcon icon={faComment} /></NavLink></li>
+        {/* <li><NavLink to="/chat">Chat <FontAwesomeIcon icon={faComment} /></NavLink></li> */}
+        <li>
+  <NavLink to="/chat">
+    Chat <FontAwesomeIcon icon={faComment} />
+    {unreadCount > 0 && (
+      <span className="chat-badge">{unreadCount}</span>
+    )}
+  </NavLink>
+</li>
         <li><NavLink to="/">Logout</NavLink></li>
 
       </ul>
