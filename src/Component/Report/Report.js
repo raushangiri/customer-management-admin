@@ -296,7 +296,7 @@ const fetchAndDownloadReport = async () => {
       <h3 className="text-center">Reports</h3>
       <div className="container">
         <div className="row">
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <h5 className='text-center'>Report as per Loan Type</h5>
             <div style={chartStyle}>
               <Pie data={pieChartData} />
@@ -307,7 +307,7 @@ const fetchAndDownloadReport = async () => {
             <div style={chartStyle}>
               <Pie data={PendingpieChartData} />
             </div>
-          </div>
+          </div> */}
 
           {/* <div className="col-md-6">
             <h5>Sales Over Time</h5>
@@ -363,7 +363,7 @@ const fetchAndDownloadReport = async () => {
             </div>
           </div>
           <div className="col-md-6 mt-4">
-      <div className="card">
+      {/* <div className="card">
         <div className="card-body">
           <h5 className="card-title">TVR Report</h5>
 
@@ -399,7 +399,7 @@ const fetchAndDownloadReport = async () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
           <div className="col-md-6 mt-4">
             <div className="card">
