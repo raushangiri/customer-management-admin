@@ -1348,7 +1348,7 @@ import "./ChatScreen.css";
 
 const reactbaseurl = process.env.REACT_APP_API_BASE_URL;
 // const socket = io("http://localhost:3009");
-const socket = io("http://34.171.111.0:3009");
+const socket = io(reactbaseurl);
 
 const ChatScreen = () => {
 

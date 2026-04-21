@@ -35,7 +35,8 @@ const Availableuserlist = () => {
               <th scope="col">User ID</th>
               <th scope="col">Name</th>
               <th scope="col">Role</th>
-              <th scope="col">Current Aux</th>
+              <th scope="col">Available User</th>
+              <th scope="col">Login Time</th>
             </tr>
           </thead>
           <tbody>
@@ -52,6 +53,7 @@ const Availableuserlist = () => {
                   <td>{user.name || "N/A"}</td>
                   <td>{user.role || "Agent"}</td>
                   <td>{currentAux}</td>
+                   <td>{user.totalAvailableTime} Hrs</td>
                 </tr>
               );
             })}

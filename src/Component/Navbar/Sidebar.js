@@ -124,8 +124,6 @@ useEffect(() => {
                   <li><NavLink to="/admincdrhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>CDR File History</NavLink></li>
                   <li><NavLink to="/adminbankloginhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>bank_login File History</NavLink></li>
                   <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Approval File History</NavLink></li>
-                  <li><NavLink to="/availableuser" className={({ isActive }) => isActive ? 'active-link' : ''}>Available Users</NavLink></li>
-
                 </ul>
               )}
               {/* <NavLink to="/team-filehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li> */}
@@ -147,20 +145,18 @@ useEffect(() => {
                 </ul>
               )}
             </li>
-            <li><NavLink to="/user-list" className={({ isActive }) => isActive ? 'active-link' : ''}>Manage Users</NavLink></li>
-            {/* <li>
+            <li>
               <div onClick={toggleSubMenu} className="submenu-title">
                 Manage User
                 <FontAwesomeIcon icon={faCircleChevronDown} />
               </div>
               {showSubMenu && (
                 <ul className="submenu">
-                  <li><NavLink to="/create-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Create User</NavLink></li>
-                  <li><NavLink to="/user-list" className={({ isActive }) => isActive ? 'active-link' : ''}>User List</NavLink></li>
-                  <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Unlock User</NavLink></li>
+                  <li><NavLink to="/user-list" className={({ isActive }) => isActive ? 'active-link' : ''}>Manage Users</NavLink></li>
+                  <li><NavLink to="/availableuser" className={({ isActive }) => isActive ? 'active-link' : ''}>Available Users</NavLink></li>
                 </ul>
               )}
-            </li> */}
+            </li>
             <li>
               <NavLink to="/upload-csv" className={({ isActive }) => isActive ? 'active-link' : ''}>Upload File</NavLink>
             </li>
