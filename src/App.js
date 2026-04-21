@@ -50,6 +50,7 @@ import Bankloginsearch from './Component/Components/Bankloginsearch';
 import Chat from './Component/Chat/Chat';
 import AuxRibbon from './Component/Dashboard/Auxcomponent';
 import Availableuserlist from './Component/Create-user/Availableuserlist';
+import Adminfileapprovalhistory from './Component/History/Adminfileapprovalhistory';
 // import TeamleaderHistory from './Component/History/Teamleaderhistory';
 
 function App() {
@@ -125,6 +126,7 @@ function Main() {
         <Route path="/admintvrhistory" element={<Admintvrhistory/>} />
         <Route path="/admincdrhistory" element={<Admincdrhistory/>} />
         <Route path="/adminbankloginhistory" element={<Adminbankloginhistory/>} />
+        <Route path="/adminapprovalfilehistory" element={<Adminfileapprovalhistory/>} />
         <Route path="/tvrteamperformance" element={<Tvrteamperformance/>} />
         <Route path="/cdrteamperformance" element={<Cdrteamperformance/>} />
         <Route path="/bankloginteamperformance" element={<Bankloginteamperformance/>} />

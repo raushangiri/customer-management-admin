@@ -123,7 +123,7 @@ useEffect(() => {
                   {/* <li><NavLink to="/admintvrhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>TVR File History</NavLink></li> */}
                   <li><NavLink to="/admincdrhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>CDR File History</NavLink></li>
                   <li><NavLink to="/adminbankloginhistory" className={({ isActive }) => isActive ? 'active-link' : ''}>bank_login File History</NavLink></li>
-                  <li><NavLink to="/unlock-user" className={({ isActive }) => isActive ? 'active-link' : ''}>Approval File History</NavLink></li>
+                  <li><NavLink to="/adminapprovalfilehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>Approval File History</NavLink></li>
                 </ul>
               )}
               {/* <NavLink to="/team-filehistory" className={({ isActive }) => isActive ? 'active-link' : ''}>File History</NavLink></li> */}
