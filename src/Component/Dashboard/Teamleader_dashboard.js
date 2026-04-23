@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import AUXRibbon from './Auxcomponent';
 
 const Teamleader_dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
@@ -81,6 +82,7 @@ const Teamleader_dashboard = () => {
   return (
     <>
       <h3>Welcome {dashboardData.username}</h3>
+      <AUXRibbon />
       <div className="mb-4">
           <div className="row mb-3">
             <div className='col-sm-4'>

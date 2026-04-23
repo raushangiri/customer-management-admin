@@ -3,8 +3,7 @@ import axios from 'axios';
 
 
 const Cdrteamperformance = () => {
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    
     const [selectedTeamLeader, setSelectedTeamLeader] = useState('');
     const [selectedAgent, setSelectedAgent] = useState('');
     const [teamData, setTeamData] = useState([]);
@@ -14,6 +13,24 @@ const Cdrteamperformance = () => {
     const [filterTL, setFilterTL] = useState('');
     const baseurl = process.env.REACT_APP_API_BASE_URL;
   
+
+  const getDefaultStartDate = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return d.toISOString().split('T')[0];
+};
+
+const getDefaultEndDate = () => {
+  const d = new Date();
+  return d.toISOString().split('T')[0];
+};
+
+const [startDate, setStartDate] = useState(getDefaultStartDate());
+const [endDate, setEndDate] = useState(getDefaultEndDate());
+useEffect(() => {
+  fetchFilteredData();
+}, []);
+
     // Function to fetch data from API based on filters
     const fetchFilteredData = async () => {
       if (!startDate || !endDate) return;

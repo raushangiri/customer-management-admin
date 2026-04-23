@@ -176,18 +176,19 @@ const Dashboard = () => {
   <div className="col-sm-4 mb-3">
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title">Total Bank logged-in</h5>
+        <h5 className="card-title">Total Bank login Completed</h5>
         <p>Total Count: {dashboardData.bankloginCompleted}</p>
         {/* <p> Total Amount: </p> */}
 
       </div>
     </div>
   </div>
-  <div className="col-sm-4 mb-3">
+
+<div className="col-sm-4 mb-3">
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title">Total Approved Bank logged-in</h5>
-        <p>Total Count: </p>
+        <h5 className="card-title">Total Bank login Pending</h5>
+        <p>Total Count: {dashboardData.bankloginPending}</p>
         {/* <p> Total Amount: </p> */}
 
       </div>
@@ -196,7 +197,7 @@ const Dashboard = () => {
   <div className="col-sm-4 mb-3">
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title">Total Rejected Bank logged-in</h5>
+        <h5 className="card-title">Total Bank login Rejected</h5>
         <p>Total Count: {dashboardData.bankloginRejected}</p>
         {/* <p> Total Amount: </p> */}
 
@@ -206,8 +207,34 @@ const Dashboard = () => {
   <div className="col-sm-4 mb-3">
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title">Total File Completed</h5>
-        <p>Total Count: </p>
+        <h5 className="card-title">Total Approval Completed</h5>
+        <p>Total Count: {dashboardData.approvalCompleted}</p>
+      </div>
+    </div>
+  </div>
+  <div className="col-sm-4 mb-3">
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">Total Approval Pending</h5>
+        <p>Total Count: {dashboardData.approvalPending}</p>
+      </div>
+    </div>
+  </div>
+  <div className="col-sm-4 mb-3">
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">Total Approval Rejected</h5>
+        <p>Total Count: {dashboardData.approvalRejected}</p>
+        {/* <p> Total Amount: </p> */}
+
+      </div>
+    </div>
+  </div>
+  <div className="col-sm-4 mb-3">
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">Total Disbursal</h5>
+        <p>Total Count: {dashboardData.disbursalCompleted}</p>
         {/* <p> Total Amount: </p> */}
       </div>
     </div>
@@ -215,17 +242,8 @@ const Dashboard = () => {
   <div className="col-sm-4 mb-3">
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title">Total File Rejected</h5>
-        <p>Total Count: </p>
-        {/* <p> Total Amount: </p> */}
-      </div>
-    </div>
-  </div>
-  <div className="col-sm-4 mb-3">
-    <div className="card">
-      <div className="card-body">
-        <h5 className="card-title">Total Disbursal File</h5>
-        <p>Total Count: </p>
+        <h5 className="card-title">Disbursal NI By customer</h5>
+        <p>Total Count: {dashboardData.disbursalNI}</p>
         {/* <p> Total Amount: </p> */}
       </div>
     </div>

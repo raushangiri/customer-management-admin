@@ -539,8 +539,7 @@ const Adminfilehistory = () => {
               <th scope="col">Team Leader</th>
               <th scope="col">Agent Name</th>
               <th scope="col">Interested</th>
-              <th scope="col">TVR Pending</th>
-              <th scope="col">TVR Completed</th>
+             
               <th scope="col">CDR Pending</th>
               <th scope="col">CDR Completed</th>
               <th scope="col">Bank Login</th>
@@ -559,8 +558,7 @@ const Adminfilehistory = () => {
                   <td>{data.teamLeaderName}</td>
                   <td>{data.sales_agent_name}</td>
                   <td>{data.interested}</td>
-                  <td>{data.tvrPending}</td>
-                  <td>{data.tvrCompleted}</td>
+                
                   <td>{data.cdrPending}</td>
                   <td>{data.cdrCompleted}</td>
                   <td>{data.bankLogin}</td>

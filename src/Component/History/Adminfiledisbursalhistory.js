@@ -4,7 +4,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-const Adminfileapprovalhistory = () => {
+const Adminfiledisbursalhistory = () => {
   const [loanFiles, setLoanFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,7 +23,7 @@ const Adminfileapprovalhistory = () => {
     d.setDate(d.getDate() - 1);
     return d.toISOString().split('T')[0];
   };
- 
+
   const getDefaultEndDate = () => {
     const d = new Date();
     return d.toISOString().split('T')[0];
@@ -35,7 +35,7 @@ const Adminfileapprovalhistory = () => {
     setError(null);
 
     try {
-      const response = await axios.get(`${baseurl}/getApprovalfilesbyDate`, {
+      const response = await axios.get(`${baseurl}/getdisbursalfilesbyDate`, {
         params: {
           startDate: start,
           endDate: end
@@ -109,7 +109,7 @@ const Adminfileapprovalhistory = () => {
 
   return (
     <div className="container mt-4">
-      <h2>File Approval History</h2>
+      <h2>File Disbursal History</h2>
 
       {/* Filters */}
       <div className="row mb-3">
@@ -202,7 +202,7 @@ const Adminfileapprovalhistory = () => {
                 <td>{file.customer_name}</td>
                 <td>{file.customer_mobile_number}</td>
                 <td>{file.type_of_loan}</td>
-                <td>{file.approval_status}</td>
+                <td>{file.disbursal_status}</td>
                 <td>{file.remarks}</td>
 
                 <td className="text-center">
@@ -227,4 +227,4 @@ const Adminfileapprovalhistory = () => {
   );
 };
 
-export default Adminfileapprovalhistory;
+export default Adminfiledisbursalhistory;

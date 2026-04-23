@@ -262,10 +262,10 @@ const Disposition = () => {
                       <option value="cdr_rejected">CDR Rejected</option>
                       <option value="process_to_login_team">Process to Login Team</option>
                       <option value="bank_login_rejected">Bank Login Rejected</option>
-                      <option value="bank_login_underprocess">bank_login_underprocess</option>
+                      <option value="bank_login_underprocess">Bank Login Underprocess</option>
                       <option value="bank_login_approved">Bank Login Approved</option>
-                      <option value="disbursal_rejected">Rejected Disbursal</option>
-                      <option value="loan_disbursed">Loan Disbursed</option>
+                      <option value="disbursal_approved"> Disbursal Approved</option>
+                      <option value="customer_ni_disbursal">Customer NI for Disbursal</option>
 
                     </select>
                   </div>

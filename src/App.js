@@ -51,6 +51,7 @@ import Chat from './Component/Chat/Chat';
 import AuxRibbon from './Component/Dashboard/Auxcomponent';
 import Availableuserlist from './Component/Create-user/Availableuserlist';
 import Adminfileapprovalhistory from './Component/History/Adminfileapprovalhistory';
+import Adminfiledisbursalhistory from './Component/History/Adminfiledisbursalhistory';
 // import TeamleaderHistory from './Component/History/Teamleaderhistory';
 
 function App() {
@@ -135,10 +136,8 @@ function Main() {
         <Route path="/AuxRibbon" element={<AuxRibbon />} />
          <Route path="*" element={<h1>404 Not Found</h1>} />
          <Route path="/availableuser" element={<Availableuserlist />} />
-         
-     
-
-
+        
+         <Route path="/admindisbursalfilehistory" element={<Adminfiledisbursalhistory />} />
 
         </Routes>
       </div>

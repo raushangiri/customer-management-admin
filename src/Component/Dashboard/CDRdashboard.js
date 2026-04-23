@@ -58,8 +58,9 @@ const CDRdashboard = () => {
       {/* <Navbar /> Uncomment if you want to use Navbar */}
       {/* <p>Welcome back Admin</p> Uncomment if you want to show a welcome message */}
       <div className="container">
-        <AUXRibbon />
         <h2>Welcome {dashboardData.username}</h2>
+        <AUXRibbon />
+        
 
         {/* Date Selection */}
         <div className="mb-4">

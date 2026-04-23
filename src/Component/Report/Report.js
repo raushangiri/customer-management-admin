@@ -23,6 +23,9 @@ const Report = ({ onApplyFilter, onDownloadCSV }) => {
   const [startDatebanklogin, setStartDatebanklogin] = useState('');
 const [endDatebanklogin, setEndDatebanklogin] = useState('');
 
+const [startDateAux, setStartDateAux] = useState('');
+const [endDateAux, setEndDateAux] = useState('');
+
 // Function to handle CSV download
 const fetchAndDownloadReport = async () => {
   if (!startDatebanklogin || !endDatebanklogin) {
@@ -72,20 +75,13 @@ const fetchAndDownloadReport = async () => {
   }
 };
 
-
-
-
-
-
   const handleDownloadCSV = async () => {
     if (!startDate || !endDate) {
       alert('Please select both start and end dates.');
       return;
     }
-
     try {
-      // Make API call to fetch data based on date filters
-      const response = await axios.get(`${baseurl}/tvrreport`, {
+      const response = await axios.get(`${baseurl}/dispositionReport`, {
         params: {
           startDate,
           endDate,
@@ -93,12 +89,9 @@ const fetchAndDownloadReport = async () => {
       });
 
       if (response.data && response.data.success) {
-        // Prepare CSV content
         const csvData = convertToCSV(response.data.data);
-
-        // Create a Blob object and trigger download
         const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-        saveAs(blob, 'tvr_report.csv');
+        saveAs(blob, 'disposition_report.csv');
       } else {
         alert('No data available for the selected date range.');
       }
@@ -107,20 +100,36 @@ const fetchAndDownloadReport = async () => {
       alert('Error downloading the report. Please try again later.');
     }
   };
-
-  // Function to convert data to CSV format
   const convertToCSV = (data) => {
-    const header = ['TVR Assigned Date','Time', 'Team Leader ID', 'Team Leader Name','TVR Agent ID', 'TVR Agent Name', 'TVR Status','Customer Name', 'Mobile Number'];
-    const csvRows = data.map((row) => [
-      row.tvr_assign_date,
-      row.time,
-      row.teamleaderid || '', // Use empty string if no team leader ID
-      row.teamleadername || '', // Use empty string if no team leader name
-      row.tvr_agent_id,
-      row.tvr_agent_name,
-      row.tvr_status,
-      row.customer_name,
-      row.customer_mobile_number,
+   const header = [
+  'File Number',
+  'User ID',
+  
+  'User Name',
+  'Role',
+  'Call Status',
+  'Interested Status',
+  'Disposition',
+  'Not Interested Reason',
+  'Remarks',
+  'File Status',
+  'Date',
+  'Time'
+];
+  const csvRows = data.map((row) => [
+      row.file_number,
+row.userId,
+
+row.username,
+row.role,
+row.call_status,
+row.is_interested,
+row.disposition,
+row.not_interested_reason || '',
+row.remarks || '',
+row.file_status,
+row.date,
+row.time
     ]);
 
     // Join the header and rows into a CSV string
@@ -178,6 +187,49 @@ const fetchAndDownloadReport = async () => {
     return csvContent;
   };
 
+  const fetchAuxReport = async () => {
+  if (!startDateAux || !endDateAux) {
+    alert('Please select start and end date');
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const response = await axios.get(`${baseurl}/auxReport`, {
+      params: {
+        startDate: startDateAux,
+        endDate: endDateAux
+      }
+    });
+
+    if (response.data.success) {
+      const formattedData = response.data.data.map((row) => ({
+        "User ID": row.userId,
+        "Name": row.name,
+        "Role": row.role,
+        "Login Time": row.LoginTime,
+        "Available": row.Available,
+        "Meeting": row.Meeting,
+        "Break": row.Break,
+        "Training": row.Training,
+        "Offline": row.Offline
+      }));
+
+      const csv = Papa.unparse(formattedData);
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+      saveAs(blob, `Employee_Login_Report_${startDateAux}_to_${endDateAux}.csv`);
+    } else {
+      alert('No data found');
+    }
+  } catch (error) {
+    console.error(error);
+    alert('Error fetching report');
+  } finally {
+    setLoading(false);
+  }
+};
   // Fetch loan data from the API
   useEffect(() => {
     const fetchLoanData = async () => {
@@ -213,115 +265,17 @@ const fetchAndDownloadReport = async () => {
     fetchPendingCounts();
   }, []);
 
-  // Prepare data for the Pie chart based on API response
-  const pieChartData = {
-
-    datasets: [
-      {
-        label: 'Count',
-        data: loanData.map(loan => loan.count),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-    labels: loanData.map(loan => loan.type_of_loan || 'Unknown'),
-  };
-
-  const PendingpieChartData = {
-
-    datasets: [
-      {
-        label: 'Count',
-        data: pendingData.map(loan => loan.count),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-    labels: pendingData.map(loan => loan.data || 'Unknown'),
-  };
-  const chartStyle = {
-    maxWidth: '400px',
-    minWidth: '400px',
-    maxHeight: '400px',
-    minHeight: '400px',
-    margin: '0 auto',
-  };
-  
-
   const handleApplyFilter = () => {
-    onApplyFilter(startDate, endDate); // Pass selected date filters to parent component
+    onApplyFilter(startDate, endDate); 
   };
-
-  // const handleDownloadCSV = () => {
-  //   onDownloadCSV(startDate, endDate); // Trigger CSV download with current date filters
-  // };
-  // Render loading or error states
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-
-
 
   return (
     <>
       <h3 className="text-center">Reports</h3>
       <div className="container">
         <div className="row">
-          {/* <div className="col-md-6">
-            <h5 className='text-center'>Report as per Loan Type</h5>
-            <div style={chartStyle}>
-              <Pie data={pieChartData} />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <h5 className='text-center'>Interested Vs Pending Report</h5>
-            <div style={chartStyle}>
-              <Pie data={PendingpieChartData} />
-            </div>
-          </div> */}
-
-          {/* <div className="col-md-6">
-            <h5>Sales Over Time</h5>
-            <div style={chartStyle}>
-              <Line data={lineChartData} />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <h5>Sales Over Time</h5>
-            <div style={chartStyle}>
-              <Line data={lineChartData} />
-            </div>
-          </div> */}
-
           <div className="col-md-6 mt-4">
             <div className="card">
               <div className="card-body">
@@ -363,44 +317,46 @@ const fetchAndDownloadReport = async () => {
             </div>
           </div>
           <div className="col-md-6 mt-4">
-      {/* <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">TVR Report</h5>
+   <div className="card">
+    <div className="card-body">
+      <h5 className="card-title">Employee Login & AUX Report</h5>
 
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="startDate">Start Date:</label>
-              <input
-                type="date"
-                className="form-control"
-                id="startDate"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="endDate">End Date:</label>
-              <input
-                type="date"
-                className="form-control"
-                id="endDate"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-
-            <div className="col-md-12 mb-3">
-              <button
-                className="btn btn-success w-100"
-                onClick={handleDownloadCSV}
-              >
-                Download CSV
-              </button>
-            </div>
-          </div>
+      <div className="row">
+        <div className="col-md-6 mb-3">
+          <label>Start Date:</label>
+          <input
+            type="date"
+            className="form-control"
+            value={startDateAux}
+            onChange={(e) => setStartDateAux(e.target.value)}
+          />
         </div>
-      </div> */}
+
+        <div className="col-md-6 mb-3">
+          <label>End Date:</label>
+          <input
+            type="date"
+            className="form-control"
+            value={endDateAux}
+            onChange={(e) => setEndDateAux(e.target.value)}
+          />
+        </div>
+
+        <div className="col-md-12">
+          <button
+            className="btn btn-success w-100"
+            onClick={fetchAuxReport}
+            disabled={loading}
+          >
+            {loading ? "Downloading..." : "Download Employee Report"}
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
+    </div>
+
+     
           <div className="col-md-6 mt-4">
             <div className="card">
               <div className="card-body">
@@ -477,6 +433,10 @@ const fetchAndDownloadReport = async () => {
               </div>
             </div>
           </div>
+
+          <div className="col-md-6 mt-4">
+ 
+</div>
         </div>
       </div>
 
@@ -484,18 +444,5 @@ const fetchAndDownloadReport = async () => {
   );
 };
 
-// Data for the Line chart (remains unchanged)
-const lineChartData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'Sales',
-      data: [65, 59, 80, 81, 56, 55, 40],
-      fill: false,
-      borderColor: 'rgb(75, 192, 192)',
-      tension: 0.1,
-    },
-  ],
-};
 
 export default Report;
