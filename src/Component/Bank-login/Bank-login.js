@@ -12,6 +12,7 @@ import LoanApproval from '../Components/LoanApproval';
 import Bank_Login from '../Components/BankLogin';
 import FileOverviewdetails from '../Components/FileOverviewdetails';
 import BankLogincomponent from '../Components/BankLogincomponent';
+import ScheduleCallback from '../Components/schedulecallback';
 
 const Bank_login = () => {
     const [activeTab, setActiveTab] = useState('bank_login_file');
@@ -104,7 +105,14 @@ const Bank_login = () => {
                         Disbursal Details
                     </button>
                 </li>
-                
+                <li className="nav-item">
+                    <button
+                        className={`nav-link ${activeTab === 'Schedule Callback' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('Schedule Callback')}
+                    >
+                        Schedule Callback
+                    </button>
+                </li>
                 <li className="nav-item">
           <button
             className={`nav-link ${activeTab === 'disposition' ? 'active' : ''}`}
@@ -146,6 +154,10 @@ const Bank_login = () => {
                 )}
                 {activeTab === 'approval_details' && (
                     <LoanApproval />
+                )}
+                
+{activeTab === 'Schedule Callback' && (
+                    <ScheduleCallback />
                 )}
                 {activeTab === 'disposition' && (
   <Disposition/>
