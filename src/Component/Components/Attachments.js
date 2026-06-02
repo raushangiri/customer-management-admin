@@ -19,12 +19,41 @@ const Attachments = () => {
   const [error, setError] = useState(null);
 
   // console.log(formData1.file_number,"formData1")
-  const allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // Excel (.xlsx)
-  'application/vnd.ms-excel', // Older Excel (.xls)
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // Word (.docx)
-  'application/msword'] // Older Word (.doc)];
+ const allowedFileTypes = [
+
+  'image/jpeg',
+
+  'image/png',
+
+  'image/jpg',
+
+  'application/pdf',
+
+  // Excel (.xlsx)
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+
+  // Excel (.xls)
+  'application/vnd.ms-excel',
+
+  // Word (.docx)
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+
+  // Word (.doc)
+  'application/msword'
+];
   const maxFileSize = 5 * 1024 * 1024; // 5 MB
 
+
+  const allowedExtensions = [
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.pdf',
+  '.xlsx',
+  '.xls',
+  '.doc',
+  '.docx'
+];
   const handleDocumentTypeChange = (event) => {
     setSelectedDocumentType(event.target.value);
     if (event.target.value !== 'other') {
@@ -32,6 +61,7 @@ const Attachments = () => {
     }
   };
 
+  
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -39,8 +69,14 @@ const Attachments = () => {
         alert('File size exceeds the 5MB limit.');
         return;
       }
+      const fileExtension =
+  file.name.substring(
+    file.name.lastIndexOf('.')
+  ).toLowerCase();
 
-      if (!allowedFileTypes.includes(file.type)) {
+
+      if ( !allowedFileTypes.includes(file.type) &&
+  !allowedExtensions.includes(fileExtension)) {
         alert('Unsupported file format. Please upload JPG, PNG, or PDF files.');
         return;
       }

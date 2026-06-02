@@ -185,7 +185,7 @@ const Banklogindetails = () => {
     }
   };
   const [loading, setLoading] = useState(false);
-console.log("coapplicantOneDetails", coapplicantOneDetails);
+// console.log("coapplicantOneDetails", coapplicantOneDetails);
 // Format Co-Applicant One (if exists)
 const coapplicantOneText = coapplicantOneDetails
   ? `\n\n--- Co-Applicant One Details ---\n` +
@@ -279,8 +279,22 @@ const coapplicantTwoText = coapplicantTwoDetails
       const extension = fileNameWithExtension.substring(dotIndex);
       return `${fileName}_${index}${extension}`;
     };
-    const documentUrls = documents.map((doc) => doc.downloadUrl);
-    const documentNames = documents.map((doc, index) => extractFileName(doc.downloadUrl, index));
+    // const documentUrls = documents.map((doc) => doc.downloadUrl);
+    // const documentNames = documents.map((doc, index) => extractFileName(doc.downloadUrl, index));
+
+const selectedDocs = documents.filter((doc) =>
+  selectedDocuments.includes(doc._id)
+);
+
+const documentUrls = selectedDocs.map(
+  (doc) => doc.downloadUrl
+);
+
+const documentNames = selectedDocs.map(
+  (doc, index) =>
+    extractFileName(doc.downloadUrl, index)
+);
+
     const referenceDetails = references.map((ref, index) => (
       `\n\nReference ${index + 1}:\n` +
       `Name: ${ref.reference_name || 'N/A'}\n` +
@@ -349,7 +363,10 @@ const coapplicantTwoText = coapplicantTwoDetails
   call_status: "Connected",
   is_interested: "Interested",
   disposition: "bank_login_underprocess",
-  selected_documents: [], 
+ selected_documents: selectedDocs.map(doc => ({
+  document_name: doc.document_name,
+  document_url: doc.downloadUrl
+})),
   expected_document_date: new Date(),
   not_interested_reason: "NA",
   remarks: `Email shared with ${bankDetail.bank_name} RM`,

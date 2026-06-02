@@ -1,215 +1,589 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { statuses, bank_details } from '../../Component/Bank-login/Data'; // Adjust the path if necessary
+import React, { useState, useEffect } from "react";
+import { useOverview } from "../ContentHook/OverviewContext";
 
+/* Input Component */
+const InputField = ({
+  label,
+  name,
+  type = "text",
+  value,
+  onChange
+}) => (
 
+  <div className="mb-3">
+
+    <label className="form-label fw-semibold">
+      {label}
+    </label>
+
+    <input
+      type={type}
+      name={name}
+      value={value || ""}
+      onChange={onChange}
+      className="form-control"
+    />
+
+  </div>
+);
 
 const Disbursal = () => {
-    const [activeTab, setActiveTab] = useState('details');
-    const [references, setReferences] = useState([]);
-    const [newReference, setNewReference] = useState({ name: '', mobileNumber: '', address: '' });
-    const [loandetail, setloandetail] = useState({ bankName: '', emiAmount: '', emiDate: '', loanstartDate: '', noofemiBounces: '', bouncesReason: '', carDetails: '' });
-    const [newloandetail, setNewloandetail] = useState([]);
-    // const [selectedLoanType, setSelectedLoanType] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [isInterested, setIsInterested] = useState('');
-    const [showModal, setShowModal] = useState(false);
-    const [notInterestedReason, setNotInterestedReason] = useState('');
-    const [remarks, setRemarks] = useState('');
-    const [selectedDocumentType, setSelectedDocumentType] = useState('');
-    const [uploadedDocuments, setUploadedDocuments] = useState([]);
-    const [showModal1, setShowModal1] = useState(false);
-    const [selectedDocumentFile, setSelectedDocumentFile] = useState(null);
-    const [loginStatus, setLoginStatus] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
-  const [selectedReason, setSelectedReason] = useState('');
-  const [selectedBank, setSelectedBank] = useState('');
-  const [bankDetail, setBankDetail] = useState({ "RM NAME": '', "RM CONTACT NO": '' });
-  const [selectedLoanType, setSelectedLoanType] = useState('');
 
-  // Filter bank details based on selectedLoanType
-  const filteredBanks = bank_details.filter(bank => bank["Loan Type"] === selectedLoanType);
+  const { formData, setFormData } =
+    useOverview();
 
-  // Helper function to get bank details
-  const getBankDetails = (bankName) => {
-    return filteredBanks.find(bank => bank["BANK NAME"] === bankName) || {};
-  };
+  const baseurl =
+    process.env.REACT_APP_API_BASE_URL;
 
+  const fileNumber =
+    formData?.file_number;
+
+  /* States */
+  const [localFormData, setLocalFormData] =
+    useState({});
+
+  const [similarToApproval,
+    setSimilarToApproval] =
+    useState(false);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  /* Allowed Fields */
+  const allowedFields = [
+
+    "loanType",
+
+    "customerName",
+
+    "bankName",
+
+    "emiDate",
+
+    "asset",
+
+    "basicLoanAmount",
+
+    "loanSuraksha",
+
+    "pfCharges",
+
+    "docCharges",
+
+    "stampDuty",
+
+    "emiAmount",
+
+    "tenure",
+
+    "deductFc",
+
+    "rto",
+
+    "netDisbursalAmount",
+
+    "customerPaymentDD",
+
+    "holdPayment",
+
+    "docOnline",
+
+    "carInsurance",
+
+    "minusFcAmount",
+
+    "preEmi",
+
+    "roiType",
+
+    "subjectivity",
+
+    "inhandAmountCustomer",
+
+    "remark",
+
+    "cashback"
+  ];
+
+  /* Number Fields */
+  const numberFields = [
+
+    "basicLoanAmount",
+
+    "loanSuraksha",
+
+    "pfCharges",
+
+    "docCharges",
+
+    "stampDuty",
+
+    "emiAmount",
+
+    "tenure",
+
+    "deductFc",
+
+    "rto",
+
+    "netDisbursalAmount",
+
+    "customerPaymentDD",
+
+    "holdPayment",
+
+    "docOnline",
+
+    "carInsurance",
+
+    "minusFcAmount",
+
+    "preEmi",
+
+    "inhandAmountCustomer",
+
+    "cashback"
+  ];
+
+  /* ONLY Toggle decides API */
   useEffect(() => {
-    setBankDetail(getBankDetails(selectedBank));
-  }, [selectedBank]);
 
-  const handleLoginStatusChange = (event) => {
-    setLoginStatus(event.target.value);
-    if (event.target.value === 'Yes') {
-      setSelectedStatus('');
-      setSelectedReason('');
-      setSelectedBank('');
-      setBankDetail({ "RM NAME": '', "RM CONTACT NO": '' }); // Reset bank details
+    if (!fileNumber) return;
+
+    if (similarToApproval) {
+
+      fetchApprovalData();
+
+    } else {
+
+      fetchDisbursalData();
+    }
+
+  }, [similarToApproval, fileNumber]);
+
+  /* Fetch Existing Disbursal */
+  const fetchDisbursalData = async () => {
+
+    try {
+
+      const res = await fetch(
+        `${baseurl}/getdisbursal/${fileNumber}`
+      );
+
+      const data = await res.json();
+
+      if (
+        data.success &&
+        data.data
+      ) {
+
+        setLocalFormData(
+          data.data
+        );
+
+        setFormData((prev) => ({
+
+          ...prev,
+
+          ...data.data
+        }));
+      }
+
+    } catch (err) {
+
+      console.error(
+        "Disbursal Fetch Error:",
+        err
+      );
     }
   };
 
-  const handleStatusChange = (event) => {
-    const status = event.target.value;
-    setSelectedStatus(status);
-    setSelectedReason('');
+  /* Fetch Approval Data */
+  const fetchApprovalData = async () => {
+
+    try {
+
+      const res = await fetch(
+        `${baseurl}/getloanapproval/${fileNumber}`
+      );
+
+      const data = await res.json();
+
+      if (
+        data.success &&
+        data.data
+      ) {
+
+        setLocalFormData(
+          data.data
+        );
+
+        setFormData((prev) => ({
+
+          ...prev,
+
+          ...data.data
+        }));
+      }
+
+    } catch (err) {
+
+      console.error(
+        "Approval Fetch Error:",
+        err
+      );
+    }
   };
 
-  const handleReasonChange = (event) => {
-    setSelectedReason(event.target.value);
+  /* Toggle */
+  const handleApprovalToggle = (
+    e
+  ) => {
+
+    setSimilarToApproval(
+      e.target.checked
+    );
   };
 
-  const handleBankChange = (event) => {
-    const bankName = event.target.value;
-    setSelectedBank(bankName);
+  /* Input Change */
+  const handleChange = (e) => {
+
+    const { name, value } =
+      e.target;
+
+    setLocalFormData((prev) => ({
+
+      ...prev,
+
+      [name]: value
+    }));
   };
 
-  const filteredReasons = statuses.find(status => status.login_status === selectedStatus)?.reasons || [];
-  const bankOptions = filteredBanks.map(bank => bank["BANK NAME"]);
+  /* Submit */
+  const handleSubmit = async () => {
 
+    try {
 
+      setLoading(true);
 
+      let filteredData = {};
 
-    const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
+      allowedFields.forEach((key) => {
 
-    const getPrevious12Months = () => {
-        const previous12Months = [];
-        const currentDate = new Date();
-        let currentMonth = currentDate.getMonth();
-        let currentYear = currentDate.getFullYear();
+        if (
+          localFormData[key] !== undefined
+        ) {
 
-        for (let i = 0; i < 12; i++) {
-            const monthName = months[currentMonth];
-            previous12Months.push({
-                month: monthName,
-                year: currentYear,
-                dayValues: Array(6).fill('') // Initialize with empty strings for days 5, 10, 15, 20, 25, 30
-            });
-
-            currentMonth = (currentMonth - 1 + 12) % 12;
-            if (currentMonth === 11) {
-                currentYear--;
-            }
+          filteredData[key] =
+            localFormData[key];
         }
-        return previous12Months.reverse();
-    };
+      });
 
-    const [previous12Months, setPrevious12Months] = useState(getPrevious12Months());
+      /* Convert Numbers */
+      numberFields.forEach((key) => {
 
-    const handleDayValueChange = (monthIndex, dayIndex, value) => {
-        const updatedMonths = [...previous12Months];
-        updatedMonths[monthIndex].dayValues[dayIndex] = value;
-        setPrevious12Months(updatedMonths);
-    };
+        if (
+          filteredData[key] !== "" &&
+          filteredData[key] !== undefined
+        ) {
 
-    const calculateTotalAB = (dayValues) => {
-        return dayValues.reduce((total, value) => total + (parseFloat(value) || 0), 0);
-    };
-
-    const calculateTotalABB = (totalAB) => {
-        return totalAB / 6;
-    };
-
-    const handleDocumentTypeChange = (event) => {
-        setSelectedDocumentType(event.target.value);
-    };
-
-    // Handle file input change
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setUploadedDocuments([...uploadedDocuments, { type: selectedDocumentType, file }]);
+          filteredData[key] =
+            Number(
+              filteredData[key]
+            );
         }
-    };
+      });
 
-    // Handle document upload (submit)
-    const handleDocumentUpload = (event) => {
-        event.preventDefault();
-        // You can add additional logic here if needed.
-        // For now, it just resets the form fields.
-        setSelectedDocumentType('');
-    };
+      const payload = {
 
-    // Handle view document
-    const handleViewDocument = (doc) => {
-        const fileURL = URL.createObjectURL(doc.file);
-        setSelectedDocumentFile(fileURL);
-        setShowModal1(true);
-    };
+        file_number: fileNumber,
 
-    // Handle delete document
-    const handleDeleteDocument = (index) => {
-        const updatedDocuments = uploadedDocuments.filter((_, i) => i !== index);
-        setUploadedDocuments(updatedDocuments);
-    };
+        similarToApproval,
 
-
-    const handleAddReference = (e) => {
-        e.preventDefault();
-        setReferences([...references, newReference]);
-        setNewReference({ name: '', mobileNumber: '', address: '' });
-    };
-
-
-    const handleAddloanDetails = (e) => {
-        e.preventDefault();
-        setNewloandetail([...newloandetail, loandetail]);
-        setloandetail({ bankName: '', emiAmount: '', emiDate: '', loanstartDate: '', noofemiBounces: '', bouncesReason: '', carDetails: '' });
-    };
-
-    const loanMasterData = {
-        'Auto Loan': ['External Bt', 'Internal Bt', 'Refinance', 'New Car', 'Sale Purchage'],
-        'Business Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-        'LAP Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-        'Home Loan': ['Proprietorship', 'Partnership', 'Pvt Ltd Firm'],
-        'Personal Loan': ['Personal Loan'],
-        'Education Loan': ['Education Loan'],
-        'Insurance': ['Insurance'],
-        'Working capital Loan': ['Working capital Loan'],
-        'Small Business Loan':['small business loan'],
-        'Drop Down OD':['Drop Down OD']
+        ...filteredData
       };
 
-    const NotInterestedOptions = {
-        notInterested: [
-            'No need Loan',
-            'Need after 1 Month',
-            'Abuse on Call',
-            'Do not want to provide details',
-            'Threat to complain',
-            'Asked not to call again',
-        ]
-    };
-    const handleInterestChange = (e) => {
-        const value = e.target.value;
-        setIsInterested(value);
-        if (value === 'NotIntrested') {
-            setShowModal(true);
-        } else {
-            setShowModal(false);
+      const res = await fetch(
+
+        `${baseurl}/createOrUpdatedisbursal`,
+
+        {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify(payload)
         }
-    };
+      );
 
-    const handleModalSubmit = (e) => {
-        e.preventDefault();
-        // Handle form submission inside the modal
-        // console.log('Reason:', notInterestedReason);
-        // console.log('Remarks:', remarks);
-        setShowModal(false);
-    };
+      const data = await res.json();
 
-    const handleLoanTypeChange = (e) => {
-        setSelectedLoanType(e.target.value);
-        setSelectedCategory(''); // Reset category when loan type changes
-    };
+      if (data.success) {
+
+        setLocalFormData(
+          data.data || {}
+        );
+
+        setFormData((prev) => ({
+
+          ...prev,
+
+          ...data.data
+        }));
+
+        alert(
+          data.message ||
+          "Disbursal Saved Successfully"
+        );
+      }
+
+    } catch (err) {
+
+      console.error(
+        "Disbursal Submit Error:",
+        err
+      );
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
   return (
-    <>
-    
-    </>
-  )
-}
 
-export default Disbursal
+    <div className="container py-4">
+
+      {/* Header */}
+      <div className="card shadow-sm border-0 mb-4">
+
+        <div className="card-body">
+
+          <div className="row align-items-center">
+
+            {/* Loan Type */}
+            <div className="col-md-6">
+
+              <label className="form-label fw-semibold">
+                Loan Type
+              </label>
+
+              <select
+                className="form-control"
+                name="loanType"
+                value={
+                  localFormData.loanType || ""
+                }
+                onChange={handleChange}
+              >
+
+                <option value="">
+                  Select Loan Type
+                </option>
+
+                <option value="Auto_loan">
+                  Auto Loan
+                </option>
+
+                <option value="Personal_loan">
+                  Personal Loan
+                </option>
+
+                <option value="Business Loan">
+                  Business Loan
+                </option>
+
+                <option value="Home_Loan">
+                  Home Loan
+                </option>
+
+                <option value="LAP">
+                  LAP
+                </option>
+
+              </select>
+
+            </div>
+
+            {/* Toggle */}
+            <div className="col-md-6">
+
+              <div className="d-flex justify-content-md-end mt-4 mt-md-0">
+
+                <div className="form-check form-switch">
+
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="approvalToggle"
+                    checked={
+                      similarToApproval
+                    }
+                    onChange={
+                      handleApprovalToggle
+                    }
+                    style={{
+                      width: '55px',
+                      height: '28px',
+                      cursor: 'pointer'
+                    }}
+                  />
+
+                  <label
+                    className="form-check-label ms-2 fw-semibold"
+                    htmlFor="approvalToggle"
+                  >
+                    Similar to Approval
+                  </label>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* Form */}
+      <div className="card shadow-sm border-0">
+
+        <div className="card-body">
+
+          <div className="row">
+
+            {
+              allowedFields.map((field) => (
+
+                field !== "loanType" &&
+                field !== "roiType" &&
+                field !== "remark" && (
+
+                  <div
+                    className="col-md-4"
+                    key={field}
+                  >
+
+                    <InputField
+
+                      label={
+                        field
+                          .replace(
+                            /([A-Z])/g,
+                            ' $1'
+                          )
+                          .replace(
+                            /^./,
+                            str =>
+                              str.toUpperCase()
+                          )
+                      }
+
+                      name={field}
+
+                      value={
+                        localFormData[field]
+                      }
+
+                      onChange={
+                        handleChange
+                      }
+                    />
+
+                  </div>
+                )
+              ))
+            }
+
+            {/* ROI */}
+            <div className="col-md-4 mb-3">
+
+              <label className="form-label fw-semibold">
+                ROI Type
+              </label>
+
+              <select
+                name="roiType"
+                value={
+                  localFormData.roiType || ""
+                }
+                onChange={
+                  handleChange
+                }
+                className="form-control"
+              >
+
+                <option value="">
+                  Select
+                </option>
+
+                <option value="Reducing">
+                  Reducing
+                </option>
+
+                <option value="Flat">
+                  Flat
+                </option>
+
+              </select>
+
+            </div>
+
+            {/* Remark */}
+            <div className="col-md-12 mb-3">
+
+              <label className="form-label fw-semibold">
+                Remark
+              </label>
+
+              <textarea
+                name="remark"
+                value={
+                  localFormData.remark || ""
+                }
+                onChange={
+                  handleChange
+                }
+                className="form-control"
+                rows="4"
+              />
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* Submit */}
+      <div className="text-center mt-4">
+
+        <button
+          className="btn btn-primary px-5"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+
+          {
+            loading
+              ? "Saving..."
+              : "Submit / Update"
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+  );
+};
+
+export default Disbursal;

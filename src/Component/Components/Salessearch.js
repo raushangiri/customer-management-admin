@@ -9,6 +9,7 @@ import BankLogin from '../Components/BankLogin';
 import OverviewDetails from '../Components/OverviewDetails';
 import Disposition from '../Components/Disposition';
 import Attachmentview from '../Components/Attachmentview';
+import ScheduleCallback from './schedulecallback';
 
 const Salessearch = () => {
     const [activeTab, setActiveTab] = useState('Previous Loan Details');
@@ -51,6 +52,14 @@ const Salessearch = () => {
           </li>
           <li className="nav-item">
             <button
+              className={`nav-link ${activeTab === 'Schedule Callback' ? 'active' : ''}`}
+              onClick={() => setActiveTab('Schedule Callback')}
+            >
+              Schedule Callback
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
               className={`nav-link ${activeTab === 'disposition' ? 'active' : ''}`}
               onClick={() => setActiveTab('disposition')}
             >
@@ -74,6 +83,9 @@ const Salessearch = () => {
   {activeTab === 'attachments' && (
     <Attachmentview/>
   )}
+    {activeTab === 'Schedule Callback' && (
+                    <ScheduleCallback />
+                )}
   
   {activeTab === 'disposition' && (
     <Disposition/>

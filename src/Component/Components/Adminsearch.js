@@ -11,6 +11,8 @@ import Disposition from '../Components/Disposition';
 import LoanApproval from '../Components/LoanApproval';
 import BankLogincomponent from './BankLogincomponent';
 import Applicant_coapplicant from './Applicant_coapplicant';
+import ScheduleCallback from './schedulecallback';
+import Disbursal from './Disbursal';
 
 const Adminsearch = () => {
     const [activeTab, setActiveTab] = useState('Previous Loan Details');
@@ -91,6 +93,14 @@ const Adminsearch = () => {
                         Disbursal Details
                     </button>
                 </li>
+                 <li className="nav-item">
+                    <button
+                        className={`nav-link ${activeTab === 'Schedule Callback' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('Schedule Callback')}
+                    >
+                        Schedule Callback
+                    </button>
+                </li>
                 
                 <li className="nav-item">
           <button
@@ -131,6 +141,12 @@ const Adminsearch = () => {
                 )}
                 {activeTab === 'approval_details' && (
                     <LoanApproval />
+                )}
+                {activeTab === 'disbursal_details' && (
+                    <Disbursal />
+                )}
+                 {activeTab === 'Schedule Callback' && (
+                    <ScheduleCallback />
                 )}
                 {activeTab === 'disposition' && (
   <Disposition/>

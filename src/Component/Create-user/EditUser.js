@@ -88,7 +88,7 @@ const fetchUserDetails = async () => {
     fetchUserDetails();
   }, [userId]);
 
-  console.log(role, "role")
+  // console.log(role, "role")
   // Handle updating user details
   const handleUpdateUser = async () => {
     if (!name || !role) {
@@ -168,7 +168,7 @@ const fetchUserDetails = async () => {
   <option value="Sales Agent">Sales Agent</option>
   <option value="TVR Team">TVR Team</option>
   <option value="CDR Team">CDR Team</option>
-  <option value="bank_login">bank_login</option>
+  <option value="bank_login">Bank Login</option>
 </select>
 
         </div>
@@ -232,16 +232,23 @@ const fetchUserDetails = async () => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-         <div className="mb-3">
-          <label htmlFor="status" className="form-label text-light">Status</label>
-          <input
-            type="text"
-            className="form-control"
-            id="status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          />
-        </div>
+        <div className="mb-3">
+  <label htmlFor="status" className="form-label text-light">
+    Status
+  </label>
+
+  <select
+   className="form-select"
+  aria-label="Select Role"
+    id="status"
+    value={status}
+    onChange={(e) => setStatus(e.target.value)}
+  >
+    <option value="">Select Status</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+  </select>
+</div>
 
         <div className="d-flex justify-content-center text-center">
       <button

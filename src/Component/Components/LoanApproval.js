@@ -415,6 +415,8 @@ const LoanApproval = () => {
           <InputField label="Car Insurance" name="carInsurance" value={localFormData.carInsurance || ""} onChange={handleChange} />
           <InputField label="Minus Fc Amount" name="minusFcAmount" value={localFormData.minusFcAmount || ""} onChange={handleChange} />
           <InputField label="Pre EMI" name="preEmi" value={localFormData.preEmi || ""} onChange={handleChange} />
+          <InputField label="cashback" name="cashback" value={localFormData.cashback || ""} onChange={handleChange} />
+
 
           <div className="mb-3">
             <label>ROI</label>

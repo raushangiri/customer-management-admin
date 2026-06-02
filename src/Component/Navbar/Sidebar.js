@@ -233,7 +233,7 @@ useEffect(() => {
 
           </>
         )}
-        {/* <li><NavLink to="/chat">Chat <FontAwesomeIcon icon={faComment} /></NavLink></li> */}
+        <li><NavLink to="/callback-history">Callback History</NavLink></li>
         <li>
   <NavLink to="/chat">
     Chat <FontAwesomeIcon icon={faComment} />
